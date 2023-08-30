@@ -5,4 +5,14 @@
     <string name="logo">Logo</string>
     <string name="username">Username</string>
     <string name="LoginFragmentButtonText">Continue</string>
+    <string name="board_size_option_String">Select Board Size</string>
+    <string name="select_match_condition">Select Match Condition</string>
+    <string name="select_marker">Select Marker</string>
+    <string name="MarkerImageViewDescription">Player Marker</string>
+    <string name="marker_image_description">Marker</string>
+    <string-array name="board_size_options">
+        <item>3x3</item>
+        <item>6x6</item>
+        <item>9x9</item>
+    </string-array>
 </resources>
