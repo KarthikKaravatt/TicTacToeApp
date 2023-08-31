@@ -64,10 +64,27 @@
             <ImageView
                 android:id="@+id/markerImage"
                 android:layout_width="wrap_content"
-                android:layout_height="100dp"
+                android:layout_height="130dp"
                 android:src="@drawable/x"
                 android:scaleType="centerInside"
-                android:contentDescription="@string/marker_image_description" />
+                android:contentDescription="@string/marker_image_description"
+                android:paddingBottom="20dp"
+                android:paddingTop="20dp"
+
+                />
+            <Button
+                android:id="@+id/startButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start!"
+                android:layout_gravity="center_horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:padding="15dp"
+
+                />
 
 
         </LinearLayout>
