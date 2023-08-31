@@ -5,7 +5,7 @@
     android:id="@+id/LoginFragmentFrameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GameSettings">
+    tools:context=".GameSettingsFragment">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/LoginFragmentConstraintLayout"
         android:layout_width="match_parent"
