@@ -1,6 +1,5 @@
 package com.example.madassignment1;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +9,16 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.fragment.app.Fragment;
 
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link GameSettings#newInstance} factory method to
+ * Use the {@link GameSettingsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GameSettings extends Fragment {
+public class GameSettingsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,7 +45,7 @@ public class GameSettings extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public GameSettings() {
+    public GameSettingsFragment() {
         // Required empty public constructor
     }
 
@@ -60,8 +58,8 @@ public class GameSettings extends Fragment {
      * @return A new instance of fragment GameSettings.
      */
     // TODO: Rename and change types and number of parameters
-    public static GameSettings newInstance(String param1, String param2) {
-        GameSettings fragment = new GameSettings();
+    public static GameSettingsFragment newInstance(String param1, String param2) {
+        GameSettingsFragment fragment = new GameSettingsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

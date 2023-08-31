@@ -47,7 +47,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/NewGameButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="New Game"
@@ -58,25 +58,25 @@
                 app:layout_constraintWidth_percent="0.5"/>
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/StatisticsButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Your Statistics"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/button1"
+                app:layout_constraintTop_toBottomOf="@id/NewGameButton"
                 app:layout_constraintWidth_percent="0.5"/>
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/LeaderboardButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Leaderboard"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/button2"
+                app:layout_constraintTop_toBottomOf="@id/StatisticsButton"
                 app:layout_constraintWidth_percent="0.5"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
