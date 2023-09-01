@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class BoardFragment extends Fragment {
     private boolean undoUsed = false;
 
     private TimerViewModel timerViewModel;
+    private BoardViewModel boardViewModel;
 
 
     private int boardSize = 3;
@@ -90,17 +92,30 @@ public class BoardFragment extends Fragment {
         View boardView = inflater.inflate(R.layout.fragment_board, container, false);
         boardFragment = boardView.findViewById(R.id.board_fragment);
         timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);
+        boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
         timerViewModel.getTimeRemaining().observe(getViewLifecycleOwner(), timeRemaining -> {
             if (timeRemaining == 0L) {
                 switchTurns();
                 timerViewModel.resetTimer();
             }
         });
-        createBoard(boardSize);
+        // No idea how this works but it works
+        if (boardViewModel.hasLayout()) {
+            View boardLayout = boardViewModel.getBoardLayout();
+            ViewGroup parent = (ViewGroup) boardLayout.getParent();
+            if (parent != null) {
+                parent.removeView(boardLayout);
+            }
+            boardFragment.addView(boardLayout);
+        } else {
+            LinearLayout layout = createBoard(boardSize);
+            boardViewModel.setBoardLayout(layout);
+            boardFragment.addView(layout);
+        }
         return boardView;
     }
 
-    public void createBoard(int boardSize) {
+    public LinearLayout createBoard(int boardSize) {
         // initial checks
         assert boardSize > 2 && winCondition > 1 && playerOneIcon != playerTwoIcon && winCondition <= boardSize : "Invalid board configuration";
         if (grid != null) {
@@ -149,7 +164,7 @@ public class BoardFragment extends Fragment {
             }
             boardContainer.addView(row);
         }
-        boardFragment.addView(boardContainer);
+        return boardContainer;
     }
 
     public int getMovesAvailable() {
@@ -186,6 +201,7 @@ public class BoardFragment extends Fragment {
             undoUsed = true;
             // switch turns after undo
             turnOver = !turnOver;
+            timerViewModel.resetTimer();
         }
     }
 
@@ -266,6 +282,7 @@ public class BoardFragment extends Fragment {
         movesAvailable = boardSize * boardSize;
         movesMade = 0;
         gameOver = false;
+        timerViewModel.resetTimer();
     }
 
     public void switchTurns() {
