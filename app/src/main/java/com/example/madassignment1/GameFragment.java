@@ -1,14 +1,16 @@
 package com.example.madassignment1;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,7 +28,13 @@ public class GameFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private BoardFragment boardFragment;
+    private BoardFragment boardFragment = new BoardFragment();
+    private TextView timeRemainingDisplay;
+    private TextView turnsLeftDisplay;
+    private TimerViewModel timerViewModel;
+
+
+
 
     public GameFragment() {
         // Required empty public constructor
@@ -65,8 +73,31 @@ public class GameFragment extends Fragment {
         // Inflate the layout for this fragment
         View gameView = inflater.inflate(R.layout.fragment_game, container, false);
         FrameLayout gameFrameLayout = gameView.findViewById(R.id.fragment_game_board);
-        boardFragment = new BoardFragment();
+        timeRemainingDisplay = gameView.findViewById(R.id.time_remaining_text_view);
+        turnsLeftDisplay = gameView.findViewById(R.id.turns_remaining_text_view);
+        Button undoButton = gameView.findViewById(R.id.undo_turn_button);
+        Button resetButton = gameView.findViewById(R.id.reset_button);
+        timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);
+        timerViewModel.getTimeRemaining().observe(getViewLifecycleOwner(), timeRemaining -> {
+            String timeRemainingString = "TimeRemaining: " + String.valueOf(timeRemaining / 1000);
+            timeRemainingDisplay.setText(timeRemainingString);
+        });
+        resetButton.setOnClickListener(view -> boardFragment.resetGrid());
+        undoButton.setOnClickListener(view -> boardFragment.undoLastTurn());
         getChildFragmentManager().beginTransaction().replace(gameFrameLayout.getId(), boardFragment).commit();
         return gameView;
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        timerViewModel.startTimer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        timerViewModel.stopTimer();
     }
 }

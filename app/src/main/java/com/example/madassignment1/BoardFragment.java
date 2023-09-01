@@ -4,11 +4,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +31,25 @@ public class BoardFragment extends Fragment {
     private String mParam2;
 
     private FrameLayout boardFragment;
+    private ArrayList<ArrayList<ImageButton>> grid = new ArrayList<>();
+    private Boolean turnOver = false;
+    private int playerOneIcon = R.drawable.x;
+    private int playerTwoIcon = R.drawable.o;
+
+    private Integer lastTurnY = -1;
+    private Integer lastTurnX = -1;
+
+    private boolean undoUsed = false;
+
+    private TimerViewModel timerViewModel;
+
+
+    private int boardSize = 3;
+    private int winCondition = 3;
+    private int movesAvailable = boardSize * boardSize;
+    private int movesMade = 0;
+
+    private boolean gameOver = false;
 
 
     public BoardFragment() {
@@ -66,39 +89,186 @@ public class BoardFragment extends Fragment {
         // Inflate the layout for this fragment
         View boardView = inflater.inflate(R.layout.fragment_board, container, false);
         boardFragment = boardView.findViewById(R.id.board_fragment);
-        createBoard(20);
+        timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);
+        timerViewModel.getTimeRemaining().observe(getViewLifecycleOwner(), timeRemaining -> {
+            if (timeRemaining == 0L) {
+                switchTurns();
+                timerViewModel.resetTimer();
+            }
+        });
+        createBoard(boardSize);
         return boardView;
     }
 
     public void createBoard(int boardSize) {
-        // Create the board container
+        // initial checks
+        assert boardSize > 2 && winCondition > 1 && playerOneIcon != playerTwoIcon && winCondition <= boardSize : "Invalid board configuration";
+        if (grid != null) {
+            boardFragment.removeAllViews();
+            grid.clear();
+        }
+        // create the board, this is the grid
         LinearLayout boardContainer = new LinearLayout(getContext());
         boardContainer.setOrientation(LinearLayout.VERTICAL);
-        // Calculate the button size
-        int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        int screenHeight = getResources().getDisplayMetrics().heightPixels;
-        int buttonSize = (int) (Math.min(screenWidth, screenHeight) / boardSize * 0.9);
-        // Create the rows and cells
+        // derive the button size from the board size so it scales
+        int buttonSize = (int) (Math.min(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels) / boardSize * 0.9);
+        // populate the grid with imageButtons
         for (int i = 0; i < boardSize; i++) {
             LinearLayout row = new LinearLayout(getContext());
             row.setOrientation(LinearLayout.HORIZONTAL);
+            grid.add(new ArrayList<>());
             for (int j = 0; j < boardSize; j++) {
-                // Create a button
-                Button button = new Button(getContext());
+                ImageButton button = new ImageButton(getContext());
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(buttonSize, buttonSize);
+                // customise the button
                 params.setMargins(0, 0, 0, 0);
                 button.setLayoutParams(params);
                 button.setBackgroundResource(R.drawable.button_outline);
                 button.setPadding(0, 0, 0, 0);
-                button.setText(" ");
-                button.setOnClickListener(v -> button.setText("X"));
-                // Add the button to the row
+                button.setImageResource(R.drawable.button_outline);
+                button.setOnClickListener(v -> {
+                    if (button.getTag() == null && !gameOver) {
+                        movesAvailable--;
+                        movesMade++;
+                        setLastTurn(button);
+                        turnOver = !turnOver;
+                        int turn = turnOver ? playerOneIcon : playerTwoIcon;
+                        button.setBackgroundResource(turn);
+                        button.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                        button.setTag(turn);
+                        timerViewModel.resetTimer();
+                        gameOver = checkGameCondition(turn);
+                        if (gameOver || isTie()) {
+                            gameOver = true;
+                            timerViewModel.stopTimer();
+                        }
+                    }
+                });
                 row.addView(button);
+                grid.get(i).add(button);
             }
-            // Add the row to the board container
             boardContainer.addView(row);
         }
-        // Add the board container to the fragment
         boardFragment.addView(boardContainer);
+    }
+
+    public int getMovesAvailable() {
+        return movesAvailable;
+    }
+
+    public int getMovesMade() {
+        return movesMade;
+    }
+
+    private void setLastTurn(ImageButton button) {
+        // can only undo once per turn
+        if (undoUsed) {
+            undoUsed = false;
+            return;
+        }
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid.size(); j++) {
+                if (grid.get(i).get(j) == button) {
+                    lastTurnY = i;
+                    lastTurnX = j;
+                    return;
+                }
+            }
+        }
+    }
+
+    public void undoLastTurn() {
+        if (lastTurnY != -1 && lastTurnX != -1 && !gameOver) {
+            grid.get(lastTurnY).get(lastTurnX).setTag(null);
+            grid.get(lastTurnY).get(lastTurnX).setBackgroundResource(R.drawable.button_outline);
+            lastTurnY = -1;
+            lastTurnX = -1;
+            undoUsed = true;
+            // switch turns after undo
+            turnOver = !turnOver;
+        }
+    }
+
+    private boolean checkGameCondition(int player) {
+        int leftDiagonalWins = 0, rightDiagonalWins = 0;
+        // iterate over the grid
+        for (int i = 0; i < grid.size(); i++) {
+            int rowWins = 0, colWins = 0;
+            for (int j = 0; j < grid.size(); j++) {
+                // Check row
+                if (grid.get(i).get(j).getTag() != null && (int) grid.get(i).get(j).getTag() == player) {
+                    if (++rowWins == winCondition) return true;
+                } else rowWins = 0;
+                // Check column
+                if (grid.get(j).get(i).getTag() != null && (int) grid.get(j).get(i).getTag() == player) {
+                    if (++colWins == winCondition) return true;
+                } else colWins = 0;
+            }
+            // Check left diagonal
+            if (grid.get(i).get(i).getTag() != null && (int) grid.get(i).get(i).getTag() == player) {
+                if (++leftDiagonalWins == winCondition) return true;
+            } else leftDiagonalWins = 0;
+            // Check right diagonal
+            if (grid.get(grid.size() - i - 1).get(i).getTag() != null && (int) grid.get(grid.size() - i - 1).get(i).getTag() == player) {
+                if (++rightDiagonalWins == winCondition) return true;
+            } else rightDiagonalWins = 0;
+        }
+        return false;
+    }
+
+    public boolean isTie() {
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid.size(); j++) {
+                if (grid.get(i).get(j).getTag() == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean getGameStatus() {
+        return gameOver;
+    }
+
+    public void setPlayerOneIcon(int playerOneIcon) {
+        if (playerOneIcon == playerTwoIcon)
+            throw new IllegalArgumentException("Player one and player two cannot have the same icon");
+        this.playerOneIcon = playerOneIcon;
+    }
+
+    public void setPlayerTwoIcon(int playerTwoIcon) {
+        if (playerOneIcon == playerTwoIcon)
+            throw new IllegalArgumentException("Player one and player two cannot have the same icon");
+        this.playerTwoIcon = playerTwoIcon;
+    }
+
+    public void setBoardSize(int boardSize) {
+        if (boardSize < 3) throw new IllegalArgumentException("Board size cannot be less than 3");
+        this.boardSize = boardSize;
+        resetGrid();
+    }
+
+    public void setWinCondition(int winCondition) {
+        if (winCondition < 2)
+            throw new IllegalArgumentException("Win condition cannot be less than 2");
+        this.winCondition = winCondition;
+        resetGrid();
+    }
+
+    public void resetGrid() {
+        for (ArrayList<ImageButton> row : grid) {
+            for (ImageButton button : row) {
+                button.setTag(null);
+                button.setBackgroundResource(R.drawable.button_outline);
+            }
+        }
+        movesAvailable = boardSize * boardSize;
+        movesMade = 0;
+        gameOver = false;
+    }
+
+    public void switchTurns() {
+        turnOver = !turnOver;
     }
 }
