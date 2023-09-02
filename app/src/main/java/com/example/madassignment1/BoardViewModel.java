@@ -3,13 +3,11 @@ package com.example.madassignment1;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class BoardViewModel extends ViewModel {
     private LiveData<LinearLayout> boardLayout;
@@ -36,7 +34,7 @@ public class BoardViewModel extends ViewModel {
     private LiveData<Integer> player2Marker = new MutableLiveData<>(R.drawable.o);
 
     private MutableLiveData<Integer> boardSize = new MutableLiveData<>(3);
-    private LiveData<Integer> winCondition = new MutableLiveData<>(3);
+    private MutableLiveData<Integer> winCondition = new MutableLiveData<>(3);
     private LiveData<Boolean> undoUsed = new MutableLiveData<>(false);
 
 
@@ -46,12 +44,6 @@ public class BoardViewModel extends ViewModel {
     }
     public LiveData<Integer> getMovesMade() {
         return movesMade;
-    }
-    public boolean getUndoUsed() {
-        return undoUsed.getValue();
-    }
-    public void setUndoUsed(boolean undoUsed ) {
-        this.undoUsed = new MutableLiveData<>(undoUsed);
     }
     public void setBoardLayout(LinearLayout boardLayout) {
         this.boardLayout = new MutableLiveData<>(boardLayout);
@@ -66,10 +58,8 @@ public class BoardViewModel extends ViewModel {
     public int getBoardSize() {
         return boardSize.getValue();
     }
-    public void setBoardSize(int boardSize) {
-        // changing the board size will reset everything
-        this.boardSize.setValue(boardSize);
-        this.movesAvailable.setValue(boardSize * boardSize);
+    public void resetBoard() {
+        this.movesAvailable.setValue(boardSize.getValue() * boardSize.getValue());
         this.movesMade.setValue(0);
         this.gameOver = new MutableLiveData<>(false);
         this.lastMoveX = new MutableLiveData<>(-1);
@@ -77,11 +67,21 @@ public class BoardViewModel extends ViewModel {
         this.turnOver = new MutableLiveData<>(false);
         boardLayout = null;
     }
+    public void setBoardSize(int boardSize) {
+        // changing the board size will reset everything
+        this.boardSize.setValue(boardSize);
+        this.movesAvailable.setValue(boardSize * boardSize);
+        resetBoard();
+    }
     public int getWinCondition() {
         return winCondition.getValue();
     }
     public void setWinCondition(int winCondition) {
-        this.winCondition = new MutableLiveData<>(winCondition);
+        // changing the win condition will reset everything
+        assert winCondition <= boardSize.getValue();
+        this.winCondition.setValue(winCondition);
+        resetBoard();
+
     }
     public int getPlayer1Marker() {
         return player1Marker.getValue();
@@ -112,9 +112,6 @@ public class BoardViewModel extends ViewModel {
     }
     public void setGameOver(boolean gameOver) {
         this.gameOver.setValue(gameOver);
-    }
-    public LiveData<Boolean> getGameOver() {
-        return gameOver;
     }
     public int getLastMoveX() {
         return lastMoveX.getValue();

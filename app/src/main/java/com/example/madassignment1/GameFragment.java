@@ -38,7 +38,6 @@ public class GameFragment extends Fragment {
     private TimerViewModel timerViewModel;
     private BoardViewModel boardViewModel;
 
-    private Boolean undoUsed = false;
 
 
     public GameFragment() {
@@ -78,60 +77,91 @@ public class GameFragment extends Fragment {
         // Inflate the layout for this fragment
         View gameView = inflater.inflate(R.layout.fragment_game, container, false);
         FrameLayout gameFrameLayout = gameView.findViewById(R.id.fragment_game_board);
+        Button undoButton = gameView.findViewById(R.id.undo_turn_button);
+        Button resetButton = gameView.findViewById(R.id.reset_button);
+        MediatorLiveData<Pair<Integer, Integer>> mediator = new MediatorLiveData<>();
         timeRemainingDisplay = gameView.findViewById(R.id.time_remaining_text_view);
         turnsLeftDisplay = gameView.findViewById(R.id.turns_remaining_text_view);
         playerTurnDisplay = gameView.findViewById(R.id.playerTurn_text_view);
-        Button undoButton = gameView.findViewById(R.id.undo_turn_button);
-        Button resetButton = gameView.findViewById(R.id.reset_button);
         timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+        // observer time remaining
         timerViewModel.getTimeRemaining().observe(getViewLifecycleOwner(), timeRemaining -> {
-            String timeRemainingString = "TimeRemaining: " + String.valueOf(timeRemaining / 1000);
+            String timeRemainingString = "TimeRemaining: " + timeRemaining / 1000;
             timeRemainingDisplay.setText(timeRemainingString);
         });
         // observer both moves available and moves made
-        MediatorLiveData<Pair<Integer, Integer>> mediator = new MediatorLiveData<>();
         mediator.addSource(boardViewModel.getMovesAvailable(), movesAvailable -> mediator.setValue(Pair.create(movesAvailable, boardViewModel.getMovesMade().getValue())));
         mediator.addSource(boardViewModel.getMovesMade(), movesMade -> mediator.setValue(Pair.create(boardViewModel.getMovesAvailable().getValue(), movesMade)));
         mediator.observe(getViewLifecycleOwner(), data -> {
-            String text = "Turns Remaining: " + String.valueOf(data.first);
-            text += " Moves Made: " + String.valueOf(data.second);
+            String text = "Turns Remaining: " + data.first;
+            text += " Moves Made: " + data.second;
             turnsLeftDisplay.setText(text);
-
         });
+        // observer player turn
         boardViewModel.turnOver.observe(getViewLifecycleOwner(), turnOver -> {
             String playerTurnString = "Player Turn: " + (turnOver ? "O" : "X");
             playerTurnDisplay.setText(playerTurnString);
         });
-        //resetButton.setOnClickListener(view -> boardFragment.resetGrid());
-        resetButton.setOnClickListener(view -> {
-            changeBoardSize(12);
-        });
 
+        // observer game over
+        resetButton.setOnClickListener(view -> boardFragment.resetGrid());
         undoButton.setOnClickListener(view -> boardFragment.undoLastTurn());
+
         getChildFragmentManager().beginTransaction().replace(gameFrameLayout.getId(), boardFragment).commit();
         return gameView;
     }
 
+
     public void changeBoardSize(int boardSize) {
+        // remove the old board fragment
         FragmentManager fragmentManager = getChildFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_game_board);
         if (fragment != null) {
             fragmentManager.beginTransaction().remove(fragment).commit();
         }
+        // create a new board fragment and reset the board by changing the board size
         boardViewModel.setBoardSize(boardSize);
         boardFragment = new BoardFragment();
         getChildFragmentManager().beginTransaction().replace(R.id.fragment_game_board, boardFragment).commit();
     }
+    public void changeWinCondition(int winCondition) {
+        // remove the old board fragment
+        FragmentManager fragmentManager = getChildFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_game_board);
+        if (fragment != null) {
+            fragmentManager.beginTransaction().remove(fragment).commit();
+        }
+        // create a new board fragment and reset the board by changing the win condition
+        boardViewModel.setWinCondition(winCondition);
+        boardFragment = new BoardFragment();
+        getChildFragmentManager().beginTransaction().replace(R.id.fragment_game_board, boardFragment).commit();
+    }
+
+    public void setPlayer1Marker(int marker) {
+        // only allow the player to change the marker if the game is over
+        if(boardViewModel.isGameOver()) {
+            boardViewModel.setPlayer1Marker(marker);
+        }
+    }
+    public void setPlayer2Marker(int marker) {
+        // only allow the player to change the marker if the game is over
+        if(boardViewModel.isGameOver()) {
+            boardViewModel.setPlayer2Marker(marker);
+        }
+    }
+    // TODO: make it so if a you move to a different fragment, the timer stops and gameOver set to true
 
     @Override
     public void onStart() {
+        // start the timer on start
         super.onStart();
         timerViewModel.startTimer();
     }
 
     @Override
     public void onStop() {
+        // stop the timer on stop
         super.onStop();
         timerViewModel.stopTimer();
     }

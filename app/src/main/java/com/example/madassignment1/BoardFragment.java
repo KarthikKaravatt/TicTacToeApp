@@ -107,9 +107,12 @@ public class BoardFragment extends Fragment {
                     }
                 }
             }
+            // add the layout to the fragment
             boardFragment.addView(boardLayout);
+            // set the grid to the board
             grid = boardViewModel.board;
         } else {
+            // create the board if it doesn't exist
             LinearLayout layout = createBoard(boardViewModel.getBoardSize());
             boardViewModel.board = grid;
             boardViewModel.setBoardLayout(layout);
@@ -148,26 +151,32 @@ public class BoardFragment extends Fragment {
                 button.setPadding(0, 0, 0, 0);
                 button.setImageResource(R.drawable.button_outline);
                 button.setOnClickListener(v -> {
+                    // if the cell is empty and the game is not over
                     if (button.getTag() == null && !boardViewModel.isGameOver()) {
+                        // decrement the moves available and increment the moves made
                         boardViewModel.decrementMovesAvailable();
                         boardViewModel.incrementMovesMade();
                         setLastTurn(button);
                         boardViewModel.setTurnOver();
+                        // set the button to the current player's marker
                         int turn = boardViewModel.isTurnOver() ? boardViewModel.getPlayer1Marker() : boardViewModel.getPlayer2Marker();
                         button.setBackgroundResource(turn);
                         button.setScaleType(ImageView.ScaleType.FIT_CENTER);
                         button.setTag(turn);
                         timerViewModel.resetTimer();
                         boardViewModel.setGameOver(checkGameCondition(turn));
+                        // if the game is over or there is a tie
                         if (boardViewModel.isGameOver() || isTie()) {
                             boardViewModel.setGameOver(true);
                             timerViewModel.stopTimer();
                         }
                     }
                 });
+                // add the button to the row and the grid
                 row.addView(button);
                 grid.get(i).add(button);
             }
+            // add the row to the board
             boardContainer.addView(row);
         }
         return boardContainer;
@@ -190,6 +199,7 @@ public class BoardFragment extends Fragment {
         // undo the last turn if there is one
         if (boardViewModel.getMovesMade().getValue() > 0 && !boardViewModel.isGameOver()) {
             ImageButton button = grid.get(boardViewModel.getLastMoveX()).get(boardViewModel.getLastMoveY());
+            // reset the cell
             button.setTag(null);
             button.setBackgroundResource(R.drawable.button_outline);
             boardViewModel.setTurnOver();
@@ -246,6 +256,7 @@ public class BoardFragment extends Fragment {
     }
 
     public boolean isTie() {
+        // if all the cells are filled
         for (int i = 0; i < grid.size(); i++) {
             for (int j = 0; j < grid.size(); j++) {
                 if (grid.get(i).get(j).getTag() == null) {
@@ -258,12 +269,14 @@ public class BoardFragment extends Fragment {
 
 
     public void resetGrid() {
+        // reset the grid
         for (ArrayList<ImageButton> row : grid) {
             for (ImageButton button : row) {
                 button.setTag(null);
                 button.setBackgroundResource(R.drawable.button_outline);
             }
         }
+        // reset the view models
         boardViewModel.resetMovesAvailable();
         boardViewModel.resetMovesMade();
         boardViewModel.turnOver.setValue(false);
