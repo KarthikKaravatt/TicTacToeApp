@@ -188,7 +188,7 @@ public class BoardFragment extends Fragment {
 
     public void undoLastTurn() {
         // undo the last turn if there is one
-        if (boardViewModel.getMovesMade() > 0 && !boardViewModel.isGameOver()) {
+        if (boardViewModel.getMovesMade().getValue() > 0 && !boardViewModel.isGameOver()) {
             ImageButton button = grid.get(boardViewModel.getLastMoveX()).get(boardViewModel.getLastMoveY());
             button.setTag(null);
             button.setBackgroundResource(R.drawable.button_outline);
@@ -266,6 +266,7 @@ public class BoardFragment extends Fragment {
         }
         boardViewModel.resetMovesAvailable();
         boardViewModel.resetMovesMade();
+        boardViewModel.turnOver.setValue(false);
         boardViewModel.setGameOver(false);
         timerViewModel.resetTimer();
     }
@@ -273,4 +274,5 @@ public class BoardFragment extends Fragment {
     public void switchTurns() {
         boardViewModel.setTurnOver();
     }
+
 }

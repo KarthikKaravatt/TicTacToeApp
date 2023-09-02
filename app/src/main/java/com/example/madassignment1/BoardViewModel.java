@@ -3,6 +3,7 @@ package com.example.madassignment1;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -19,27 +20,33 @@ public class BoardViewModel extends ViewModel {
 
     // defaults values
     // with thread safe live data
-    private LiveData<Integer> movesAvailable = new MutableLiveData<>(9);
-    private LiveData<Integer> movesMade= new MutableLiveData<>(0);
+    private MutableLiveData<Integer> movesAvailable = new MutableLiveData<>(9);
+    private MutableLiveData<Integer> movesMade= new MutableLiveData<>(0);
 
-    private LiveData<Boolean> gameOver = new MutableLiveData<>(false);
+    private MutableLiveData<Boolean> gameOver = new MutableLiveData<>(false);
 
 
     private LiveData<Integer> lastMoveX = new MutableLiveData<>(-1);
     private LiveData<Integer> lastMoveY = new MutableLiveData<>(-1);
 
     // false means player one, true means player 2
-    public LiveData<Boolean> turnOver = new MutableLiveData<>(false);
+    public MutableLiveData<Boolean> turnOver = new MutableLiveData<>(false);
 
     private LiveData<Integer> player1Marker = new MutableLiveData<>(R.drawable.x);
     private LiveData<Integer> player2Marker = new MutableLiveData<>(R.drawable.o);
 
-    private LiveData<Integer> boardSize = new MutableLiveData<>(6);
+    private MutableLiveData<Integer> boardSize = new MutableLiveData<>(3);
     private LiveData<Integer> winCondition = new MutableLiveData<>(3);
     private LiveData<Boolean> undoUsed = new MutableLiveData<>(false);
 
 
 
+    public LiveData<Integer> getMovesAvailable() {
+        return movesAvailable;
+    }
+    public LiveData<Integer> getMovesMade() {
+        return movesMade;
+    }
     public boolean getUndoUsed() {
         return undoUsed.getValue();
     }
@@ -60,7 +67,15 @@ public class BoardViewModel extends ViewModel {
         return boardSize.getValue();
     }
     public void setBoardSize(int boardSize) {
-        this.boardSize = new MutableLiveData<>(boardSize);
+        // changing the board size will reset everything
+        this.boardSize.setValue(boardSize);
+        this.movesAvailable.setValue(boardSize * boardSize);
+        this.movesMade.setValue(0);
+        this.gameOver = new MutableLiveData<>(false);
+        this.lastMoveX = new MutableLiveData<>(-1);
+        this.lastMoveY = new MutableLiveData<>(-1);
+        this.turnOver = new MutableLiveData<>(false);
+        boardLayout = null;
     }
     public int getWinCondition() {
         return winCondition.getValue();
@@ -80,29 +95,26 @@ public class BoardViewModel extends ViewModel {
     public void setPlayer2Marker(int player2Marker) {
         this.player2Marker = new MutableLiveData<>(player2Marker);
     }
-    public int getMovesAvailable() {
-        return movesAvailable.getValue();
-    }
     public void decrementMovesAvailable() {
-        this.movesAvailable = new MutableLiveData<>(movesAvailable.getValue() - 1);
+        this.movesAvailable.setValue(movesAvailable.getValue() - 1);
     }
     public void resetMovesAvailable() {
-        this.movesAvailable = new MutableLiveData<>(boardSize.getValue() * boardSize.getValue());
-    }
-    public int getMovesMade() {
-        return movesMade.getValue();
+        this.movesAvailable.setValue(boardSize.getValue() * boardSize.getValue());
     }
     public void incrementMovesMade() {
-        this.movesMade = new MutableLiveData<>(movesMade.getValue() + 1);
+        this.movesMade.setValue(movesMade.getValue() + 1);
     }
     public void resetMovesMade() {
-        this.movesMade = new MutableLiveData<>(0);
+        this.movesMade.setValue(0);
     }
     public boolean isGameOver() {
         return gameOver.getValue();
     }
     public void setGameOver(boolean gameOver) {
-        this.gameOver = new MutableLiveData<>(gameOver);
+        this.gameOver.setValue(gameOver);
+    }
+    public LiveData<Boolean> getGameOver() {
+        return gameOver;
     }
     public int getLastMoveX() {
         return lastMoveX.getValue();
@@ -120,7 +132,7 @@ public class BoardViewModel extends ViewModel {
         return turnOver.getValue();
     }
     public void setTurnOver() {
-        this.turnOver = new MutableLiveData<>(!this.turnOver.getValue());
+        this.turnOver.setValue(!turnOver.getValue());
     }
 
 

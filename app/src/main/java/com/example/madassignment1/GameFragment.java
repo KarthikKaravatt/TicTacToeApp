@@ -1,6 +1,7 @@
 package com.example.madassignment1;
 
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 
@@ -31,9 +34,11 @@ public class GameFragment extends Fragment {
     private BoardFragment boardFragment = new BoardFragment();
     private TextView timeRemainingDisplay;
     private TextView turnsLeftDisplay;
+    private TextView playerTurnDisplay;
     private TimerViewModel timerViewModel;
+    private BoardViewModel boardViewModel;
 
-
+    private Boolean undoUsed = false;
 
 
     public GameFragment() {
@@ -75,19 +80,49 @@ public class GameFragment extends Fragment {
         FrameLayout gameFrameLayout = gameView.findViewById(R.id.fragment_game_board);
         timeRemainingDisplay = gameView.findViewById(R.id.time_remaining_text_view);
         turnsLeftDisplay = gameView.findViewById(R.id.turns_remaining_text_view);
+        playerTurnDisplay = gameView.findViewById(R.id.playerTurn_text_view);
         Button undoButton = gameView.findViewById(R.id.undo_turn_button);
         Button resetButton = gameView.findViewById(R.id.reset_button);
         timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);
+        boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
         timerViewModel.getTimeRemaining().observe(getViewLifecycleOwner(), timeRemaining -> {
             String timeRemainingString = "TimeRemaining: " + String.valueOf(timeRemaining / 1000);
             timeRemainingDisplay.setText(timeRemainingString);
         });
-        resetButton.setOnClickListener(view -> boardFragment.resetGrid());
+        // observer both moves available and moves made
+        MediatorLiveData<Pair<Integer, Integer>> mediator = new MediatorLiveData<>();
+        mediator.addSource(boardViewModel.getMovesAvailable(), movesAvailable -> mediator.setValue(Pair.create(movesAvailable, boardViewModel.getMovesMade().getValue())));
+        mediator.addSource(boardViewModel.getMovesMade(), movesMade -> mediator.setValue(Pair.create(boardViewModel.getMovesAvailable().getValue(), movesMade)));
+        mediator.observe(getViewLifecycleOwner(), data -> {
+            String text = "Turns Remaining: " + String.valueOf(data.first);
+            text += " Moves Made: " + String.valueOf(data.second);
+            turnsLeftDisplay.setText(text);
+
+        });
+        boardViewModel.turnOver.observe(getViewLifecycleOwner(), turnOver -> {
+            String playerTurnString = "Player Turn: " + (turnOver ? "O" : "X");
+            playerTurnDisplay.setText(playerTurnString);
+        });
+        //resetButton.setOnClickListener(view -> boardFragment.resetGrid());
+        resetButton.setOnClickListener(view -> {
+            changeBoardSize(12);
+        });
+
         undoButton.setOnClickListener(view -> boardFragment.undoLastTurn());
         getChildFragmentManager().beginTransaction().replace(gameFrameLayout.getId(), boardFragment).commit();
         return gameView;
     }
 
+    public void changeBoardSize(int boardSize) {
+        FragmentManager fragmentManager = getChildFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_game_board);
+        if (fragment != null) {
+            fragmentManager.beginTransaction().remove(fragment).commit();
+        }
+        boardViewModel.setBoardSize(boardSize);
+        boardFragment = new BoardFragment();
+        getChildFragmentManager().beginTransaction().replace(R.id.fragment_game_board, boardFragment).commit();
+    }
 
     @Override
     public void onStart() {
