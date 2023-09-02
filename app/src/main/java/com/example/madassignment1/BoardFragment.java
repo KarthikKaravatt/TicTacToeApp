@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
@@ -33,25 +32,10 @@ public class BoardFragment extends Fragment {
 
     private FrameLayout boardFragment;
     private ArrayList<ArrayList<ImageButton>> grid = new ArrayList<>();
-    private Boolean turnOver = false;
-    private int playerOneIcon = R.drawable.x;
-    private int playerTwoIcon = R.drawable.o;
 
-    private Integer lastTurnY = -1;
-    private Integer lastTurnX = -1;
-
-    private boolean undoUsed = false;
 
     private TimerViewModel timerViewModel;
     private BoardViewModel boardViewModel;
-
-
-    private int boardSize = 3;
-    private int winCondition = 3;
-    private int movesAvailable = boardSize * boardSize;
-    private int movesMade = 0;
-
-    private boolean gameOver = false;
 
 
     public BoardFragment() {
@@ -99,16 +83,35 @@ public class BoardFragment extends Fragment {
                 timerViewModel.resetTimer();
             }
         });
-        // No idea how this works but it works
+        // Must remove the the board layout from its parent before adding it to a new parent
+        // because it can only have one parent
         if (boardViewModel.hasLayout()) {
-            View boardLayout = boardViewModel.getBoardLayout();
+            ViewGroup boardLayout = boardViewModel.getBoardLayout();
             ViewGroup parent = (ViewGroup) boardLayout.getParent();
             if (parent != null) {
                 parent.removeView(boardLayout);
             }
+            // derive the button size from the board size so it scales
+            int buttonSize = (int)
+                    (Math.min(getResources().getDisplayMetrics().widthPixels,
+                            getResources().getDisplayMetrics().heightPixels)
+                            / boardViewModel.getBoardSize() * 0.9);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(buttonSize, buttonSize);
+            // add the layout params to the buttons
+            for (int i = 0; i < boardLayout.getChildCount(); i++) {
+                View row = boardLayout.getChildAt(i);
+                for (int j = 0; j < ((ViewGroup) row).getChildCount(); j++) {
+                    View button = ((ViewGroup) row).getChildAt(j);
+                    if (button instanceof ImageButton) {
+                        button.setLayoutParams(params);
+                    }
+                }
+            }
             boardFragment.addView(boardLayout);
+            grid = boardViewModel.board;
         } else {
-            LinearLayout layout = createBoard(boardSize);
+            LinearLayout layout = createBoard(boardViewModel.getBoardSize());
+            boardViewModel.board = grid;
             boardViewModel.setBoardLayout(layout);
             boardFragment.addView(layout);
         }
@@ -117,7 +120,10 @@ public class BoardFragment extends Fragment {
 
     public LinearLayout createBoard(int boardSize) {
         // initial checks
-        assert boardSize > 2 && winCondition > 1 && playerOneIcon != playerTwoIcon && winCondition <= boardSize : "Invalid board configuration";
+        assert boardSize > 2 &&
+                boardViewModel.getWinCondition() > 1 &&
+                boardViewModel.getPlayer1Marker() != boardViewModel.getPlayer2Marker()
+                && boardViewModel.getWinCondition() <= boardSize : "Invalid board configuration";
         if (grid != null) {
             boardFragment.removeAllViews();
             grid.clear();
@@ -142,19 +148,19 @@ public class BoardFragment extends Fragment {
                 button.setPadding(0, 0, 0, 0);
                 button.setImageResource(R.drawable.button_outline);
                 button.setOnClickListener(v -> {
-                    if (button.getTag() == null && !gameOver) {
-                        movesAvailable--;
-                        movesMade++;
+                    if (button.getTag() == null && !boardViewModel.isGameOver()) {
+                        boardViewModel.decrementMovesAvailable();
+                        boardViewModel.incrementMovesMade();
                         setLastTurn(button);
-                        turnOver = !turnOver;
-                        int turn = turnOver ? playerOneIcon : playerTwoIcon;
+                        boardViewModel.setTurnOver();
+                        int turn = boardViewModel.isTurnOver() ? boardViewModel.getPlayer1Marker() : boardViewModel.getPlayer2Marker();
                         button.setBackgroundResource(turn);
                         button.setScaleType(ImageView.ScaleType.FIT_CENTER);
                         button.setTag(turn);
                         timerViewModel.resetTimer();
-                        gameOver = checkGameCondition(turn);
-                        if (gameOver || isTie()) {
-                            gameOver = true;
+                        boardViewModel.setGameOver(checkGameCondition(turn));
+                        if (boardViewModel.isGameOver() || isTie()) {
+                            boardViewModel.setGameOver(true);
                             timerViewModel.stopTimer();
                         }
                     }
@@ -167,41 +173,26 @@ public class BoardFragment extends Fragment {
         return boardContainer;
     }
 
-    public int getMovesAvailable() {
-        return movesAvailable;
-    }
 
-    public int getMovesMade() {
-        return movesMade;
-    }
-
+    //TODO: Maybe only allow for undo to be used once per turn
     private void setLastTurn(ImageButton button) {
-        // can only undo once per turn
-        if (undoUsed) {
-            undoUsed = false;
-            return;
-        }
+        // find the location of the last move on the grid
         for (int i = 0; i < grid.size(); i++) {
-            for (int j = 0; j < grid.size(); j++) {
-                if (grid.get(i).get(j) == button) {
-                    lastTurnY = i;
-                    lastTurnX = j;
-                    return;
-                }
+            if (grid.get(i).contains(button)) {
+                boardViewModel.setLastMoveX(i);
+                boardViewModel.setLastMoveY(grid.get(i).indexOf(button));
+                break;
             }
         }
     }
 
     public void undoLastTurn() {
-        if (lastTurnY != -1 && lastTurnX != -1 && !gameOver) {
-            grid.get(lastTurnY).get(lastTurnX).setTag(null);
-            grid.get(lastTurnY).get(lastTurnX).setBackgroundResource(R.drawable.button_outline);
-            lastTurnY = -1;
-            lastTurnX = -1;
-            undoUsed = true;
-            // switch turns after undo
-            turnOver = !turnOver;
-            timerViewModel.resetTimer();
+        // undo the last turn if there is one
+        if (boardViewModel.getMovesMade() > 0 && !boardViewModel.isGameOver()) {
+            ImageButton button = grid.get(boardViewModel.getLastMoveX()).get(boardViewModel.getLastMoveY());
+            button.setTag(null);
+            button.setBackgroundResource(R.drawable.button_outline);
+            boardViewModel.setTurnOver();
         }
     }
 
@@ -213,21 +204,43 @@ public class BoardFragment extends Fragment {
             for (int j = 0; j < grid.size(); j++) {
                 // Check row
                 if (grid.get(i).get(j).getTag() != null && (int) grid.get(i).get(j).getTag() == player) {
-                    if (++rowWins == winCondition) return true;
+                    if (++rowWins == boardViewModel.getWinCondition()) return true;
                 } else rowWins = 0;
                 // Check column
                 if (grid.get(j).get(i).getTag() != null && (int) grid.get(j).get(i).getTag() == player) {
-                    if (++colWins == winCondition) return true;
+                    if (++colWins == boardViewModel.getWinCondition()) return true;
                 } else colWins = 0;
             }
             // Check left diagonal
             if (grid.get(i).get(i).getTag() != null && (int) grid.get(i).get(i).getTag() == player) {
-                if (++leftDiagonalWins == winCondition) return true;
+                if (++leftDiagonalWins == boardViewModel.getWinCondition()) return true;
             } else leftDiagonalWins = 0;
             // Check right diagonal
             if (grid.get(grid.size() - i - 1).get(i).getTag() != null && (int) grid.get(grid.size() - i - 1).get(i).getTag() == player) {
-                if (++rightDiagonalWins == winCondition) return true;
+                if (++rightDiagonalWins == boardViewModel.getWinCondition()) return true;
             } else rightDiagonalWins = 0;
+        }
+        // Check other diagonals
+        for (int offset = 1; offset <= grid.size() - boardViewModel.getWinCondition(); offset++) {
+            int leftDiagonalWinsTop = 0, leftDiagonalWinsBottom = 0, rightDiagonalWinsTop = 0, rightDiagonalWinsBottom = 0;
+            for (int i = 0; i < grid.size() - offset; i++) {
+                // Check top-left diagonal
+                if (grid.get(i + offset).get(i).getTag() != null && (int) grid.get(i + offset).get(i).getTag() == player) {
+                    if (++leftDiagonalWinsTop == boardViewModel.getWinCondition()) return true;
+                } else leftDiagonalWinsTop = 0;
+                // Check bottom-left diagonal
+                if (grid.get(i).get(i + offset).getTag() != null && (int) grid.get(i).get(i + offset).getTag() == player) {
+                    if (++leftDiagonalWinsBottom == boardViewModel.getWinCondition()) return true;
+                } else leftDiagonalWinsBottom = 0;
+                // Check top-right diagonal
+                if (grid.get(grid.size() - i - offset - 1).get(i).getTag() != null && (int) grid.get(grid.size() - i - offset - 1).get(i).getTag() == player) {
+                    if (++rightDiagonalWinsTop == boardViewModel.getWinCondition()) return true;
+                } else rightDiagonalWinsTop = 0;
+                // Check bottom-right diagonal
+                if (grid.get(grid.size() - i - 1).get(i + offset).getTag() != null && (int) grid.get(grid.size() - i - 1).get(i + offset).getTag() == player) {
+                    if (++rightDiagonalWinsBottom == boardViewModel.getWinCondition()) return true;
+                } else rightDiagonalWinsBottom = 0;
+            }
         }
         return false;
     }
@@ -243,34 +256,6 @@ public class BoardFragment extends Fragment {
         return true;
     }
 
-    public boolean getGameStatus() {
-        return gameOver;
-    }
-
-    public void setPlayerOneIcon(int playerOneIcon) {
-        if (playerOneIcon == playerTwoIcon)
-            throw new IllegalArgumentException("Player one and player two cannot have the same icon");
-        this.playerOneIcon = playerOneIcon;
-    }
-
-    public void setPlayerTwoIcon(int playerTwoIcon) {
-        if (playerOneIcon == playerTwoIcon)
-            throw new IllegalArgumentException("Player one and player two cannot have the same icon");
-        this.playerTwoIcon = playerTwoIcon;
-    }
-
-    public void setBoardSize(int boardSize) {
-        if (boardSize < 3) throw new IllegalArgumentException("Board size cannot be less than 3");
-        this.boardSize = boardSize;
-        resetGrid();
-    }
-
-    public void setWinCondition(int winCondition) {
-        if (winCondition < 2)
-            throw new IllegalArgumentException("Win condition cannot be less than 2");
-        this.winCondition = winCondition;
-        resetGrid();
-    }
 
     public void resetGrid() {
         for (ArrayList<ImageButton> row : grid) {
@@ -279,13 +264,13 @@ public class BoardFragment extends Fragment {
                 button.setBackgroundResource(R.drawable.button_outline);
             }
         }
-        movesAvailable = boardSize * boardSize;
-        movesMade = 0;
-        gameOver = false;
+        boardViewModel.resetMovesAvailable();
+        boardViewModel.resetMovesMade();
+        boardViewModel.setGameOver(false);
         timerViewModel.resetTimer();
     }
 
     public void switchTurns() {
-        turnOver = !turnOver;
+        boardViewModel.setTurnOver();
     }
 }
