@@ -6,10 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.List;
 
@@ -81,6 +83,10 @@ public class GameSettingsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View gameSettingsView = inflater.inflate(R.layout.fragment_game_settings, container, false);
+
+        // find the back button
+        ImageButton backButton = (ImageButton) gameSettingsView.findViewById(R.id.back_button);
+
         boardSizeDropdown = gameSettingsView.findViewById(R.id.BoardSizeOptionTextView);
         matchConditionDropdown = gameSettingsView.findViewById(R.id.MatchConditionDropDownTextView);
         markerDropdown = gameSettingsView.findViewById(R.id.MarkerSelectorDropDownTextView);
@@ -120,6 +126,15 @@ public class GameSettingsFragment extends Fragment {
             currentMarker = adapterView.getItemAtPosition(i).toString();
             setMarkerImage(currentMarker);
         });
+
+        // on click listener for the back button
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // perform the fragment transaction to load new game fragment
+                loadGameSelectionFragment();
+            }
+        });
         return gameSettingsView;
     }
 
@@ -130,5 +145,14 @@ public class GameSettingsFragment extends Fragment {
             markerImageView.setImageResource(R.drawable.o);
         }
 
+    }
+
+    // private method to load the game selection fragment when the back button is clicked
+    private void loadGameSelectionFragment() {
+        // get fragment manager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
+        // begin the fragment transaction
+        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new GameSelectionFragment()).commit();
     }
 }

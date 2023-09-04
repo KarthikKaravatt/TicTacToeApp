@@ -197,7 +197,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         >
-        <ImageView
+        <ImageButton
             android:id="@+id/back_button"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -209,7 +209,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1">
 
-        </ImageView>
+        </ImageButton>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
