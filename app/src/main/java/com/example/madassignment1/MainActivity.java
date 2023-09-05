@@ -1,9 +1,11 @@
 package com.example.madassignment1;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import java.util.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     LoginFragment loginFragment = new LoginFragment();
     StatisticsFragment statsFragment = new StatisticsFragment();
     FragmentManager fm = getSupportFragmentManager();
+    private List<String> usernameList = new ArrayList<>();
 
     // initial app startup
     @Override
@@ -22,6 +25,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         loadLoginFragment();
+    }
+
+    // handle username from login fragment
+    public void handleUsername(String username) {
+        usernameList.add(username);
+    }
+
+    public boolean usernameExists(String username) {
+        return usernameList.contains(username);
     }
 
     // loads homepage
