@@ -10,20 +10,31 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/LoginFragmentConstraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="200dp">
 
         <ImageView
-            android:id="@+id/LoginFragmentImage"
-            android:layout_width="411dp"
-            android:layout_height="400dp"
+            android:id="@+id/AvatarImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/logo"
             android:scaleType="centerInside"
-            android:src="@drawable/dice"
-            app:layout_constraintBottom_toTopOf="@+id/LoginFragmentButton"
+            android:src="@drawable/avatar_default"
+            app:layout_constraintBottom_toTopOf="@+id/AvatarButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/AvatarButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:text="Change Avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/AvatarImage" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/LoginFragmentTextInputLayout"
@@ -32,26 +43,32 @@
             android:layout_marginTop="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LoginFragmentImage">
+            app:layout_constraintTop_toBottomOf="@+id/AvatarButton">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/usernameText"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:hint="@string/username">
+                android:orientation="horizontal">
 
-            </com.google.android.material.textfield.TextInputEditText>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/usernameText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="30dp"
+                    android:hint="@string/username"
+                    android:background="@drawable/custom_border"/>
+
+                <Button
+                    android:id="@+id/LoginFragmentButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="10dp"
+                    android:text="➜" />
+            </LinearLayout>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:id="@+id/LoginFragmentButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/LoginFragmentButtonText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LoginFragmentTextInputLayout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
