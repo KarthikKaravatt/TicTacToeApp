@@ -1,11 +1,13 @@
 package com.example.madassignment1;
 
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     LoginFragment loginFragment = new LoginFragment();
     StatisticsFragment statsFragment = new StatisticsFragment();
     FragmentManager fm = getSupportFragmentManager();
+    Fragment mainFragment = fm.findFragmentById(R.id.MainActivityFrameLayout);
     private List<String> usernameList = new ArrayList<>();
 
     // initial app startup
@@ -24,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (savedInstanceState != null) {
+            return;
+        }
         loadLoginFragment();
     }
 
@@ -63,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     // loads user statistics
     private void loadStatsFragment() {
-        fm.beginTransaction().replace(R.id.MainActivityFrameLayout,  statsFragment).commit();
+        fm.beginTransaction().replace(R.id.MainActivityFrameLayout, statsFragment).commit();
     }
 
 }

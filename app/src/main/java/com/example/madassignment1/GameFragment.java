@@ -165,4 +165,5 @@ public class GameFragment extends Fragment {
         super.onStop();
         timerViewModel.stopTimer();
     }
+
 }

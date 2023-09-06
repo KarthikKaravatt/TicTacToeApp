@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -86,31 +87,7 @@ public class BoardFragment extends Fragment {
         // Must remove the the board layout from its parent before adding it to a new parent
         // because it can only have one parent
         if (boardViewModel.hasLayout()) {
-            ViewGroup boardLayout = boardViewModel.getBoardLayout();
-            ViewGroup parent = (ViewGroup) boardLayout.getParent();
-            if (parent != null) {
-                parent.removeView(boardLayout);
-            }
-            // derive the button size from the board size so it scales
-            int buttonSize = (int)
-                    (Math.min(getResources().getDisplayMetrics().widthPixels,
-                            getResources().getDisplayMetrics().heightPixels)
-                            / boardViewModel.getBoardSize() * 0.9);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(buttonSize, buttonSize);
-            // add the layout params to the buttons
-            for (int i = 0; i < boardLayout.getChildCount(); i++) {
-                View row = boardLayout.getChildAt(i);
-                for (int j = 0; j < ((ViewGroup) row).getChildCount(); j++) {
-                    View button = ((ViewGroup) row).getChildAt(j);
-                    if (button instanceof ImageButton) {
-                        button.setLayoutParams(params);
-                    }
-                }
-            }
-            // add the layout to the fragment
-            boardFragment.addView(boardLayout);
-            // set the grid to the board
-            grid = boardViewModel.board;
+            rebuildBoard();
         } else {
             // create the board if it doesn't exist
             LinearLayout layout = createBoard(boardViewModel.getBoardSize());
@@ -119,6 +96,33 @@ public class BoardFragment extends Fragment {
             boardFragment.addView(layout);
         }
         return boardView;
+    }
+    public void rebuildBoard(){
+        ViewGroup boardLayout = boardViewModel.getBoardLayout();
+        ViewGroup parent = (ViewGroup) boardLayout.getParent();
+        if (parent != null) {
+            parent.removeView(boardLayout);
+        }
+        // derive the button size from the board size so it scales
+        int buttonSize = (int)
+                (Math.min(getResources().getDisplayMetrics().widthPixels,
+                        getResources().getDisplayMetrics().heightPixels)
+                        / boardViewModel.getBoardSize() * 0.9);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(buttonSize, buttonSize);
+        // add the layout params to the buttons
+        for (int i = 0; i < boardLayout.getChildCount(); i++) {
+            View row = boardLayout.getChildAt(i);
+            for (int j = 0; j < ((ViewGroup) row).getChildCount(); j++) {
+                View button = ((ViewGroup) row).getChildAt(j);
+                if (button instanceof ImageButton) {
+                    button.setLayoutParams(params);
+                }
+            }
+        }
+        // add the layout to the fragment
+        boardFragment.addView(boardLayout);
+        // set the grid to the board
+        grid = boardViewModel.board;
     }
 
     public LinearLayout createBoard(int boardSize) {
@@ -166,8 +170,11 @@ public class BoardFragment extends Fragment {
                         timerViewModel.resetTimer();
                         boardViewModel.setGameOver(checkGameCondition(turn));
                         // if the game is over or there is a tie
-                        if (boardViewModel.isGameOver() || isTie()) {
-                            boardViewModel.setGameOver(true);
+                        if (boardViewModel.isGameOver()) {
+                            Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                            timerViewModel.stopTimer();
+                        } else if (isTie()) {
+                            Toast.makeText(getContext(), "Tie", Toast.LENGTH_SHORT).show();
                             timerViewModel.stopTimer();
                         }
                     }
