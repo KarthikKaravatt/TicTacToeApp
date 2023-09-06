@@ -3,16 +3,14 @@ package com.example.madassignment1;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GameSelectionFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GameSelectionFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -59,6 +57,53 @@ public class GameSelectionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_game_selection, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_game_selection, container, false);
+        // find the back button
+        ImageButton backButton = (ImageButton) rootView.findViewById(R.id.back_button);
+        // find human vs human button
+        Button humanVsHumanButton = rootView.findViewById(R.id.humanVsHumanButton);
+        // find human vs AI button
+        Button humanVsAiButton = rootView.findViewById(R.id.humanVsAiButton);
+
+        humanVsHumanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // perform the fragment transaction to load new game fragment
+                loadGameSettingsFragment();
+            }
+        });
+        humanVsAiButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // perform the fragment transaction to load new game fragment
+                loadGameSettingsFragment();
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // perform the fragment transaction to load new game fragment
+                loadHomepageFragment();
+            }
+        });
+
+        return rootView;
+    }
+
+    private void loadHomepageFragment() {
+        // get fragment manager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
+        // begin the fragment transaction
+        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new HomepageFragment()).commit();
+    }
+
+    private void loadGameSettingsFragment() {
+        // get fragment manager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
+        // begin the fragment transaction
+        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new GameSettingsFragment()).commit();
     }
 }

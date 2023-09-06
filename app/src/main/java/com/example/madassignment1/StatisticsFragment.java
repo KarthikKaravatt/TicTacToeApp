@@ -3,10 +3,13 @@ package com.example.madassignment1;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -58,7 +61,24 @@ public class StatisticsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
+        ImageButton backButton = rootView.findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // perform the fragment transaction to load HomepageFragment
+                loadHomepageFragment();
+            }
+        });
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_statistics, container, false);
+        return rootView;
+    }
+
+    private void loadHomepageFragment() {
+        // get fragment manager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
+        // begin the fragment transaction
+        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new HomepageFragment()).commit();
     }
 }
