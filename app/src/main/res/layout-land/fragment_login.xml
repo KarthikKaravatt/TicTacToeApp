@@ -13,40 +13,65 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/LoginFragmentImage"
-            android:layout_width="0dp"
-            android:layout_height="300dp"
+            android:id="@+id/AvatarImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
             android:contentDescription="@string/logo"
-            android:src="@drawable/dice"
+            android:src="@drawable/avatar_default"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/LoginFragmentTextInputLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
         </ImageView>
+
+        <Button
+            android:id="@+id/AvatarButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Change Avatar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/LoginFragmentTextInputLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/AvatarImage"
+            android:layout_marginHorizontal="20dp" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guidelineVertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/LoginFragmentTextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/LoginFragmentImage"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/usernameText"
+            app:layout_constraintEnd_toStartOf="@id/guidelineVertical"
+            app:layout_constraintStart_toEndOf="@+id/AvatarImage"
+            app:layout_constraintTop_toTopOf="@+id/AvatarImage"
+            android:layout_marginTop="20dp">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="30dp"
-                android:hint="@string/username">
+                android:orientation="horizontal">
 
-            </com.google.android.material.textfield.TextInputEditText>
-
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/usernameText"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="20dp"
+                    android:hint="@string/username"
+                    android:background="@drawable/custom_border"/>
+                <Button
+                    android:id="@+id/button1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="➜" />
+            </LinearLayout>
         </com.google.android.material.textfield.TextInputLayout>
-
         <Button
             android:id="@+id/LoginFragmentButton"
             android:layout_width="wrap_content"
@@ -56,8 +81,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/LoginFragmentTextInputLayout"
             app:layout_constraintTop_toBottomOf="@+id/LoginFragmentTextInputLayout" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </FrameLayout>
+
