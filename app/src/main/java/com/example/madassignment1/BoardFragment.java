@@ -1,5 +1,6 @@
 package com.example.madassignment1;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,8 +85,6 @@ public class BoardFragment extends Fragment {
                 timerViewModel.resetTimer();
             }
         });
-        // Must remove the the board layout from its parent before adding it to a new parent
-        // because it can only have one parent
         if (boardViewModel.hasLayout()) {
             rebuildBoard();
         } else {
@@ -97,7 +96,10 @@ public class BoardFragment extends Fragment {
         }
         return boardView;
     }
-    public void rebuildBoard(){
+
+    public void rebuildBoard() {
+        // Must remove the the board layout from its parent before adding it to a new parent
+        // because it can only have one parent
         ViewGroup boardLayout = boardViewModel.getBoardLayout();
         ViewGroup parent = (ViewGroup) boardLayout.getParent();
         if (parent != null) {
@@ -170,11 +172,18 @@ public class BoardFragment extends Fragment {
                         timerViewModel.resetTimer();
                         boardViewModel.setGameOver(checkGameCondition(turn));
                         // if the game is over or there is a tie
+                        // TODO: Toast is broken when loading the fragment more than once
                         if (boardViewModel.isGameOver()) {
-                            Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                            Activity activity = getActivity();
+                            if (activity != null) {
+                                Toast.makeText(activity, "Game Over", Toast.LENGTH_SHORT).show();
+                            }
                             timerViewModel.stopTimer();
                         } else if (isTie()) {
-                            Toast.makeText(getContext(), "Tie", Toast.LENGTH_SHORT).show();
+                            Activity activity = getActivity();
+                            if (activity != null) {
+                                Toast.makeText(activity, "Tie", Toast.LENGTH_SHORT).show();
+                            }
                             timerViewModel.stopTimer();
                         }
                     }
@@ -294,5 +303,4 @@ public class BoardFragment extends Fragment {
     public void switchTurns() {
         boardViewModel.setTurnOver();
     }
-
 }
