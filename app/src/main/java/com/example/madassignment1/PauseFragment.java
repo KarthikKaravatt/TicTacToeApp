@@ -10,17 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link StatisticsFragment#newInstance} factory method to
+ * Use the {@link PauseFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StatisticsFragment extends Fragment {
+public class PauseFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,9 +27,11 @@ public class StatisticsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private Button returnButton;
+    private Button exitButton;
     private BoardViewModel boardViewModel;
 
-    public StatisticsFragment() {
+    public PauseFragment() {
         // Required empty public constructor
     }
 
@@ -43,11 +41,11 @@ public class StatisticsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment StatisticsFragment.
+     * @return A new instance of fragment PauseFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static StatisticsFragment newInstance(String param1, String param2) {
-        StatisticsFragment fragment = new StatisticsFragment();
+    public static PauseFragment newInstance(String param1, String param2) {
+        PauseFragment fragment = new PauseFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -67,24 +65,38 @@ public class StatisticsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
-        ImageButton backButton = rootView.findViewById(R.id.back_button);
-        TextView gamesTiedText = rootView.findViewById(R.id.drawText);
-
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_pause, container, false);
+        returnButton = rootView.findViewById(R.id.returnButton);
+        exitButton = rootView.findViewById(R.id.exitButton);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
-        backButton.setOnClickListener(new View.OnClickListener() {
+        returnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // perform the fragment transaction to load HomepageFragment
+                loadGameFragment();
+            }
+        });
+
+        exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // perform the fragment transaction to load HomepageFragment
                 loadHomepageFragment();
+                boardViewModel.resetBoard();
             }
         });
 
-
-        // Inflate the layout for this fragment
         return rootView;
     }
 
+    private void loadGameFragment() {
+        // get fragment manager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
+        // begin the fragment transaction
+        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new GameFragment()).commit();
+    }
     private void loadHomepageFragment() {
         // get fragment manager
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();

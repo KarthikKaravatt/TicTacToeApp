@@ -23,12 +23,14 @@ public class BoardViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> gameOver = new MutableLiveData<>(false);
 
-
+    private MutableLiveData<Boolean> tie = new MutableLiveData<>(false);
     private LiveData<Integer> lastMoveX = new MutableLiveData<>(-1);
     private LiveData<Integer> lastMoveY = new MutableLiveData<>(-1);
 
     // false means player one, true means player 2
     public MutableLiveData<Boolean> turnOver = new MutableLiveData<>(false);
+
+
 
     private LiveData<Integer> player1Marker = new MutableLiveData<>(R.drawable.x);
     private LiveData<Integer> player2Marker = new MutableLiveData<>(R.drawable.o);
@@ -131,6 +133,8 @@ public class BoardViewModel extends ViewModel {
     public void setTurnOver() {
         this.turnOver.setValue(!turnOver.getValue());
     }
+
+
 
 
 }

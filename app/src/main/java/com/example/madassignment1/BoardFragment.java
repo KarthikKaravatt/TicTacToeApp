@@ -75,6 +75,7 @@ public class BoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View boardView = inflater.inflate(R.layout.fragment_board, container, false);
+
         boardFragment = boardView.findViewById(R.id.board_fragment);
         timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
