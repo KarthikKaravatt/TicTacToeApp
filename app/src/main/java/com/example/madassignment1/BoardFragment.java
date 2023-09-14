@@ -1,6 +1,5 @@
 package com.example.madassignment1;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -172,18 +170,11 @@ public class BoardFragment extends Fragment {
                         timerViewModel.resetTimer();
                         boardViewModel.setGameOver(checkGameCondition(turn));
                         // if the game is over or there is a tie
-                        // TODO: Toast is broken when loading the fragment more than once
-                        if (boardViewModel.isGameOver()) {
-                            Activity activity = getActivity();
-                            if (activity != null) {
-                                Toast.makeText(activity, "Game Over", Toast.LENGTH_SHORT).show();
-                            }
+                        if (isTie()) {
+                            boardViewModel.setTie(true);
+                            boardViewModel.setGameOver(true);
                             timerViewModel.stopTimer();
-                        } else if (isTie()) {
-                            Activity activity = getActivity();
-                            if (activity != null) {
-                                Toast.makeText(activity, "Tie", Toast.LENGTH_SHORT).show();
-                            }
+                        }else if (boardViewModel.isGameOver()) {
                             timerViewModel.stopTimer();
                         }
                     }

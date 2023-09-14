@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -109,9 +110,21 @@ public class GameFragment extends Fragment {
                 playerTurnMarkerDisplay.setImageResource(boardViewModel.getPlayer1Marker());
             }
         });
+        boardViewModel.getGameOver().observe(getViewLifecycleOwner(), gameOver -> {
+            if(! boardViewModel.isTie()){
+                if(gameOver) {
+                    Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        boardViewModel.getTie().observe(getViewLifecycleOwner(), tie -> {
+            if(tie) {
+                Toast.makeText(getContext(), "Tie", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // observer game over
-        resetButton.setOnClickListener(view -> boardFragment.resetGrid());
+        resetButton.setOnClickListener(view -> {loadGameSettingsFragment();boardFragment.resetGrid();});
         undoButton.setOnClickListener(view -> boardFragment.undoLastTurn());
 
         getChildFragmentManager().beginTransaction().replace(gameFrameLayout.getId(), boardFragment).commit();
