@@ -1,6 +1,5 @@
 package com.example.madassignment1;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,15 +11,16 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +47,7 @@ public class GameSettingsFragment extends Fragment {
             "Flower", R.drawable.flower,
             "Don Cheadle", R.drawable.doncheadle,
             "Robot", R.drawable.robot);
+    private final Map<Integer, String> markerImagesReversed = switchKeysAndValues(markerImages);
     private final List<String> markers = new ArrayList<>(markerImages.keySet());
     private AutoCompleteTextView boardSizeDropdown;
     private AutoCompleteTextView matchConditionDropdown;
@@ -68,6 +69,7 @@ public class GameSettingsFragment extends Fragment {
     private FragmentManager fragmentManager;
     private GameFragment gameFragment = new GameFragment();
     private BoardViewModel boardViewModel;
+    private GameSettingsViewModel gameSettingsViewModel;
 
 
     // TODO: Rename and change types of parameters
@@ -129,6 +131,7 @@ public class GameSettingsFragment extends Fragment {
         player1MarkerImageView = gameSettingsView.findViewById(R.id.player1markerImage);
         player2MarkerImageView = gameSettingsView.findViewById(R.id.player2markerImage);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+        gameSettingsViewModel = new ViewModelProvider(requireActivity()).get(GameSettingsViewModel.class);
         // Connect drop down menu with the base element
         ArrayAdapter<String> boardSizeAdapter = new ArrayAdapter<>(requireActivity(), R.layout.list_item, boardSizes);
         ArrayAdapter<String> matchConditionAdapter = new ArrayAdapter<>(requireActivity(), R.layout.list_item, matchConditions);
@@ -146,10 +149,19 @@ public class GameSettingsFragment extends Fragment {
     }
 
     private void setDefaultConditions() {
-        boardSizeDropdown.setText(boardSizes.get(currentBoardSize), false);
-        matchConditionDropdown.setText(matchConditions.get(currentMatchCondition), false);
-        player1MarkerDropdown.setText("X", false);
-        player2MarkerDropdown.setText("0", false);
+        currentMarkerPlayer1 = markerImagesReversed.get(boardViewModel.getPlayer1Marker());
+        currentMarkerPlayer2 = markerImagesReversed.get(boardViewModel.getPlayer2Marker());
+        boardSizeDropdown.setText(boardSizes.get(boardViewModel.getBoardSize() - 3), false);
+        matchConditionDropdown.setText(matchConditions.get(boardViewModel.getWinCondition() - 3), false);
+        player1MarkerDropdown.setText(currentMarkerPlayer1, false);
+        player2MarkerDropdown.setText(currentMarkerPlayer2, false);
+    }
+    public static <K, V> Map<V, K> switchKeysAndValues(Map<K, V> originalMap) {
+        Map<V, K> switchedMap = new HashMap<>();
+        for (Map.Entry<K, V> entry : originalMap.entrySet()) {
+            switchedMap.put(entry.getValue(), entry.getKey());
+        }
+        return switchedMap;
     }
 
     private void setPlayerOneMarker(String marker) {
