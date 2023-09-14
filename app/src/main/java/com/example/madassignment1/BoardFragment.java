@@ -1,6 +1,7 @@
 package com.example.madassignment1;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
@@ -127,6 +129,10 @@ public class BoardFragment extends Fragment {
     }
 
     public LinearLayout createBoard(int boardSize) {
+        long delayMillis = 3000;
+        Handler handler = new Handler();
+        boardViewModel.removeTie();
+
         // initial checks
         assert boardSize > 2 &&
                 boardViewModel.getWinCondition() > 1 &&
@@ -173,10 +179,24 @@ public class BoardFragment extends Fragment {
                         // if the game is over or there is a tie
                         if (boardViewModel.isGameOver()) {
                             Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+
                             timerViewModel.stopTimer();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadGameOverFragment();
+                                }
+                            }, delayMillis);
+
                         } else if (isTie()) {
                             Toast.makeText(getContext(), "Tie", Toast.LENGTH_SHORT).show();
                             timerViewModel.stopTimer();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadGameOverFragment();
+                                }
+                            }, delayMillis);
                         }
                     }
                 });
@@ -272,6 +292,7 @@ public class BoardFragment extends Fragment {
                 }
             }
         }
+        boardViewModel.setTie();
         return true;
     }
 
@@ -294,6 +315,14 @@ public class BoardFragment extends Fragment {
 
     public void switchTurns() {
         boardViewModel.setTurnOver();
+    }
+
+    private void loadGameOverFragment() {
+        // get fragment manager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
+        // begin the fragment transaction
+        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new GameOverFragment()).commit();
     }
 
 }

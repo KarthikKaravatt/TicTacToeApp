@@ -39,13 +39,22 @@ public class BoardViewModel extends ViewModel {
     private MutableLiveData<Integer> winCondition = new MutableLiveData<>(3);
     private LiveData<Boolean> undoUsed = new MutableLiveData<>(false);
 
-
+    private MutableLiveData<Integer> isTie = new MutableLiveData<>(0);
 
     public LiveData<Integer> getMovesAvailable() {
         return movesAvailable;
     }
     public LiveData<Integer> getMovesMade() {
         return movesMade;
+    }
+    public LiveData<Integer> getIsTie() {
+        return isTie;
+    }
+    public void setTie() {
+        isTie.setValue(1);
+    }
+    public void removeTie() {
+        isTie.setValue(0);
     }
     public void setBoardLayout(LinearLayout boardLayout) {
         this.boardLayout = new MutableLiveData<>(boardLayout);

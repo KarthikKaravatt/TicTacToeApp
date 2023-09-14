@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.os.Handler;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -193,5 +194,6 @@ public class GameFragment extends Fragment {
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new PauseFragment()).commit();
     }
+
 
 }
