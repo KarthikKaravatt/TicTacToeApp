@@ -1,5 +1,6 @@
 package com.example.madassignment1;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
@@ -30,6 +33,7 @@ public class GameSettingsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
 
     private final List<String> boardSizes = List.of("3x3", "4x4", "5x5", "6x6", "7x7",
             "8x8", "9x9", "10x10", "11x11", "12x12", "13x13", "14x14", "15x15", "16x16", "17x17",
@@ -104,6 +108,14 @@ public class GameSettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // restart activity on screen rotate otherwise the drop downs do not save
+        if (savedInstanceState != null) {
+            GameSettingsFragment frag = new GameSettingsFragment();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.MainActivityFrameLayout, frag);
+            fragmentTransaction.commit();
+        }
         fragmentManager = requireActivity().getSupportFragmentManager();
         // Inflate the layout for this fragment
         View gameSettingsView = inflater.inflate(R.layout.fragment_game_settings, container, false);
