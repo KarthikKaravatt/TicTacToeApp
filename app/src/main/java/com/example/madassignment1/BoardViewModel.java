@@ -18,6 +18,9 @@ public class BoardViewModel extends ViewModel {
 
     // defaults values
     // with thread safe live data
+
+    // keeps track of the winner. 0 = tie, 1 = player 1, 2 = player 2
+    private MutableLiveData<Integer> winner = new MutableLiveData<>(0);
     private MutableLiveData<Integer> gamesWon = new MutableLiveData<>(0);
     private MutableLiveData<Integer> gamesLost = new MutableLiveData<>(0);
     private MutableLiveData<Integer> gamesTied = new MutableLiveData<>(0);
@@ -174,6 +177,11 @@ public class BoardViewModel extends ViewModel {
         return gamesPlayed;
     }
     public void setGamesPlayed(int value) { gamesPlayed.setValue(value);}
+
+    public LiveData<Integer> getWinner() {
+        return winner;
+    }
+    public void setWinner(int value) { winner.setValue(value);}
 
 
 

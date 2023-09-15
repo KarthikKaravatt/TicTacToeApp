@@ -74,25 +74,51 @@ public class GameOverFragment extends Fragment {
         winnerImage = rootView.findViewById(R.id.winnerImage);
         outcome = rootView.findViewById(R.id.outcome);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
-        Integer isTieValue = boardViewModel.getIsTie().getValue();
 
-        boardViewModel.setGamesPlayed(boardViewModel.getGamesPlayed().getValue()+1);
-        if (isTieValue == 1)
+        if (savedInstanceState == null)
         {
-            outcome.setText("Tie");
-            boardViewModel.setGamesTied(boardViewModel.getGamesTied().getValue()+1);
-        }
-        else
-        {
-            if (boardViewModel.isTurnOver())
+            Integer isTieValue = boardViewModel.getIsTie().getValue();
+
+            boardViewModel.setGamesPlayed(boardViewModel.getGamesPlayed().getValue()+1);
+            if (isTieValue == 1)
             {
-                winnerImage.setBackgroundResource(boardViewModel.getPlayer1Marker());
-                boardViewModel.setGamesWon(boardViewModel.getGamesWon().getValue()+1);
+                outcome.setText("Tie");
+                boardViewModel.setGamesTied(boardViewModel.getGamesTied().getValue()+1);
+                boardViewModel.setWinner(0);
             }
             else
             {
-                winnerImage.setBackgroundResource(boardViewModel.getPlayer2Marker());
-                boardViewModel.setGamesLost(boardViewModel.getGamesLost().getValue()+1);
+                if (boardViewModel.isTurnOver())
+                {
+                    winnerImage.setBackgroundResource(boardViewModel.getPlayer1Marker());
+                    boardViewModel.setGamesWon(boardViewModel.getGamesWon().getValue()+1);
+                    boardViewModel.setWinner(1);
+                }
+                else
+                {
+                    winnerImage.setBackgroundResource(boardViewModel.getPlayer2Marker());
+                    boardViewModel.setGamesLost(boardViewModel.getGamesLost().getValue()+1);
+                    boardViewModel.setWinner(2);
+                }
+            }
+        }
+        else
+        {
+            Integer isTieValue = boardViewModel.getIsTie().getValue();
+            if (isTieValue == 1)
+            {
+                outcome.setText("Tie");
+            }
+            else
+            {
+                if (boardViewModel.getWinner().getValue() == 1)
+                {
+                    winnerImage.setBackgroundResource(boardViewModel.getPlayer1Marker());
+                }
+                else if (boardViewModel.getWinner().getValue() == 2)
+                {
+                    winnerImage.setBackgroundResource(boardViewModel.getPlayer2Marker());
+                }
             }
         }
         homeButton.setOnClickListener(new View.OnClickListener() {
