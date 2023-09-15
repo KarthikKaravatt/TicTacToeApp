@@ -114,7 +114,10 @@ public class BoardFragment extends Fragment {
         }
         return boardView;
     }
-    public void rebuildBoard(){
+
+    public void rebuildBoard() {
+        // Must remove the the board layout from its parent before adding it to a new parent
+        // because it can only have one parent
         ViewGroup boardLayout = boardViewModel.getBoardLayout();
         ViewGroup parent = (ViewGroup) boardLayout.getParent();
         if (parent != null) {
@@ -146,7 +149,6 @@ public class BoardFragment extends Fragment {
         long delayMillis = 3000;
         long delayAiMove = 800;
         Handler handler = new Handler();
-        boardViewModel.removeTie();
 
 
         // initial checks
@@ -158,7 +160,6 @@ public class BoardFragment extends Fragment {
             boardFragment.removeAllViews();
             grid.clear();
         }
-
         // create the board, this is the grid
         LinearLayout boardContainer = new LinearLayout(getContext());
         boardContainer.setOrientation(LinearLayout.VERTICAL);
@@ -208,10 +209,13 @@ public class BoardFragment extends Fragment {
                         }
 
                         // if the game is over or there is a tie
-                        if (boardViewModel.isGameOver()) {
 
-                                Toast.makeText(requireContext(), "Game Over", Toast.LENGTH_SHORT).show();
 
+                        if (isTie()) {
+                            boardViewModel.setTie(true);
+                            boardViewModel.setGameOver(true);
+                        }
+                        else if (boardViewModel.isGameOver()) {
                             timerViewModel.stopTimer();
                             handler.postDelayed(new Runnable() {
 
@@ -220,10 +224,10 @@ public class BoardFragment extends Fragment {
                                     loadGameOverFragment();
                                 }
                             }, delayMillis);
+                        }
+                        if (boardViewModel.isGameOver()) {
 
-                        } else if (isTie()) {
-
-                                Toast.makeText(requireContext(), "Tie", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), "Game Over", Toast.LENGTH_SHORT).show();
 
                             timerViewModel.stopTimer();
                             handler.postDelayed(new Runnable() {
@@ -327,7 +331,6 @@ public class BoardFragment extends Fragment {
                 }
             }
         }
-        boardViewModel.setTie();
         return true;
     }
 
