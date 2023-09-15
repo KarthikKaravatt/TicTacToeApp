@@ -9,14 +9,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-import java.util.Random;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,7 +97,8 @@ public class BoardFragment extends Fragment {
 
                     }, delayAiMove);
                     disableBoard();
-                };
+                }
+                ;
             }
         });
         // Must remove the the board layout from its parent before adding it to a new parent
@@ -214,8 +214,7 @@ public class BoardFragment extends Fragment {
                         if (isTie()) {
                             boardViewModel.setTie(true);
                             boardViewModel.setGameOver(true);
-                        }
-                        else if (boardViewModel.isGameOver()) {
+                        } else if (boardViewModel.isGameOver()) {
                             timerViewModel.stopTimer();
                             handler.postDelayed(new Runnable() {
 
@@ -255,13 +254,12 @@ public class BoardFragment extends Fragment {
         // find the location of the last move on the grid
         for (int i = 0; i < grid.size(); i++) {
             if (grid.get(i).contains(button)) {
-                if(boardViewModel.isAi()){
-                    if(!boardViewModel.isTurnOver()){
+                if (boardViewModel.isAi()) {
+                    if (!boardViewModel.isTurnOver()) {
                         boardViewModel.setLastMoveX(i);
                         boardViewModel.setLastMoveY(grid.get(i).indexOf(button));
                     }
-                }
-                else {
+                } else {
                     boardViewModel.setLastMoveX(i);
                     boardViewModel.setLastMoveY(grid.get(i).indexOf(button));
                 }
@@ -271,22 +269,27 @@ public class BoardFragment extends Fragment {
     }
 
     public void undoLastTurn() {
-        // undo the last turn if there is one
+        // Check if there are moves made and the game is not over
         if (boardViewModel.getMovesMade().getValue() > 0 && !boardViewModel.isGameOver()) {
-            if(boardViewModel.isAi()){
-                if (!boardViewModel.isTurnOver()){
-                    ImageButton button = grid.get(boardViewModel.getLastMoveX()).get(boardViewModel.getLastMoveY());
-                    // reset the cell
-                    button.setTag(null);
-                    button.setBackgroundResource(R.drawable.button_outline);
-                }
-            }
-            else{
-                ImageButton button = grid.get(boardViewModel.getLastMoveX()).get(boardViewModel.getLastMoveY());
-                // reset the cell
-                button.setTag(null);
-                button.setBackgroundResource(R.drawable.button_outline);
+            // Get the last move coordinates
+            int lastMoveX = boardViewModel.getLastMoveX();
+            int lastMoveY = boardViewModel.getLastMoveY();
+
+            // Get the button corresponding to the last move
+            ImageButton lastMoveButton = grid.get(lastMoveX).get(lastMoveY);
+
+            // Reset the cell
+            lastMoveButton.setTag(null);
+            lastMoveButton.setBackgroundResource(R.drawable.button_outline);
+
+            // if using an ai don't switch to the ai's turn
+            if (boardViewModel.isAi() && !boardViewModel.isTurnOver()) {
+                boardViewModel.incrementMovesAvailable();
+                boardViewModel.decrementMovesMade();
+            } else {
                 boardViewModel.setTurnOver();
+                boardViewModel.incrementMovesAvailable();
+                boardViewModel.decrementMovesMade();
             }
         }
     }
@@ -380,6 +383,7 @@ public class BoardFragment extends Fragment {
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new GameOverFragment()).commit();
     }
+
     private void makeRandomMoveForAI() {
         // find available empty cells
         ArrayList<ImageButton> emptyCells = new ArrayList<>();
@@ -399,8 +403,7 @@ public class BoardFragment extends Fragment {
         }
     }
 
-    private void disableBoard()
-    {
+    private void disableBoard() {
         for (ArrayList<ImageButton> row : grid) {
             for (ImageButton button : row) {
                 button.setEnabled(false);
@@ -408,8 +411,7 @@ public class BoardFragment extends Fragment {
         }
     }
 
-    private void enableBoard()
-    {
+    private void enableBoard() {
         for (ArrayList<ImageButton> row : grid) {
             for (ImageButton button : row) {
                 button.setEnabled(true);
