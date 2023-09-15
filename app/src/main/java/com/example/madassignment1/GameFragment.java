@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -40,6 +42,7 @@ public class GameFragment extends Fragment {
     private TextView timeRemainingDisplay;
     private TextView turnsLeftDisplay;
     private TextView playerTurnDisplay;
+    private ImageView playerTurnMarkerDisplay;
     private TimerViewModel timerViewModel;
     private BoardViewModel boardViewModel;
     private ImageButton pauseButton;
@@ -92,6 +95,7 @@ public class GameFragment extends Fragment {
         timeRemainingDisplay = gameView.findViewById(R.id.time_remaining_text_view);
         turnsLeftDisplay = gameView.findViewById(R.id.turns_remaining_text_view);
         playerTurnDisplay = gameView.findViewById(R.id.playerTurn_text_view);
+        playerTurnMarkerDisplay = gameView.findViewById(R.id.playerTurn_image_view);
         timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
 
@@ -111,12 +115,27 @@ public class GameFragment extends Fragment {
         });
         // observer player turn
         boardViewModel.turnOver.observe(getViewLifecycleOwner(), turnOver -> {
-            String playerTurnString = "Player Turn: " + (turnOver ? "O" : "X");
-            playerTurnDisplay.setText(playerTurnString);
+            if(turnOver) {
+                playerTurnMarkerDisplay.setImageResource(boardViewModel.getPlayer2Marker());
+            } else {
+                playerTurnMarkerDisplay.setImageResource(boardViewModel.getPlayer1Marker());
+            }
+        });
+        boardViewModel.getGameOver().observe(getViewLifecycleOwner(), gameOver -> {
+            if(! boardViewModel.isTie()){
+                if(gameOver) {
+                    Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        boardViewModel.getTie().observe(getViewLifecycleOwner(), tie -> {
+            if(tie) {
+                Toast.makeText(getContext(), "Tie", Toast.LENGTH_SHORT).show();
+            }
         });
 
         // observer game over
-        resetButton.setOnClickListener(view -> boardFragment.resetGrid());
+        resetButton.setOnClickListener(view -> {loadGameSettingsFragment();boardFragment.resetGrid();});
         undoButton.setOnClickListener(view -> boardFragment.undoLastTurn());
 
         pauseButton.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +172,11 @@ public class GameFragment extends Fragment {
 
         getChildFragmentManager().beginTransaction().replace(gameFrameLayout.getId(), boardFragment).commit();
         return gameView;
+    }
+    private void loadGameSettingsFragment() {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        GameSettingsFragment gameSettingsFragment = new GameSettingsFragment();
+        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, gameSettingsFragment).commit();
     }
 
 

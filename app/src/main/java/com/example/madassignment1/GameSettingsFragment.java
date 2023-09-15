@@ -13,9 +13,14 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,30 +34,42 @@ public class GameSettingsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
     private final List<String> boardSizes = List.of("3x3", "4x4", "5x5", "6x6", "7x7",
             "8x8", "9x9", "10x10", "11x11", "12x12", "13x13", "14x14", "15x15", "16x16", "17x17",
             "18x18", "19x19", "20x20");
     private final List<String> matchConditions = List.of("3", "4", "5", "6", "7", "8", "9",
             "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20");
     // TODO: Implement custom markers ?
-    private final List<String> markers = List.of("X", "O");
+    private final Map<String, Integer> markerImages = Map.of(
+            "X", R.drawable.x,
+            "O", R.drawable.o,
+            "Flower", R.drawable.flower,
+            "Don Cheadle", R.drawable.doncheadle,
+            "Robot", R.drawable.robot);
+    private final Map<Integer, String> markerImagesReversed = switchKeysAndValues(markerImages);
+    private final List<String> markers = new ArrayList<>(markerImages.keySet());
     private AutoCompleteTextView boardSizeDropdown;
     private AutoCompleteTextView matchConditionDropdown;
 
     private ImageButton backButton;
     private Button startGameButton;
 
-    private AutoCompleteTextView markerDropdown;
-    private ImageView markerImageView;
+    private AutoCompleteTextView player1MarkerDropdown;
+    private AutoCompleteTextView player2MarkerDropdown;
+    private ImageView player1MarkerImageView;
+    private ImageView player2MarkerImageView;
 
     private int currentBoardSize = 0;
     private int currentMatchCondition = 0;
 
-    private String currentMarker = "X";
+    private String currentMarkerPlayer1 = "X";
+    private String currentMarkerPlayer2 = "O";
 
     private FragmentManager fragmentManager;
     private GameFragment gameFragment = new GameFragment();
     private BoardViewModel boardViewModel;
+    private GameSettingsViewModel gameSettingsViewModel;
 
 
     // TODO: Rename and change types of parameters
@@ -93,6 +110,14 @@ public class GameSettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // restart activity on screen rotate otherwise the drop downs do not save
+        if (savedInstanceState != null) {
+            GameSettingsFragment frag = new GameSettingsFragment();
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.MainActivityFrameLayout, frag);
+            fragmentTransaction.commit();
+        }
         fragmentManager = requireActivity().getSupportFragmentManager();
         // Inflate the layout for this fragment
         View gameSettingsView = inflater.inflate(R.layout.fragment_game_settings, container, false);
@@ -101,36 +126,56 @@ public class GameSettingsFragment extends Fragment {
         startGameButton = gameSettingsView.findViewById(R.id.startButton);
         boardSizeDropdown = gameSettingsView.findViewById(R.id.BoardSizeOptionTextView);
         matchConditionDropdown = gameSettingsView.findViewById(R.id.MatchConditionDropDownTextView);
-        markerDropdown = gameSettingsView.findViewById(R.id.MarkerSelectorDropDownTextView);
-        markerImageView = gameSettingsView.findViewById(R.id.markerImage);
+        player1MarkerDropdown = gameSettingsView.findViewById(R.id.Player1MarkerSelectorDropDownTextView);
+        player2MarkerDropdown = gameSettingsView.findViewById(R.id.Player2MarkerSelectorDropDownTextView);
+        player1MarkerImageView = gameSettingsView.findViewById(R.id.player1markerImage);
+        player2MarkerImageView = gameSettingsView.findViewById(R.id.player2markerImage);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+        gameSettingsViewModel = new ViewModelProvider(requireActivity()).get(GameSettingsViewModel.class);
         // Connect drop down menu with the base element
         ArrayAdapter<String> boardSizeAdapter = new ArrayAdapter<>(requireActivity(), R.layout.list_item, boardSizes);
         ArrayAdapter<String> matchConditionAdapter = new ArrayAdapter<>(requireActivity(), R.layout.list_item, matchConditions);
         ArrayAdapter<String> markerAdapter = new ArrayAdapter<>(requireActivity(), R.layout.list_item, markers);
         boardSizeDropdown.setAdapter(boardSizeAdapter);
         matchConditionDropdown.setAdapter(matchConditionAdapter);
-        markerDropdown.setAdapter(markerAdapter);
+        player1MarkerDropdown.setAdapter(markerAdapter);
+        player2MarkerDropdown.setAdapter(markerAdapter);
         setDefaultConditions();
-        setMarkerImage(currentMarker);
+        setPlayerOneMarker(currentMarkerPlayer1);
+        setPlayerTwoMarker(currentMarkerPlayer2);
         setListeners();
         // On click listeners for each drop down menu
         return gameSettingsView;
     }
-    private void setDefaultConditions(){
-        boardSizeDropdown.setText(boardSizes.get(currentBoardSize), false);
-        matchConditionDropdown.setText(matchConditions.get(currentMatchCondition), false);
-        markerDropdown.setText(markers.get(0), false);
+
+    private void setDefaultConditions() {
+        currentMarkerPlayer1 = markerImagesReversed.get(boardViewModel.getPlayer1Marker());
+        currentMarkerPlayer2 = markerImagesReversed.get(boardViewModel.getPlayer2Marker());
+        boardSizeDropdown.setText(boardSizes.get(boardViewModel.getBoardSize() - 3), false);
+        matchConditionDropdown.setText(matchConditions.get(boardViewModel.getWinCondition() - 3), false);
+        player1MarkerDropdown.setText(currentMarkerPlayer1, false);
+        player2MarkerDropdown.setText(currentMarkerPlayer2, false);
+    }
+    public static <K, V> Map<V, K> switchKeysAndValues(Map<K, V> originalMap) {
+        Map<V, K> switchedMap = new HashMap<>();
+        for (Map.Entry<K, V> entry : originalMap.entrySet()) {
+            switchedMap.put(entry.getValue(), entry.getKey());
+        }
+        return switchedMap;
     }
 
-    private void setMarkerImage(String marker) {
-        int imageResource;
-        if (marker.equals("X")) {
-            markerImageView.setImageResource(R.drawable.x);
-        } else {
-            markerImageView.setImageResource(R.drawable.o);
-        }
+    private void setPlayerOneMarker(String marker) {
+        Integer imageResource = markerImages.get(marker);
+        assert imageResource != null;
+        player1MarkerImageView.setImageResource(imageResource);
+        boardViewModel.setPlayer1Marker(imageResource);
+    }
 
+    private void setPlayerTwoMarker(String marker) {
+        Integer imageResource = markerImages.get(marker);
+        assert imageResource != null;
+        player2MarkerImageView.setImageResource(imageResource);
+        boardViewModel.setPlayer2Marker(imageResource);
     }
 
     // private method to load the game selection fragment when the back button is clicked
@@ -140,6 +185,7 @@ public class GameSettingsFragment extends Fragment {
     }
 
     private void loadGameFragment() {
+        gameFragment = new GameFragment();
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, gameFragment).commit();
     }
@@ -153,7 +199,7 @@ public class GameSettingsFragment extends Fragment {
                 Toast.makeText(requireActivity(), "Error: selection", Toast.LENGTH_SHORT).show();
             } else {
                 currentBoardSize = i;
-                boardViewModel.setBoardSize(currentBoardSize+3);
+                boardViewModel.setBoardSize(currentBoardSize + 3);
             }
         });
         matchConditionDropdown.setOnItemClickListener((adapterView, view, i, l) -> {
@@ -163,13 +209,30 @@ public class GameSettingsFragment extends Fragment {
                 Toast.makeText(requireActivity(), "Error: Invalid selection", Toast.LENGTH_SHORT).show();
             } else {
                 currentMatchCondition = i;
-                boardViewModel.setWinCondition(currentMatchCondition+3);
+                boardViewModel.setWinCondition(currentMatchCondition + 3);
             }
         });
-        markerDropdown.setOnItemClickListener((adapterView, view, i, l) -> {
-            currentMarker = adapterView.getItemAtPosition(i).toString();
-            setMarkerImage(currentMarker);
+        player1MarkerDropdown.setOnItemClickListener((adapterView, view, i, l) -> {
+            String marker = adapterView.getItemAtPosition(i).toString();
+            if (marker.equals(currentMarkerPlayer2)) {
+                player1MarkerDropdown.setText(currentMarkerPlayer1, false);
+                Toast.makeText(requireActivity(), "Error: Invalid selection", Toast.LENGTH_SHORT).show();
+            } else {
+                currentMarkerPlayer1 = marker;
+                setPlayerOneMarker(currentMarkerPlayer1);
+            }
         });
+        player2MarkerDropdown.setOnItemClickListener((adapterView, view, i, l) -> {
+            String marker = adapterView.getItemAtPosition(i).toString();
+            if (marker.equals(currentMarkerPlayer1)) {
+                player2MarkerDropdown.setText(currentMarkerPlayer2, false);
+                Toast.makeText(requireActivity(), "Error: Invalid selection", Toast.LENGTH_SHORT).show();
+            } else {
+                currentMarkerPlayer2 = marker;
+                setPlayerTwoMarker(currentMarkerPlayer2);
+            }
+        });
+
         // on click listener for the start game button
         startGameButton.setOnClickListener(button -> {
             // perform the fragment transaction to load new game fragment

@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import java.util.Random;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
@@ -101,8 +100,6 @@ public class BoardFragment extends Fragment {
                 };
             }
         });
-        // Must remove the the board layout from its parent before adding it to a new parent
-        // because it can only have one parent
         if (boardViewModel.hasLayout()) {
             rebuildBoard();
         } else {
@@ -114,7 +111,10 @@ public class BoardFragment extends Fragment {
         }
         return boardView;
     }
-    public void rebuildBoard(){
+
+    public void rebuildBoard() {
+        // Must remove the the board layout from its parent before adding it to a new parent
+        // because it can only have one parent
         ViewGroup boardLayout = boardViewModel.getBoardLayout();
         ViewGroup parent = (ViewGroup) boardLayout.getParent();
         if (parent != null) {
@@ -222,6 +222,11 @@ public class BoardFragment extends Fragment {
 
                         } else if (isTie()) {
                             Toast.makeText(getContext(), "Tie", Toast.LENGTH_SHORT).show();
+                        if (isTie()) {
+                            boardViewModel.setTie(true);
+                            boardViewModel.setGameOver(true);
+                            timerViewModel.stopTimer();
+                        }else if (boardViewModel.isGameOver()) {
                             timerViewModel.stopTimer();
                             handler.postDelayed(new Runnable() {
                                 @Override
