@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/LoginFragmentImage"
+            android:id="@+id/AvatarImage"
             android:layout_width="wrap_content"
             android:layout_height="300dp"
             android:adjustViewBounds="true"
@@ -34,7 +34,7 @@
             app:layout_constraintBottom_toTopOf="@+id/LoginFragmentButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LoginFragmentImage">
+            app:layout_constraintTop_toBottomOf="@+id/AvatarImage">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/usernameText"

@@ -20,7 +20,6 @@
             android:background="@android:color/transparent"
             android:contentDescription="@string/logo"
             android:scaleType="centerInside"
-            android:src="@drawable/avatar_default"
             app:layout_constraintBottom_toTopOf="@+id/AvatarButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
