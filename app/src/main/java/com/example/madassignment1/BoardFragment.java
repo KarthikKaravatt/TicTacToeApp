@@ -209,28 +209,16 @@ public class BoardFragment extends Fragment {
                         }
 
                         // if the game is over or there is a tie
-
-
                         if (isTie()) {
-                            boardViewModel.setTie(true);
-                            boardViewModel.setGameOver(true);
-                        }
-                        else if (boardViewModel.isGameOver()) {
-                            timerViewModel.stopTimer();
-                            handler.postDelayed(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    loadGameOverFragment();
-                                }
-                            }, delayMillis);
+                            if (!boardViewModel.isGameOver()) {
+                                boardViewModel.setTie(true);
+                                boardViewModel.setGameOver(true);
+                            }
                         }
                         if (boardViewModel.isGameOver()) {
-
-                            //Toast.makeText(requireContext(), "Game Over", Toast.LENGTH_SHORT).show();
-
                             timerViewModel.stopTimer();
                             handler.postDelayed(new Runnable() {
+
                                 @Override
                                 public void run() {
                                     loadGameOverFragment();
