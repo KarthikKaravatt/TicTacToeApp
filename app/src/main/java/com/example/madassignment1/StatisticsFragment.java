@@ -30,7 +30,10 @@ public class StatisticsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private TextView winText;
+    private TextView lossText;
+    private TextView drawText;
+    private TextView gamesPlayedText;
     private BoardViewModel boardViewModel;
 
     public StatisticsFragment() {
@@ -70,8 +73,17 @@ public class StatisticsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
         ImageButton backButton = rootView.findViewById(R.id.back_button);
         TextView gamesTiedText = rootView.findViewById(R.id.drawText);
-
+        TextView gamesPlayedText = rootView.findViewById(R.id.gamesPlayedText);
+        TextView gamesLostText = rootView.findViewById(R.id.lossText);
+        TextView gamesWonText = rootView.findViewById(R.id.winText);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+
+        gamesTiedText.setText("Games Tied: " + boardViewModel.getGamesTied().getValue().toString());
+        gamesLostText.setText("Games Lost: " + boardViewModel.getGamesLost().getValue().toString());
+        gamesWonText.setText("Games Won: "+ boardViewModel.getGamesWon().getValue().toString());
+        gamesPlayedText.setText("Games Played: "+ boardViewModel.getGamesPlayed().getValue().toString());
+
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

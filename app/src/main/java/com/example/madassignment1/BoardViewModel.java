@@ -18,6 +18,10 @@ public class BoardViewModel extends ViewModel {
 
     // defaults values
     // with thread safe live data
+    private MutableLiveData<Integer> gamesWon = new MutableLiveData<>(0);
+    private MutableLiveData<Integer> gamesLost = new MutableLiveData<>(0);
+    private MutableLiveData<Integer> gamesTied = new MutableLiveData<>(0);
+    private MutableLiveData<Integer> gamesPlayed = new MutableLiveData<>(0);
     private MutableLiveData<Integer> movesAvailable = new MutableLiveData<>(9);
     private MutableLiveData<Integer> movesMade= new MutableLiveData<>(0);
 
@@ -30,7 +34,7 @@ public class BoardViewModel extends ViewModel {
     // false means player one, true means player 2
     public MutableLiveData<Boolean> turnOver = new MutableLiveData<>(false);
 
-
+    private MutableLiveData<Boolean> ai = new MutableLiveData<>(false);
 
     private LiveData<Integer> player1Marker = new MutableLiveData<>(R.drawable.x);
     private LiveData<Integer> player2Marker = new MutableLiveData<>(R.drawable.o);
@@ -40,6 +44,7 @@ public class BoardViewModel extends ViewModel {
     private LiveData<Boolean> undoUsed = new MutableLiveData<>(false);
 
     private MutableLiveData<Integer> isTie = new MutableLiveData<>(0);
+
 
     public LiveData<Integer> getMovesAvailable() {
         return movesAvailable;
@@ -94,6 +99,12 @@ public class BoardViewModel extends ViewModel {
         resetBoard();
 
     }
+
+    public boolean isAi() {return ai.getValue();}
+
+    public void setAi(boolean value) {this.ai.setValue(value);}
+
+
     public int getPlayer1Marker() {
         return player1Marker.getValue();
     }
@@ -121,6 +132,9 @@ public class BoardViewModel extends ViewModel {
     public boolean isGameOver() {
         return gameOver.getValue();
     }
+    public LiveData<Boolean> IsGameOver() {
+        return gameOver;
+    }
     public void setGameOver(boolean gameOver) {
         this.gameOver.setValue(gameOver);
     }
@@ -142,6 +156,24 @@ public class BoardViewModel extends ViewModel {
     public void setTurnOver() {
         this.turnOver.setValue(!turnOver.getValue());
     }
+
+    public LiveData<Integer> getGamesWon() {
+        return gamesWon;
+    }
+    public void setGamesWon(int value) { gamesWon.setValue(value);}
+    public LiveData<Integer> getGamesLost() {
+        return gamesLost;
+    }
+    public void setGamesLost(int value) { gamesLost.setValue(value);}
+    public LiveData<Integer> getGamesTied() {
+        return gamesTied;
+    }
+    public void setGamesTied(int value) { gamesTied.setValue(value);}
+
+    public LiveData<Integer> getGamesPlayed() {
+        return gamesPlayed;
+    }
+    public void setGamesPlayed(int value) { gamesPlayed.setValue(value);}
 
 
 

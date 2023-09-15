@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.os.Handler;
+import android.util.Log;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -95,6 +96,15 @@ public class GameFragment extends Fragment {
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
 
 
+        if (boardViewModel.isAi())
+        {
+            Log.d("AI-CHECK", "AI");
+        }
+        else if (!boardViewModel.isAi())
+        {
+            Log.d("AI-CHECK", "NOT AI");
+        }
+
         // observer time remaining
         timerViewModel.getTimeRemaining().observe(getViewLifecycleOwner(), timeRemaining -> {
             String timeRemainingString = "TimeRemaining: " + timeRemaining / 1000;
@@ -123,6 +133,27 @@ public class GameFragment extends Fragment {
             public void onClick(View v) {
                 // perform the fragment transaction to load PauseFragment
                 loadPauseFragment();
+            }
+        });
+
+        // if the game is over, you can no longer click the pause button
+        // previously, it would crash if you tried to
+        boardViewModel.IsGameOver().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isGameOver) {
+                // Here, you can react to changes in the 'gameOver' LiveData
+                if (isGameOver) {
+                pauseButton.setEnabled(false);
+                }
+            }
+        });
+        boardViewModel.getIsTie().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer getIsTie) {
+                // Here, you can react to changes in the 'gameOver' LiveData
+                if (getIsTie.equals(1) ) {
+                    pauseButton.setEnabled(false);
+                }
             }
         });
 

@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+import java.util.Random;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -77,7 +78,8 @@ public class BoardFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View boardView = inflater.inflate(R.layout.fragment_board, container, false);
-
+        long delayAiMove = 800;
+        Handler handler = new Handler();
         boardFragment = boardView.findViewById(R.id.board_fragment);
         timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
@@ -85,6 +87,18 @@ public class BoardFragment extends Fragment {
             if (timeRemaining == 0L) {
                 switchTurns();
                 timerViewModel.resetTimer();
+                if (boardViewModel.isAi() && boardViewModel.isTurnOver()) {
+                    // AI's turn (second player in AI mode)
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            makeRandomMoveForAI();
+                            enableBoard();
+                        }
+
+                    }, delayAiMove);
+                    disableBoard();
+                };
             }
         });
         // Must remove the the board layout from its parent before adding it to a new parent
@@ -130,8 +144,10 @@ public class BoardFragment extends Fragment {
 
     public LinearLayout createBoard(int boardSize) {
         long delayMillis = 3000;
+        long delayAiMove = 800;
         Handler handler = new Handler();
         boardViewModel.removeTie();
+
 
         // initial checks
         assert boardSize > 2 &&
@@ -142,6 +158,7 @@ public class BoardFragment extends Fragment {
             boardFragment.removeAllViews();
             grid.clear();
         }
+
         // create the board, this is the grid
         LinearLayout boardContainer = new LinearLayout(getContext());
         boardContainer.setOrientation(LinearLayout.VERTICAL);
@@ -176,12 +193,27 @@ public class BoardFragment extends Fragment {
                         button.setTag(turn);
                         timerViewModel.resetTimer();
                         boardViewModel.setGameOver(checkGameCondition(turn));
+
+                        if (boardViewModel.isAi() && boardViewModel.isTurnOver()) {
+                            // AI's turn (second player in AI mode)
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    makeRandomMoveForAI();
+                                    enableBoard();
+                                }
+
+                            }, delayAiMove);
+                            disableBoard();
+                        }
+
                         // if the game is over or there is a tie
                         if (boardViewModel.isGameOver()) {
                             Toast.makeText(getContext(), "Game Over", Toast.LENGTH_SHORT).show();
 
                             timerViewModel.stopTimer();
                             handler.postDelayed(new Runnable() {
+
                                 @Override
                                 public void run() {
                                     loadGameOverFragment();
@@ -324,5 +356,40 @@ public class BoardFragment extends Fragment {
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new GameOverFragment()).commit();
     }
+    private void makeRandomMoveForAI() {
+        // Find available empty cells
+        ArrayList<ImageButton> emptyCells = new ArrayList<>();
+        for (ArrayList<ImageButton> row : grid) {
+            for (ImageButton cell : row) {
+                if (cell.getTag() == null) {
+                    emptyCells.add(cell);
+                }
+            }
+        }
 
+        if (!emptyCells.isEmpty()) {
+            // Randomly select an empty cell and make a move
+            int randomIndex = new Random().nextInt(emptyCells.size());
+            ImageButton aiMove = emptyCells.get(randomIndex);
+            aiMove.performClick(); // Simulate a click to make the move
+        }
+    }
+
+    private void disableBoard()
+    {
+        for (ArrayList<ImageButton> row : grid) {
+            for (ImageButton button : row) {
+                button.setEnabled(false);
+            }
+        }
+    }
+
+    private void enableBoard()
+    {
+        for (ArrayList<ImageButton> row : grid) {
+            for (ImageButton button : row) {
+                button.setEnabled(true);
+            }
+        }
+    }
 }
