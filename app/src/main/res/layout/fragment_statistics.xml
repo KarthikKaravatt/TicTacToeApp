@@ -47,7 +47,7 @@
             app:layout_constraintTop_toBottomOf="@id/imageView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintHeight_percent="0.17">
+            app:layout_constraintHeight_percent="0.2">
 
             <TextView
                 android:id="@+id/winText"
@@ -91,6 +91,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/drawText"
+                app:layout_constraintWidth_percent="0.8"/>
+            <TextView
+                android:id="@+id/winPercentText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Win Percentage: 0%"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/gamesPlayedText"
                 app:layout_constraintWidth_percent="0.8"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

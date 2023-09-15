@@ -34,6 +34,7 @@ public class StatisticsFragment extends Fragment {
     private TextView lossText;
     private TextView drawText;
     private TextView gamesPlayedText;
+    private TextView percentWonText;
     private BoardViewModel boardViewModel;
 
     public StatisticsFragment() {
@@ -76,12 +77,24 @@ public class StatisticsFragment extends Fragment {
         TextView gamesPlayedText = rootView.findViewById(R.id.gamesPlayedText);
         TextView gamesLostText = rootView.findViewById(R.id.lossText);
         TextView gamesWonText = rootView.findViewById(R.id.winText);
+        TextView percentWonText = rootView.findViewById(R.id.winPercentText);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+        double percent;
 
+        // if no games have been played yet, set the win percentage to 0.
+        if (boardViewModel.getGamesPlayed().getValue() == 0)
+        {
+            percent = 0.0;
+        }
+        else {
+            percent = ((double) boardViewModel.getGamesWon().getValue() / boardViewModel.getGamesPlayed().getValue()) * 100;
+            percent =  Math.round(percent * 10.0) / 10.0;
+        }
         gamesTiedText.setText("Games Tied: " + boardViewModel.getGamesTied().getValue().toString());
         gamesLostText.setText("Games Lost: " + boardViewModel.getGamesLost().getValue().toString());
         gamesWonText.setText("Games Won: "+ boardViewModel.getGamesWon().getValue().toString());
         gamesPlayedText.setText("Games Played: "+ boardViewModel.getGamesPlayed().getValue().toString());
+        percentWonText.setText("Win Percentage: " + percent +"%");
 
 
         backButton.setOnClickListener(new View.OnClickListener() {

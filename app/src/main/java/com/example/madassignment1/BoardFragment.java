@@ -357,7 +357,7 @@ public class BoardFragment extends Fragment {
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new GameOverFragment()).commit();
     }
     private void makeRandomMoveForAI() {
-        // Find available empty cells
+        // find available empty cells
         ArrayList<ImageButton> emptyCells = new ArrayList<>();
         for (ArrayList<ImageButton> row : grid) {
             for (ImageButton cell : row) {
@@ -368,10 +368,10 @@ public class BoardFragment extends Fragment {
         }
 
         if (!emptyCells.isEmpty()) {
-            // Randomly select an empty cell and make a move
+            // randomly select an empty cell and make a move
             int randomIndex = new Random().nextInt(emptyCells.size());
             ImageButton aiMove = emptyCells.get(randomIndex);
-            aiMove.performClick(); // Simulate a click to make the move
+            aiMove.performClick();
         }
     }
 
