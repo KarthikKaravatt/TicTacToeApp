@@ -77,10 +77,10 @@ public class GameOverFragment extends Fragment {
 
         if (savedInstanceState == null)
         {
-            Integer isTieValue = boardViewModel.getIsTie().getValue();
+            Boolean isTieValue = boardViewModel.getTie().getValue();
 
             boardViewModel.setGamesPlayed(boardViewModel.getGamesPlayed().getValue()+1);
-            if (isTieValue == 1)
+            if (isTieValue)
             {
                 outcome.setText("Tie");
                 boardViewModel.setGamesTied(boardViewModel.getGamesTied().getValue()+1);
@@ -90,13 +90,13 @@ public class GameOverFragment extends Fragment {
             {
                 if (boardViewModel.isTurnOver())
                 {
-                    winnerImage.setBackgroundResource(boardViewModel.getPlayer1Marker());
+                    winnerImage.setBackgroundResource(boardViewModel.getPlayer2Marker());
                     boardViewModel.setGamesWon(boardViewModel.getGamesWon().getValue()+1);
                     boardViewModel.setWinner(1);
                 }
                 else
                 {
-                    winnerImage.setBackgroundResource(boardViewModel.getPlayer2Marker());
+                    winnerImage.setBackgroundResource(boardViewModel.getPlayer1Marker());
                     boardViewModel.setGamesLost(boardViewModel.getGamesLost().getValue()+1);
                     boardViewModel.setWinner(2);
                 }
@@ -104,8 +104,8 @@ public class GameOverFragment extends Fragment {
         }
         else
         {
-            Integer isTieValue = boardViewModel.getIsTie().getValue();
-            if (isTieValue == 1)
+            Boolean isTieValue = boardViewModel.getTie().getValue();
+            if (isTieValue)
             {
                 outcome.setText("Tie");
             }
@@ -113,11 +113,11 @@ public class GameOverFragment extends Fragment {
             {
                 if (boardViewModel.getWinner().getValue() == 1)
                 {
-                    winnerImage.setBackgroundResource(boardViewModel.getPlayer1Marker());
+                    winnerImage.setBackgroundResource(boardViewModel.getPlayer2Marker());
                 }
                 else if (boardViewModel.getWinner().getValue() == 2)
                 {
-                    winnerImage.setBackgroundResource(boardViewModel.getPlayer2Marker());
+                    winnerImage.setBackgroundResource(boardViewModel.getPlayer1Marker());
                 }
             }
         }

@@ -227,7 +227,7 @@ public class BoardFragment extends Fragment {
                         }
                         if (boardViewModel.isGameOver()) {
 
-                            Toast.makeText(requireContext(), "Game Over", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(requireContext(), "Game Over", Toast.LENGTH_SHORT).show();
 
                             timerViewModel.stopTimer();
                             handler.postDelayed(new Runnable() {
