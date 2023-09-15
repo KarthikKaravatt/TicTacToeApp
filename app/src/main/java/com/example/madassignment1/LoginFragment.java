@@ -29,7 +29,6 @@ public class LoginFragment extends Fragment {
         avatarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadAvatarFragment();
             }
         });
 
@@ -69,11 +68,4 @@ public class LoginFragment extends Fragment {
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new HomepageFragment()).commit();
     }
 
-    private void loadAvatarFragment() {
-        // get fragment manager
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-
-        // begin the fragment transaction
-        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new AvatarListFragment()).commit();
-    }
 }
