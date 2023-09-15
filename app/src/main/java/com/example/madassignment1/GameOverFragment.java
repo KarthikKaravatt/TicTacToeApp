@@ -4,23 +4,21 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link StatisticsFragment#newInstance} factory method to
+ * Use the {@link GameOverFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StatisticsFragment extends Fragment {
+public class GameOverFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -30,14 +28,12 @@ public class StatisticsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextView winText;
-    private TextView lossText;
-    private TextView drawText;
-    private TextView gamesPlayedText;
-    private TextView percentWonText;
+    private Button homeButton;
     private BoardViewModel boardViewModel;
+    private ImageView winnerImage;
+    private TextView outcome;
 
-    public StatisticsFragment() {
+    public GameOverFragment() {
         // Required empty public constructor
     }
 
@@ -47,11 +43,11 @@ public class StatisticsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment StatisticsFragment.
+     * @return A new instance of fragment GameOverFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static StatisticsFragment newInstance(String param1, String param2) {
-        StatisticsFragment fragment = new StatisticsFragment();
+    public static GameOverFragment newInstance(String param1, String param2) {
+        GameOverFragment fragment = new GameOverFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -65,48 +61,48 @@ public class StatisticsFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
-        ImageButton backButton = rootView.findViewById(R.id.back_button);
-        TextView gamesTiedText = rootView.findViewById(R.id.drawText);
-        TextView gamesPlayedText = rootView.findViewById(R.id.gamesPlayedText);
-        TextView gamesLostText = rootView.findViewById(R.id.lossText);
-        TextView gamesWonText = rootView.findViewById(R.id.winText);
-        TextView percentWonText = rootView.findViewById(R.id.winPercentText);
+        // Inflate the layout for this fragment
+        View rootView = inflater.inflate(R.layout.fragment_game_over, container, false);
+        homeButton = rootView.findViewById(R.id.homeButton);
+        winnerImage = rootView.findViewById(R.id.winnerImage);
+        outcome = rootView.findViewById(R.id.outcome);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
-        double percent;
+        Integer isTieValue = boardViewModel.getIsTie().getValue();
 
-        // if no games have been played yet, set the win percentage to 0.
-        if (boardViewModel.getGamesPlayed().getValue() == 0)
+        boardViewModel.setGamesPlayed(boardViewModel.getGamesPlayed().getValue()+1);
+        if (isTieValue == 1)
         {
-            percent = 0.0;
+            outcome.setText("Tie");
+            boardViewModel.setGamesTied(boardViewModel.getGamesTied().getValue()+1);
         }
-        else {
-            percent = ((double) boardViewModel.getGamesWon().getValue() / boardViewModel.getGamesPlayed().getValue()) * 100;
-            percent =  Math.round(percent * 10.0) / 10.0;
+        else
+        {
+            if (boardViewModel.isTurnOver())
+            {
+                winnerImage.setBackgroundResource(boardViewModel.getPlayer1Marker());
+                boardViewModel.setGamesWon(boardViewModel.getGamesWon().getValue()+1);
+            }
+            else
+            {
+                winnerImage.setBackgroundResource(boardViewModel.getPlayer2Marker());
+                boardViewModel.setGamesLost(boardViewModel.getGamesLost().getValue()+1);
+            }
         }
-        gamesTiedText.setText("Games Tied: " + boardViewModel.getGamesTied().getValue().toString());
-        gamesLostText.setText("Games Lost: " + boardViewModel.getGamesLost().getValue().toString());
-        gamesWonText.setText("Games Won: "+ boardViewModel.getGamesWon().getValue().toString());
-        gamesPlayedText.setText("Games Played: "+ boardViewModel.getGamesPlayed().getValue().toString());
-        percentWonText.setText("Win Percentage: " + percent +"%");
-
-
-        backButton.setOnClickListener(new View.OnClickListener() {
+        homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // perform the fragment transaction to load HomepageFragment
                 loadHomepageFragment();
             }
         });
-
-
-        // Inflate the layout for this fragment
+        boardViewModel.resetBoard();
         return rootView;
     }
 
@@ -117,4 +113,5 @@ public class StatisticsFragment extends Fragment {
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new HomepageFragment()).commit();
     }
+
 }

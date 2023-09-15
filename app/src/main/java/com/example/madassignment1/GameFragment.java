@@ -6,15 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
 
 
 /**
@@ -40,6 +45,7 @@ public class GameFragment extends Fragment {
     private ImageView playerTurnMarkerDisplay;
     private TimerViewModel timerViewModel;
     private BoardViewModel boardViewModel;
+    private ImageButton pauseButton;
 
 
 
@@ -79,6 +85,9 @@ public class GameFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View gameView = inflater.inflate(R.layout.fragment_game, container, false);
+
+        pauseButton = gameView.findViewById(R.id.pause_button);
+
         FrameLayout gameFrameLayout = gameView.findViewById(R.id.fragment_game_board);
         Button undoButton = gameView.findViewById(R.id.undo_turn_button);
         Button resetButton = gameView.findViewById(R.id.reset_button);
@@ -89,6 +98,8 @@ public class GameFragment extends Fragment {
         playerTurnMarkerDisplay = gameView.findViewById(R.id.playerTurn_image_view);
         timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+
+
         // observer time remaining
         timerViewModel.getTimeRemaining().observe(getViewLifecycleOwner(), timeRemaining -> {
             String timeRemainingString = "TimeRemaining: " + timeRemaining / 1000;
@@ -126,6 +137,38 @@ public class GameFragment extends Fragment {
         // observer game over
         resetButton.setOnClickListener(view -> {loadGameSettingsFragment();boardFragment.resetGrid();});
         undoButton.setOnClickListener(view -> boardFragment.undoLastTurn());
+
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // perform the fragment transaction to load PauseFragment
+                loadPauseFragment();
+            }
+        });
+
+        // if the game is over, you can no longer click the pause button
+        // previously, it would crash if you tried to
+        boardViewModel.IsGameOver().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isGameOver) {
+                // Here, you can react to changes in the 'gameOver' LiveData
+                if (isGameOver) {
+                pauseButton.setEnabled(false);
+                }
+            }
+        });
+        boardViewModel.getIsTie().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer getIsTie) {
+                // Here, you can react to changes in the 'gameOver' LiveData
+                if (getIsTie.equals(1) ) {
+                    pauseButton.setEnabled(false);
+                }
+            }
+        });
+
+
+
 
         getChildFragmentManager().beginTransaction().replace(gameFrameLayout.getId(), boardFragment).commit();
         return gameView;
@@ -189,5 +232,14 @@ public class GameFragment extends Fragment {
         super.onStop();
         timerViewModel.stopTimer();
     }
+
+    private void loadPauseFragment() {
+        // get fragment manager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
+        // begin the fragment transaction
+        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new PauseFragment()).commit();
+    }
+
 
 }

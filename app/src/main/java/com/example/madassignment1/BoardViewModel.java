@@ -18,6 +18,10 @@ public class BoardViewModel extends ViewModel {
 
     // defaults values
     // with thread safe live data
+    private MutableLiveData<Integer> gamesWon = new MutableLiveData<>(0);
+    private MutableLiveData<Integer> gamesLost = new MutableLiveData<>(0);
+    private MutableLiveData<Integer> gamesTied = new MutableLiveData<>(0);
+    private MutableLiveData<Integer> gamesPlayed = new MutableLiveData<>(0);
     private MutableLiveData<Integer> movesAvailable = new MutableLiveData<>(9);
     private MutableLiveData<Integer> movesMade= new MutableLiveData<>(0);
 
@@ -25,12 +29,13 @@ public class BoardViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> tie = new MutableLiveData<>(false);
 
-
     private LiveData<Integer> lastMoveX = new MutableLiveData<>(-1);
     private LiveData<Integer> lastMoveY = new MutableLiveData<>(-1);
 
     // false means player one, true means player 2
     public MutableLiveData<Boolean> turnOver = new MutableLiveData<>(false);
+
+    private MutableLiveData<Boolean> ai = new MutableLiveData<>(false);
 
     private LiveData<Integer> player1Marker = new MutableLiveData<>(R.drawable.x);
     private LiveData<Integer> player2Marker = new MutableLiveData<>(R.drawable.o);
@@ -39,6 +44,7 @@ public class BoardViewModel extends ViewModel {
     private MutableLiveData<Integer> winCondition = new MutableLiveData<>(3);
     private LiveData<Boolean> undoUsed = new MutableLiveData<>(false);
 
+    private MutableLiveData<Integer> isTie = new MutableLiveData<>(0);
 
 
     public void setTie(boolean tie) {
@@ -55,6 +61,15 @@ public class BoardViewModel extends ViewModel {
     }
     public LiveData<Integer> getMovesMade() {
         return movesMade;
+    }
+    public LiveData<Integer> getIsTie() {
+        return isTie;
+    }
+    public void setTie() {
+        isTie.setValue(1);
+    }
+    public void removeTie() {
+        isTie.setValue(0);
     }
     public void setBoardLayout(LinearLayout boardLayout) {
         this.boardLayout = new MutableLiveData<>(boardLayout);
@@ -95,6 +110,12 @@ public class BoardViewModel extends ViewModel {
         resetBoard();
 
     }
+
+    public boolean isAi() {return ai.getValue();}
+
+    public void setAi(boolean value) {this.ai.setValue(value);}
+
+
     public int getPlayer1Marker() {
         return player1Marker.getValue();
     }
@@ -122,6 +143,9 @@ public class BoardViewModel extends ViewModel {
     public boolean isGameOver() {
         return gameOver.getValue();
     }
+
+    public LiveData<Boolean> IsGameOver() {
+      
     public LiveData<Boolean> getGameOver() {
         return gameOver;
     }
@@ -146,6 +170,26 @@ public class BoardViewModel extends ViewModel {
     public void setTurnOver() {
         this.turnOver.setValue(!turnOver.getValue());
     }
+
+    public LiveData<Integer> getGamesWon() {
+        return gamesWon;
+    }
+    public void setGamesWon(int value) { gamesWon.setValue(value);}
+    public LiveData<Integer> getGamesLost() {
+        return gamesLost;
+    }
+    public void setGamesLost(int value) { gamesLost.setValue(value);}
+    public LiveData<Integer> getGamesTied() {
+        return gamesTied;
+    }
+    public void setGamesTied(int value) { gamesTied.setValue(value);}
+
+    public LiveData<Integer> getGamesPlayed() {
+        return gamesPlayed;
+    }
+    public void setGamesPlayed(int value) { gamesPlayed.setValue(value);}
+
+
 
 
 }

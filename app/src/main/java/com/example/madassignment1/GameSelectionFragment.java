@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.Observer;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,8 @@ public class GameSelectionFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private BoardViewModel boardViewModel;
 
     public GameSelectionFragment() {
         // Required empty public constructor
@@ -64,11 +68,13 @@ public class GameSelectionFragment extends Fragment {
         Button humanVsHumanButton = rootView.findViewById(R.id.humanVsHumanButton);
         // find human vs AI button
         Button humanVsAiButton = rootView.findViewById(R.id.humanVsAiButton);
+        boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
 
         humanVsHumanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // perform the fragment transaction to load new game fragment
+                boardViewModel.setAi(false);
                 loadGameSettingsFragment();
             }
         });
@@ -77,6 +83,7 @@ public class GameSelectionFragment extends Fragment {
             public void onClick(View v) {
                 // perform the fragment transaction to load new game fragment
                 loadGameSettingsFragment();
+                boardViewModel.setAi(true);
             }
         });
 
@@ -87,6 +94,7 @@ public class GameSelectionFragment extends Fragment {
                 loadHomepageFragment();
             }
         });
+
 
         return rootView;
     }
