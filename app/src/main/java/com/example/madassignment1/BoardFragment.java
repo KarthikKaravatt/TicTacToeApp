@@ -255,8 +255,16 @@ public class BoardFragment extends Fragment {
         // find the location of the last move on the grid
         for (int i = 0; i < grid.size(); i++) {
             if (grid.get(i).contains(button)) {
-                boardViewModel.setLastMoveX(i);
-                boardViewModel.setLastMoveY(grid.get(i).indexOf(button));
+                if(boardViewModel.isAi()){
+                    if(!boardViewModel.isTurnOver()){
+                        boardViewModel.setLastMoveX(i);
+                        boardViewModel.setLastMoveY(grid.get(i).indexOf(button));
+                    }
+                }
+                else {
+                    boardViewModel.setLastMoveX(i);
+                    boardViewModel.setLastMoveY(grid.get(i).indexOf(button));
+                }
                 break;
             }
         }
@@ -265,11 +273,21 @@ public class BoardFragment extends Fragment {
     public void undoLastTurn() {
         // undo the last turn if there is one
         if (boardViewModel.getMovesMade().getValue() > 0 && !boardViewModel.isGameOver()) {
-            ImageButton button = grid.get(boardViewModel.getLastMoveX()).get(boardViewModel.getLastMoveY());
-            // reset the cell
-            button.setTag(null);
-            button.setBackgroundResource(R.drawable.button_outline);
-            boardViewModel.setTurnOver();
+            if(boardViewModel.isAi()){
+                if (!boardViewModel.isTurnOver()){
+                    ImageButton button = grid.get(boardViewModel.getLastMoveX()).get(boardViewModel.getLastMoveY());
+                    // reset the cell
+                    button.setTag(null);
+                    button.setBackgroundResource(R.drawable.button_outline);
+                }
+            }
+            else{
+                ImageButton button = grid.get(boardViewModel.getLastMoveX()).get(boardViewModel.getLastMoveY());
+                // reset the cell
+                button.setTag(null);
+                button.setBackgroundResource(R.drawable.button_outline);
+                boardViewModel.setTurnOver();
+            }
         }
     }
 
