@@ -96,15 +96,6 @@ public class GameFragment extends Fragment {
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
 
 
-        if (boardViewModel.isAi())
-        {
-            Log.d("AI-CHECK", "AI");
-        }
-        else if (!boardViewModel.isAi())
-        {
-            Log.d("AI-CHECK", "NOT AI");
-        }
-
         // observer time remaining
         timerViewModel.getTimeRemaining().observe(getViewLifecycleOwner(), timeRemaining -> {
             String timeRemainingString = "TimeRemaining: " + timeRemaining / 1000;

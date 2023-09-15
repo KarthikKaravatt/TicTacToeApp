@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
@@ -60,6 +61,7 @@ public class GameOverFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -73,6 +75,7 @@ public class GameOverFragment extends Fragment {
         outcome = rootView.findViewById(R.id.outcome);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
         Integer isTieValue = boardViewModel.getIsTie().getValue();
+
         boardViewModel.setGamesPlayed(boardViewModel.getGamesPlayed().getValue()+1);
         if (isTieValue == 1)
         {
@@ -110,4 +113,5 @@ public class GameOverFragment extends Fragment {
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new HomepageFragment()).commit();
     }
+
 }
