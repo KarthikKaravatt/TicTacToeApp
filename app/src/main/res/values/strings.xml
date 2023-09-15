@@ -7,13 +7,15 @@
     <string name="LoginFragmentButtonText">Continue</string>
     <string name="board_size_option_String">Select Board Size</string>
     <string name="select_match_condition">Select Match Condition</string>
-    <string name="select_marker">Select Marker</string>
+    <string name="select_player_1_marker">Player 1 Marker</string>
+    <string name="select_player_2_marker">Player 2 Marker</string>
     <string name="MarkerImageViewDescription">Player Marker</string>
     <string name="marker_image_description">Marker</string>
     <string name="undo">Undo</string>
     <string name="reset">Reset</string>
     <string name="time_remaining">"Time remaining: "</string>
     <string name="start">Start!</string>
+    <string name="playerTurn">PlayerTurn:</string>
     <string name="change_avatar">Change Avatar</string>
     <string name="arrow_symbol">➜</string>
     <string name="image_description">User Avatar</string>

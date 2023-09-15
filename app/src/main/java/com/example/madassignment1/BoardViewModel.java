@@ -23,6 +23,8 @@ public class BoardViewModel extends ViewModel {
 
     private MutableLiveData<Boolean> gameOver = new MutableLiveData<>(false);
 
+    private MutableLiveData<Boolean> tie = new MutableLiveData<>(false);
+
 
     private LiveData<Integer> lastMoveX = new MutableLiveData<>(-1);
     private LiveData<Integer> lastMoveY = new MutableLiveData<>(-1);
@@ -39,6 +41,15 @@ public class BoardViewModel extends ViewModel {
 
 
 
+    public void setTie(boolean tie) {
+        this.tie.setValue(tie);
+    }
+    public LiveData<Boolean> getTie() {
+        return tie;
+    }
+    public boolean isTie() {
+        return tie.getValue();
+    }
     public LiveData<Integer> getMovesAvailable() {
         return movesAvailable;
     }
@@ -61,6 +72,7 @@ public class BoardViewModel extends ViewModel {
     public void resetBoard() {
         this.movesAvailable.setValue(boardSize.getValue() * boardSize.getValue());
         this.movesMade.setValue(0);
+        this.tie.setValue(false);
         this.gameOver = new MutableLiveData<>(false);
         this.lastMoveX = new MutableLiveData<>(-1);
         this.lastMoveY = new MutableLiveData<>(-1);
@@ -109,6 +121,9 @@ public class BoardViewModel extends ViewModel {
     }
     public boolean isGameOver() {
         return gameOver.getValue();
+    }
+    public LiveData<Boolean> getGameOver() {
+        return gameOver;
     }
     public void setGameOver(boolean gameOver) {
         this.gameOver.setValue(gameOver);
