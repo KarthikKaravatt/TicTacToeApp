@@ -5,10 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import java.util.*;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 public class AvatarAdapter extends RecyclerView.Adapter<AvatarAdapter.ImageViewHolder> {
     private final List<Avatar> images;

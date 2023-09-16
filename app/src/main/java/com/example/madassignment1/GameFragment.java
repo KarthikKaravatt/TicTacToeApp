@@ -1,17 +1,16 @@
 package com.example.madassignment1;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.os.Handler;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -128,6 +127,7 @@ public class GameFragment extends Fragment {
                 playerTurnMarkerDisplay.setImageResource(boardViewModel.getPlayer2Marker());
             } else {
                 undoButton.setOnClickListener(view -> boardFragment.undoLastTurn());
+                boardViewModel.setUndoUsed(true);
                 undoButton.getBackground().setAlpha(255);
                 playerTurnMarkerDisplay.setImageResource(boardViewModel.getPlayer1Marker());
             }
