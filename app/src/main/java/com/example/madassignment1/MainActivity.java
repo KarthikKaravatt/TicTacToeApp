@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             return;
         }
-        loadSettingsFragment();
+        loadLoginFragment();
     }
 
     // loads homepage
