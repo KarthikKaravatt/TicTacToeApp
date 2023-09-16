@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     Fragment mainFragment = fm.findFragmentById(R.id.MainActivityFrameLayout);
     private List<String> usernameList = new ArrayList<>();
 
+
     // initial app startup
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +33,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         loadLoginFragment();
-    }
-
-    // handle username from login fragment
-    public void handleUsername(String username) {
-        usernameList.add(username);
-    }
-
-    public boolean usernameExists(String username) {
-        return usernameList.contains(username);
     }
 
     // loads homepage
@@ -71,5 +64,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadStatsFragment() {
         fm.beginTransaction().replace(R.id.MainActivityFrameLayout, statsFragment).commit();
     }
+
+
 
 }
