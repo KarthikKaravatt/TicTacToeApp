@@ -119,6 +119,7 @@ public class BoardFragment extends Fragment {
         // Must remove the the board layout from its parent before adding it to a new parent
         // because it can only have one parent
         ViewGroup boardLayout = boardViewModel.getBoardLayout();
+        Handler handler = new Handler();
         ViewGroup parent = (ViewGroup) boardLayout.getParent();
         if (parent != null) {
             parent.removeView(boardLayout);
@@ -146,9 +147,9 @@ public class BoardFragment extends Fragment {
     }
 
     public LinearLayout createBoard(int boardSize) {
-        long delayMillis = 3000;
         long delayAiMove = 800;
         Handler handler = new Handler();
+
 
 
         // initial checks
@@ -214,16 +215,6 @@ public class BoardFragment extends Fragment {
                                 boardViewModel.setTie(true);
                                 boardViewModel.setGameOver(true);
                             }
-                        }
-                        if (boardViewModel.isGameOver()) {
-                            timerViewModel.stopTimer();
-                            handler.postDelayed(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    loadGameOverFragment();
-                                }
-                            }, delayMillis);
                         }
                     }
                 });
@@ -343,12 +334,6 @@ public class BoardFragment extends Fragment {
         boardViewModel.setTurnOver();
     }
 
-    private void loadGameOverFragment() {
-        // get fragment manager
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        // begin the fragment transaction
-        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new GameOverFragment()).commit();
-    }
     private void makeRandomMoveForAI() {
         // find available empty cells
         ArrayList<ImageButton> emptyCells = new ArrayList<>();

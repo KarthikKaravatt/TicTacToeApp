@@ -87,6 +87,8 @@ public class GameFragment extends Fragment {
         View gameView = inflater.inflate(R.layout.fragment_game, container, false);
 
         pauseButton = gameView.findViewById(R.id.pause_button);
+        long delayMillis = 3000;
+        Handler handler = new Handler();
 
         FrameLayout gameFrameLayout = gameView.findViewById(R.id.fragment_game_board);
         Button undoButton = gameView.findViewById(R.id.undo_turn_button);
@@ -154,6 +156,16 @@ public class GameFragment extends Fragment {
                 // Here, you can react to changes in the 'gameOver' LiveData
                 if (isGameOver) {
                 pauseButton.setEnabled(false);
+                    if (boardViewModel.isGameOver()) {
+                        timerViewModel.stopTimer();
+                        handler.postDelayed(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                loadGameOverFragment();
+                            }
+                        }, delayMillis);
+                    }
                 }
             }
         });
@@ -165,6 +177,8 @@ public class GameFragment extends Fragment {
                 }
             }
         });
+
+
 
 
 
@@ -238,6 +252,12 @@ public class GameFragment extends Fragment {
 
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new PauseFragment()).commit();
+    }
+    private void loadGameOverFragment() {
+        // get fragment manager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        // begin the fragment transaction
+        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new GameOverFragment()).commit();
     }
 
 
