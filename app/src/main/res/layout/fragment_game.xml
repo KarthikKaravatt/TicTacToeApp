@@ -7,7 +7,6 @@
     tools:context=".GameFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/fragment_game_constraint_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -28,11 +27,15 @@
                 android:id="@+id/time_remaining_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
                 android:text="@string/hello_blank_fragment"/>
             <TextView
                 android:id="@+id/turns_remaining_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
                 android:text="@string/hello_blank_fragment"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,6 +46,7 @@
                     android:id="@+id/playerTurn_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:text="@string/playerTurn"/>
                 <ImageView
                     android:id="@+id/playerTurn_image_view"

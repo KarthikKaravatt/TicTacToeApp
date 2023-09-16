@@ -2,13 +2,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/LoginFragmentFrameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/LoginFragmentConstraintLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="200dp">
