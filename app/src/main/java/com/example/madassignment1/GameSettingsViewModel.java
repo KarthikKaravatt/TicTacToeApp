@@ -10,6 +10,8 @@ public class GameSettingsViewModel extends ViewModel {
     private MutableLiveData<Integer> currentPlayerOneMarker = new MutableLiveData<>(R.drawable.x);
     private MutableLiveData<Integer> currentPlayerTwoMarker = new MutableLiveData<>(R.drawable.o);
 
+    private MutableLiveData<Integer> avatarId = new MutableLiveData<>(2131230954);
+
     public void setCurrentBoardSize(int boardSize) {
         currentBoardSize.setValue(boardSize);
     }
@@ -40,5 +42,14 @@ public class GameSettingsViewModel extends ViewModel {
         currentPlayerOneMarker.setValue(R.drawable.x);
         currentPlayerTwoMarker.setValue(R.drawable.o);
     }
+
+    public LiveData<Integer> getAvatarId() {
+        return avatarId;
+    }
+    public void setAvatarId(int value) {
+        avatarId.setValue(value);
+    }
+
+
 
 }
