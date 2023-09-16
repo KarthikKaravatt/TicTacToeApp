@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class AvatarAdapter extends RecyclerView.Adapter<AvatarAdapter.ImageViewHolder> {
-    private List<Avatar> images;
-    private AvatarSelectListener listener;
+    private final List<Avatar> images;
+    private final AvatarSelectListener listener;
 
     public AvatarAdapter(List<Avatar> images, AvatarSelectListener listener) {
         this.images = images;
@@ -23,7 +23,7 @@ public class AvatarAdapter extends RecyclerView.Adapter<AvatarAdapter.ImageViewH
     @Override
     public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.list_item, parent, false);
+                .inflate(R.layout.recycler_list_item, parent, false);
         return new ImageViewHolder(itemView);
     }
 
@@ -49,7 +49,7 @@ public class AvatarAdapter extends RecyclerView.Adapter<AvatarAdapter.ImageViewH
         return images.size();
     }
 
-    public class ImageViewHolder extends RecyclerView.ViewHolder {
+    public static class ImageViewHolder extends RecyclerView.ViewHolder {
         public ImageView imageView;
 
         public ImageViewHolder(View view) {

@@ -1,26 +1,21 @@
 package com.example.madassignment1;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import android.util.Log;
 import com.google.android.material.textfield.TextInputEditText;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.content.res.Resources;
 public class LoginFragment extends Fragment implements AvatarSelectListener{
 
-    private ImageView avatarImage;
+    public int avatarId = 2131230954;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
@@ -32,8 +27,10 @@ public class LoginFragment extends Fragment implements AvatarSelectListener{
         TextInputEditText usernameEditText = rootView.findViewById(R.id.usernameText);
 
         // Find the AvatarImage ImageView
-        avatarImage = rootView.findViewById(R.id.AvatarImage);
-        avatarImage.setImageResource(R.drawable.avatar_default);
+        ImageView avatarImage = rootView.findViewById(R.id.AvatarImage);
+
+        // update avatarImage with the selected avatar each time fragment is reloaded
+        avatarImage.setImageResource(avatarId);
 
         // set a click listener on the change avatar button
         avatarButton.setOnClickListener(new View.OnClickListener() {
@@ -72,23 +69,7 @@ public class LoginFragment extends Fragment implements AvatarSelectListener{
 
     @Override
     public void onAvatarSelected(int drawableResourceId) {
-        // Context context = getContext(); <- I thought this would fix it but it didn't
-        // Resources resources = context.getResources();
-        //Drawable drawable = ResourcesCompat.getDrawable(resources, drawableResourceId, null);
-        // avatarImage.setImageDrawable(drawable);
-
-        Log.d("LoginFragment", "Received drawableResourceId: " + drawableResourceId);
-        avatarImage.setVisibility(View.VISIBLE);
-
-        // Update the avatarImage ImageView with the selected drawable
-        avatarImage.setImageResource(drawableResourceId);
-
-    }
-
-    public void navigateToLoginFragment() {
-        // Perform a fragment transaction to replace the current fragment with the LoginFragment
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new LoginFragment()).commit();
+        avatarId = drawableResourceId;
     }
 
     // method to load the HomepageFragment
