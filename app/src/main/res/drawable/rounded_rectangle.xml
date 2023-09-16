@@ -4,12 +4,16 @@
 
     <!-- fill/color -->
     <solid
-        android:color="#D3D3D3"/>
+        android:color="@color/medium_purple"/>
+
+    <stroke
+        android:width="2dp"
+        android:color="@android:color/black"/>
 
     <!-- Control the width and height of the shape -->
     <size
         android:width="200dp"
-        android:height="70dp"/>
+        android:height="80dp"/>
 
     <!-- Control the radius of each corners -->
     <corners

@@ -48,7 +48,7 @@
             app:layout_constraintTop_toBottomOf="@id/imageView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintWidth_percent="0.5"
-            app:layout_constraintHeight_percent="0.2">
+            app:layout_constraintHeight_percent="0.22">
 
             <TextView
                 android:id="@+id/winText"
@@ -56,6 +56,7 @@
                 android:layout_height="wrap_content"
                 android:text="Games Won: 0"
                 android:layout_marginTop="10dp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -66,6 +67,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Games Lost: 0"
+                android:textStyle="bold"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -77,6 +79,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Games Drawn: 0"
+                android:textStyle="bold"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,6 +91,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Games Played: 0"
+                android:textStyle="bold"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -100,9 +104,11 @@
                 android:text="Win Percentage: 0%"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/gamesPlayedText"
                 app:layout_constraintWidth_percent="0.8"/>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.constraintlayout.widget.ConstraintLayout

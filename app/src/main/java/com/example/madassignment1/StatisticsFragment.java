@@ -1,5 +1,6 @@
 package com.example.madassignment1;
 
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.ImageView;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
@@ -30,12 +32,16 @@ public class StatisticsFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private TextView winText;
-    private TextView lossText;
-    private TextView drawText;
+    private TextView gamesWonText;
+    private TextView gamesLostText;
+    private TextView gamesTiedText;
     private TextView gamesPlayedText;
     private TextView percentWonText;
     private BoardViewModel boardViewModel;
+    private GameSettingsViewModel gameSettingsViewModel;
+    private ImageView profilePicture;
+
+    private TextView usernameText;
 
     public StatisticsFragment() {
         // Required empty public constructor
@@ -73,13 +79,19 @@ public class StatisticsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
         ImageButton backButton = rootView.findViewById(R.id.back_button);
-        TextView gamesTiedText = rootView.findViewById(R.id.drawText);
-        TextView gamesPlayedText = rootView.findViewById(R.id.gamesPlayedText);
-        TextView gamesLostText = rootView.findViewById(R.id.lossText);
-        TextView gamesWonText = rootView.findViewById(R.id.winText);
-        TextView percentWonText = rootView.findViewById(R.id.winPercentText);
+         gamesTiedText = rootView.findViewById(R.id.drawText);
+         gamesPlayedText = rootView.findViewById(R.id.gamesPlayedText);
+         gamesLostText = rootView.findViewById(R.id.lossText);
+         gamesWonText = rootView.findViewById(R.id.winText);
+         percentWonText = rootView.findViewById(R.id.winPercentText);
+        usernameText = rootView.findViewById(R.id.textView);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+        gameSettingsViewModel = new ViewModelProvider(requireActivity()).get(GameSettingsViewModel.class);
+        profilePicture = rootView.findViewById(R.id.imageView);
         double percent;
+
+        usernameText.setText(boardViewModel.getUsername().getValue());
+        profilePicture.setImageResource(gameSettingsViewModel.getAvatarId().getValue());
 
         // if no games have been played yet, set the win percentage to 0.
         if (boardViewModel.getGamesPlayed().getValue() == 0)
