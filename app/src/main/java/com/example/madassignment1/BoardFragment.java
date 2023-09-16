@@ -197,15 +197,15 @@ public class BoardFragment extends Fragment {
 
                         if (boardViewModel.isAi() && boardViewModel.isTurnOver()) {
                             // AI's turn (second player in AI mode)
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    makeRandomMoveForAI();
-                                    enableBoard();
-                                }
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        makeRandomMoveForAI();
+                                        enableBoard();
+                                    }
 
-                            }, delayAiMove);
-                            disableBoard();
+                                }, delayAiMove);
+                                disableBoard();
                         }
 
                         // if the game is over or there is a tie
@@ -346,7 +346,6 @@ public class BoardFragment extends Fragment {
     private void loadGameOverFragment() {
         // get fragment manager
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new GameOverFragment()).commit();
     }

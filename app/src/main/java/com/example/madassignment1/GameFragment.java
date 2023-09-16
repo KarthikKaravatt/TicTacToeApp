@@ -160,7 +160,6 @@ public class GameFragment extends Fragment {
         boardViewModel.getTie().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean getIsTie) {
-                // Here, you can react to changes in the 'gameOver' LiveData
                 if (getIsTie ) {
                     pauseButton.setEnabled(false);
                 }

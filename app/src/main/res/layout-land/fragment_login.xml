@@ -65,22 +65,18 @@
                     android:layout_marginHorizontal="20dp"
                     android:hint="@string/username"
                     android:background="@drawable/custom_border"/>
+
                 <Button
-                    android:id="@+id/button1"
+                    android:id="@+id/LoginFragmentButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="➜" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/LoginFragmentButtonText"
+
+
+                     />
             </LinearLayout>
         </com.google.android.material.textfield.TextInputLayout>
-        <Button
-            android:id="@+id/LoginFragmentButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="@string/LoginFragmentButtonText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/LoginFragmentTextInputLayout"
-            app:layout_constraintTop_toBottomOf="@+id/LoginFragmentTextInputLayout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
 
