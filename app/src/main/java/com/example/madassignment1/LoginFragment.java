@@ -21,11 +21,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 public class LoginFragment extends Fragment implements AvatarSelectListener{
     private BoardViewModel boardViewModel;
-    public int avatarId = 2131230954;
+    private GameSettingsViewModel gameSettingsViewModel;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+        gameSettingsViewModel = new ViewModelProvider(requireActivity()).get(GameSettingsViewModel.class);
+
 
 
         // find buttons
@@ -42,7 +44,7 @@ public class LoginFragment extends Fragment implements AvatarSelectListener{
         ImageView avatarImage = rootView.findViewById(R.id.AvatarImage);
 
         // update avatarImage with the selected avatar each time fragment is reloaded
-        avatarImage.setImageResource(avatarId);
+        avatarImage.setImageResource(gameSettingsViewModel.getAvatarId().getValue());
 
         // set a click listener on the change avatar button
         avatarButton.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +83,7 @@ public class LoginFragment extends Fragment implements AvatarSelectListener{
 
     @Override
     public void onAvatarSelected(int drawableResourceId) {
-        avatarId = drawableResourceId;
+        gameSettingsViewModel.setAvatarId(drawableResourceId);
     }
 
     // method to load the HomepageFragment
