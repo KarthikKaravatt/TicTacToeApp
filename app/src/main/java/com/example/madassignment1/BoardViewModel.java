@@ -20,6 +20,7 @@ public class BoardViewModel extends ViewModel {
     // with thread safe live data
     private LiveData<LinearLayout> boardLayout;
     // keeps track of the winner. 0 = tie, 1 = player 1, 2 = player 2
+    private MutableLiveData<Boolean> gamePaused = new MutableLiveData<>(false);
     private MutableLiveData<Integer> winner = new MutableLiveData<>(0);
     private MutableLiveData<Integer> gamesWon = new MutableLiveData<>(0);
     private MutableLiveData<Integer> gamesLost = new MutableLiveData<>(0);
@@ -33,12 +34,33 @@ public class BoardViewModel extends ViewModel {
     private LiveData<Integer> lastMoveY = new MutableLiveData<>(-1);
     private MutableLiveData<Boolean> ai = new MutableLiveData<>(false);
 
+    private LiveData<Integer> currentPlayer1Marker = new MutableLiveData<>(R.drawable.x);
+    private LiveData<Integer> currentPlayer2Marker = new MutableLiveData<>(R.drawable.o);
     private LiveData<Integer> player1Marker = new MutableLiveData<>(R.drawable.x);
     private LiveData<Integer> player2Marker = new MutableLiveData<>(R.drawable.o);
 
     private MutableLiveData<Integer> boardSize = new MutableLiveData<>(3);
     private MutableLiveData<Integer> winCondition = new MutableLiveData<>(3);
     private LiveData<Boolean> undoUsed = new MutableLiveData<>(false);
+
+    public LiveData<Boolean> getGamePaused() {
+        return gamePaused;
+    }
+    public void setGamePaused(boolean gamePaused) {
+        this.gamePaused.setValue(gamePaused);
+    }
+    public LiveData<Integer> getCurrentPlayer1Marker() {
+        return currentPlayer1Marker;
+    }
+    public void setCurrentPlayer1Marker(int currentPlayer1Marker) {
+        this.currentPlayer1Marker = new MutableLiveData<>(currentPlayer1Marker);
+    }
+    public LiveData<Integer> getCurrentPlayer2Marker() {
+        return currentPlayer2Marker;
+    }
+    public void setCurrentPlayer2Marker(int currentPlayer2Marker) {
+        this.currentPlayer2Marker = new MutableLiveData<>(currentPlayer2Marker);
+    }
 
     public LiveData<Boolean> getTie() {
         return tie;

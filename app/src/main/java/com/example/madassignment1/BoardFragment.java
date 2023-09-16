@@ -101,6 +101,11 @@ public class BoardFragment extends Fragment {
                 ;
             }
         });
+        boardViewModel.getGamePaused().observe(getViewLifecycleOwner(), gamePaused -> {
+            if (!gamePaused){
+                rebuildBoard();
+            }
+        });
         // Must remove the the board layout from its parent before adding it to a new parent
         // because it can only have one parent
         if (boardViewModel.hasLayout()) {
@@ -136,9 +141,22 @@ public class BoardFragment extends Fragment {
                 View button = ((ViewGroup) row).getChildAt(j);
                 if (button instanceof ImageButton) {
                     button.setLayoutParams(params);
+                    Integer buttonMarker = (Integer) button.getTag();
+                    if(buttonMarker != null) {
+                        if(button.getTag().equals(boardViewModel.getCurrentPlayer1Marker().getValue())) {
+                            button.setBackgroundResource(boardViewModel.getPlayer1Marker());
+                            button.setTag(boardViewModel.getPlayer1Marker());
+                        }
+                        else if(button.getTag().equals(boardViewModel.getCurrentPlayer2Marker().getValue())) {
+                            button.setBackgroundResource(boardViewModel.getPlayer2Marker());
+                            button.setTag(boardViewModel.getPlayer2Marker());
+                        }
+                    }
                 }
             }
         }
+        boardViewModel.setCurrentPlayer2Marker(boardViewModel.getPlayer2Marker());
+        boardViewModel.setCurrentPlayer1Marker(boardViewModel.getPlayer1Marker());
         // add the layout to the fragment
         boardFragment.addView(boardLayout);
         // set the grid to the board
@@ -188,12 +206,16 @@ public class BoardFragment extends Fragment {
                         setLastTurn(button);
                         boardViewModel.setTurnOver();
                         // set the button to the current player's marker
-                        int turn = boardViewModel.isTurnOver() ? boardViewModel.getPlayer1Marker() : boardViewModel.getPlayer2Marker();
+                        Integer turn = boardViewModel.isTurnOver() ? boardViewModel.getPlayer1Marker() : boardViewModel.getPlayer2Marker();
+                        Integer currentTurn = boardViewModel.isTurnOver() ? boardViewModel.getCurrentPlayer1Marker().getValue() : boardViewModel.getCurrentPlayer2Marker().getValue();
                         button.setBackgroundResource(turn);
                         button.setScaleType(ImageView.ScaleType.FIT_CENTER);
                         button.setTag(turn);
                         timerViewModel.resetTimer();
                         boardViewModel.setGameOver(checkGameCondition(turn));
+                        if(!boardViewModel.isGameOver()){
+                            boardViewModel.setGameOver(checkGameCondition(currentTurn));
+                        }
 
                         if (boardViewModel.isAi() && boardViewModel.isTurnOver()) {
                             // AI's turn (second player in AI mode)
@@ -225,9 +247,6 @@ public class BoardFragment extends Fragment {
                             }, delayMillis);
                         }
                         if (boardViewModel.isGameOver()) {
-
-                            //Toast.makeText(requireContext(), "Game Over", Toast.LENGTH_SHORT).show();
-
                             timerViewModel.stopTimer();
                             handler.postDelayed(new Runnable() {
                                 @Override

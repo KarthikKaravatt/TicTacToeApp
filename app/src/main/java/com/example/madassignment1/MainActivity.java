@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             return;
         }
-        loadLoginFragment();
+        loadSettingsFragment();
     }
 
     // handle username from login fragment

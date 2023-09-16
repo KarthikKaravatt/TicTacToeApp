@@ -29,6 +29,7 @@ public class PauseFragment extends Fragment {
 
     private Button returnButton;
     private Button exitButton;
+    private Button settingsButton;
     private BoardViewModel boardViewModel;
 
     public PauseFragment() {
@@ -69,7 +70,9 @@ public class PauseFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_pause, container, false);
         returnButton = rootView.findViewById(R.id.returnButton);
         exitButton = rootView.findViewById(R.id.exitButton);
+        settingsButton = rootView.findViewById(R.id.pauseSettingsButton);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+        boardViewModel.setGamePaused(true);
         returnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,9 +85,13 @@ public class PauseFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // perform the fragment transaction to load HomepageFragment
+                boardViewModel.setGamePaused(false);
                 loadHomepageFragment();
                 boardViewModel.resetBoard();
             }
+        });
+        settingsButton.setOnClickListener( view -> {
+            loadSettingsFragment();
         });
 
         return rootView;
@@ -103,5 +110,12 @@ public class PauseFragment extends Fragment {
 
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new HomepageFragment()).commit();
+    }
+    private void loadSettingsFragment() {
+        // get fragment manager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
+        // begin the fragment transaction
+        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new GameSettingsFragment()).commit();
     }
 }
