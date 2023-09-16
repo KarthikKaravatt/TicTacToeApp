@@ -24,7 +24,6 @@
 
 
     <LinearLayout
-        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -34,7 +33,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         >
         <ImageView
-            android:id="@+id/star"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/star"
@@ -42,10 +40,9 @@
 
             />
         <TextView
-            android:id="@+id/leaderboard"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_width="match_parent"
-            android:text="Leaderboard"
+            android:text="@string/leaderboard"
             android:textSize="25sp"
             android:textAlignment="center"
             android:layout_weight="5"
@@ -63,7 +60,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
     <LinearLayout
-        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -73,7 +69,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         >
         <LinearLayout
-            android:id="@+id/linearLayout1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -84,10 +79,9 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
-                android:id="@+id/firstNum"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="1."
+                android:text="@string/_1"
                 android:textSize="25sp"
                 android:textAlignment="center"
                 android:layout_weight="5"
@@ -96,14 +90,13 @@
                 android:id="@+id/firstName"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="Person 1"
+                android:text="@string/person_1"
                 android:textSize="25sp"
                 android:gravity="start"
                 android:layout_weight="1"
                 />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/linearLayout1.2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -114,10 +107,9 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
-                android:id="@+id/secondNum"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="2."
+                android:text="@string/_2"
                 android:textSize="25sp"
                 android:textAlignment="center"
                 android:layout_weight="5"
@@ -126,14 +118,13 @@
                 android:id="@+id/secondName"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="Person 2"
+                android:text="@string/person_2"
                 android:textSize="25dp"
                 android:gravity="start"
                 android:layout_weight="1"
                 />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -144,10 +135,9 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
-                android:id="@+id/thirdNum"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="3."
+                android:text="@string/_3"
                 android:textSize="25sp"
                 android:textAlignment="center"
                 android:layout_weight="5"
@@ -156,14 +146,13 @@
                 android:id="@+id/thirdName"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="Person 3"
+                android:text="@string/person_3"
                 android:textSize="25sp"
                 android:gravity="start"
                 android:layout_weight="1"
                 />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -174,10 +163,9 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
-                android:id="@+id/fourthNum"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="4."
+                android:text="@string/_4"
                 android:textSize="25sp"
                 android:textAlignment="center"
                 android:layout_weight="5"
@@ -186,14 +174,13 @@
                 android:id="@+id/fourthName"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="Person 4"
+                android:text="@string/person_4"
                 android:textSize="25sp"
                 android:gravity="start"
                 android:layout_weight="1"
                 />
         </LinearLayout>
         <LinearLayout
-            android:id="@+id/linearLayout5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -204,10 +191,9 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
-                android:id="@+id/fifthNum"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="5."
+                android:text="@string/_5"
                 android:textSize="25sp"
                 android:textAlignment="center"
                 android:layout_weight="5"
@@ -216,7 +202,7 @@
                 android:id="@+id/fifthName"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
-                android:text="Person 5"
+                android:text="@string/person_5"
                 android:textSize="25sp"
                 android:gravity="start"
                 android:layout_weight="1"
