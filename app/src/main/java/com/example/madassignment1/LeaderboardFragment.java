@@ -4,11 +4,13 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +23,11 @@ public class LeaderboardFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private BoardViewModel boardViewModel;
+
+    private int wins1, wins2, wins3, wins4, userWins;
+    private String username1, username2, username3, username4, username;
+    private TextView firstPlace, secondPlace, thirdPlace, fourthPlace, fifthPlace;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -62,7 +69,53 @@ public class LeaderboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_leaderboard, container, false);
         ImageButton backButton = rootView.findViewById(R.id.back_button);
+        boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+
+        firstPlace = rootView.findViewById(R.id.firstName);
+        secondPlace = rootView.findViewById(R.id.secondName);
+        thirdPlace = rootView.findViewById(R.id.thirdName);
+        fourthPlace = rootView.findViewById(R.id.fourthName);
+        fifthPlace = rootView.findViewById(R.id.fifthName);
+
+
+        wins1=10;
+        wins2=7;
+        wins3=4;
+        wins4=2;
+        userWins =  boardViewModel.getGamesWon().getValue();
+        username1 = "Sajib";
+        username2 = "GridMaster";
+        username3 = "Mango";
+        username4 = "XOChamp";
+        username = "user";
+
+        String[] usernames = {username1, username2, username3, username4, username};
+        int[] wins = {wins1, wins2, wins3, wins4, userWins};
+
+        for (int i = 0; i < wins.length - 1; i++) {
+            for (int j = i + 1; j < wins.length; j++) {
+                if (wins[i] < wins[j]) {
+                    // Swap wins
+                    int tempWins = wins[i];
+                    wins[i] = wins[j];
+                    wins[j] = tempWins;
+
+                    // Swap usernames
+                    String tempUsername = usernames[i];
+                    usernames[i] = usernames[j];
+                    usernames[j] = tempUsername;
+                }
+            }
+        }
+
+        firstPlace.setText(usernames[0] + " - " + wins[0] + " wins");
+        secondPlace.setText(usernames[1] + " - " + wins[1] + " wins");
+        thirdPlace.setText(usernames[2] + " - " + wins[2] + " wins");
+        fourthPlace.setText(usernames[3] + " - " + wins[3] + " wins");
+        fifthPlace.setText(usernames[4] + " - " + wins[4] + " wins");
+
         backButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 // perform the fragment transaction to load HomepageFragment
@@ -80,4 +133,5 @@ public class LeaderboardFragment extends Fragment {
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new HomepageFragment()).commit();
     }
+
 }
