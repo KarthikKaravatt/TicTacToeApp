@@ -77,30 +77,35 @@ public class LeaderboardFragment extends Fragment {
         fourthPlace = rootView.findViewById(R.id.fourthName);
         fifthPlace = rootView.findViewById(R.id.fifthName);
 
-
         wins1=10;
         wins2=7;
         wins3=4;
         wins4=2;
         userWins =  boardViewModel.getGamesWon().getValue();
-        username1 = "Sajib";
-        username2 = "GridMaster";
-        username3 = "Mango";
-        username4 = "XOChamp";
-        username = "user";
+        username1 = "sajib";
+        username2 = "gridmaster";
+        username3 = "mango";
+        username4 = "xochamp";
+
+        username=(boardViewModel.getUsername().getValue());
 
         String[] usernames = {username1, username2, username3, username4, username};
         int[] wins = {wins1, wins2, wins3, wins4, userWins};
 
+
+        ((MainActivity) requireActivity()).handleUsername(username1);
+        ((MainActivity) requireActivity()).handleUsername(username2);
+        ((MainActivity) requireActivity()).handleUsername(username3);
+        ((MainActivity) requireActivity()).handleUsername(username4);
+
         for (int i = 0; i < wins.length - 1; i++) {
             for (int j = i + 1; j < wins.length; j++) {
                 if (wins[i] < wins[j]) {
-                    // Swap wins
+                    //re-order by win number
                     int tempWins = wins[i];
                     wins[i] = wins[j];
                     wins[j] = tempWins;
-
-                    // Swap usernames
+                    // re-order usernames to match
                     String tempUsername = usernames[i];
                     usernames[i] = usernames[j];
                     usernames[j] = tempUsername;

@@ -27,6 +27,8 @@ public class HomepageFragment extends Fragment {
         // find leaderboard button
         Button leaderboardButton = rootView.findViewById(R.id.LeaderboardButton);
 
+        Button editProfileButton = rootView.findViewById(R.id.EditProfileButton);
+
         // set a click listener on the new game button
         newGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,7 +41,7 @@ public class HomepageFragment extends Fragment {
         statisticsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // perform the fragment transaction to load new game fragment
+                // perform the fragment transaction to load statistics fragment
                 loadStatisticsFragment();
             }
         });
@@ -47,10 +49,19 @@ public class HomepageFragment extends Fragment {
         leaderboardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // perform the fragment transaction to load new game fragment
+                // perform the fragment transaction to load leaderboard
                 loadLeaderboardFragment();
             }
         });
+
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // perform the fragment transaction to load login fragment
+                loadLoginFragment();
+            }
+        });
+
 
         return rootView;
     }
@@ -80,5 +91,12 @@ public class HomepageFragment extends Fragment {
 
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new LeaderboardFragment()).commit();
+    }
+    private void loadLoginFragment() {
+        // get fragment manager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
+        // begin the fragment transaction
+        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new LoginFragment()).commit();
     }
 }

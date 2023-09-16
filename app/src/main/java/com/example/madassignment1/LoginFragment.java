@@ -11,21 +11,27 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.textfield.TextInputEditText;
 
 
 public class LoginFragment extends Fragment {
+    private BoardViewModel boardViewModel;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
+        boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+
 
         // find buttons
         Button loginButton = rootView.findViewById(R.id.LoginFragmentButton);
         Button avatarButton = rootView.findViewById(R.id.AvatarButton);
         // find the username text box
         TextInputEditText usernameEditText = rootView.findViewById(R.id.usernameText);
+
+        usernameEditText.setText(boardViewModel.getUsername().getValue());
 
         // set a click listener on the change avatar button
         avatarButton.setOnClickListener(new View.OnClickListener() {
@@ -38,6 +44,7 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // get the username
                 String username = usernameEditText.getText() != null ? usernameEditText.getText().toString().trim() : "";
 
@@ -45,15 +52,14 @@ public class LoginFragment extends Fragment {
                     if (((MainActivity) requireActivity()).usernameExists(username)) {
                         Toast.makeText(requireContext(), "Username already exists", Toast.LENGTH_SHORT).show();
                     } else {
-                        // handle the username
-                        ((MainActivity) requireActivity()).handleUsername(username);
-
                         // perform the fragment transaction to load HomepageFragment
                         loadHomepageFragment();
                     }
                 } else {
                     Toast.makeText(requireContext(), "Username cannot be empty!", Toast.LENGTH_SHORT).show();
                 }
+
+                boardViewModel.setUsername(username.toLowerCase());
 
             }
         });
