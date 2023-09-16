@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -151,7 +152,6 @@ public class BoardFragment extends Fragment {
         Handler handler = new Handler();
 
 
-
         // initial checks
         assert boardSize > 2 &&
                 boardViewModel.getWinCondition() > 1 &&
@@ -234,21 +234,43 @@ public class BoardFragment extends Fragment {
         // find the location of the last move on the grid
         for (int i = 0; i < grid.size(); i++) {
             if (grid.get(i).contains(button)) {
-                boardViewModel.setLastMoveX(i);
-                boardViewModel.setLastMoveY(grid.get(i).indexOf(button));
+                if (boardViewModel.isAi()) {
+                    if (!boardViewModel.isTurnOver()) {
+                        boardViewModel.setLastMoveX(i);
+                        boardViewModel.setLastMoveY(grid.get(i).indexOf(button));
+                    }
+                } else {
+                    boardViewModel.setLastMoveX(i);
+                    boardViewModel.setLastMoveY(grid.get(i).indexOf(button));
+                }
                 break;
             }
         }
     }
 
     public void undoLastTurn() {
-        // undo the last turn if there is one
+        // Check if there are moves made and the game is not over
         if (boardViewModel.getMovesMade().getValue() > 0 && !boardViewModel.isGameOver()) {
-            ImageButton button = grid.get(boardViewModel.getLastMoveX()).get(boardViewModel.getLastMoveY());
-            // reset the cell
-            button.setTag(null);
-            button.setBackgroundResource(R.drawable.button_outline);
-            boardViewModel.setTurnOver();
+            // Get the last move coordinates
+            int lastMoveX = boardViewModel.getLastMoveX();
+            int lastMoveY = boardViewModel.getLastMoveY();
+
+            // Get the button corresponding to the last move
+            ImageButton lastMoveButton = grid.get(lastMoveX).get(lastMoveY);
+
+            // Reset the cell
+            lastMoveButton.setTag(null);
+            lastMoveButton.setBackgroundResource(R.drawable.button_outline);
+
+            // if using an ai don't switch to the ai's turn
+            if (boardViewModel.isAi() && !boardViewModel.isTurnOver()) {
+                boardViewModel.incrementMovesAvailable();
+                boardViewModel.decrementMovesMade();
+            } else {
+                boardViewModel.setTurnOver();
+                boardViewModel.incrementMovesAvailable();
+                boardViewModel.decrementMovesMade();
+            }
         }
     }
 
@@ -353,8 +375,7 @@ public class BoardFragment extends Fragment {
         }
     }
 
-    private void disableBoard()
-    {
+    private void disableBoard() {
         for (ArrayList<ImageButton> row : grid) {
             for (ImageButton button : row) {
                 button.setEnabled(false);
@@ -362,8 +383,7 @@ public class BoardFragment extends Fragment {
         }
     }
 
-    private void enableBoard()
-    {
+    private void enableBoard() {
         for (ArrayList<ImageButton> row : grid) {
             for (ImageButton button : row) {
                 button.setEnabled(true);

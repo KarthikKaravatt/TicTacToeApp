@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MADAssignment1</string>
+    <string name="app_name">MADAssignment!</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="logo">Logo</string>
@@ -16,6 +16,9 @@
     <string name="time_remaining">"Time remaining: "</string>
     <string name="start">Start!</string>
     <string name="playerTurn">PlayerTurn:</string>
+    <string name="change_avatar">Change Avatar</string>
+    <string name="arrow_symbol">➜</string>
+    <string name="image_description">User Avatar</string>
     <string-array name="board_size_options">
         <item>3x3</item>
         <item>6x6</item>

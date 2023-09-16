@@ -118,8 +118,14 @@ public class GameFragment extends Fragment {
         // observer player turn
         boardViewModel.turnOver.observe(getViewLifecycleOwner(), turnOver -> {
             if(turnOver) {
+                if (boardViewModel.isAi()){
+                    undoButton.setOnClickListener(null);
+                    undoButton.getBackground().setAlpha(64);
+                }
                 playerTurnMarkerDisplay.setImageResource(boardViewModel.getPlayer2Marker());
             } else {
+                undoButton.setOnClickListener(view -> boardFragment.undoLastTurn());
+                undoButton.getBackground().setAlpha(255);
                 playerTurnMarkerDisplay.setImageResource(boardViewModel.getPlayer1Marker());
             }
         });
@@ -138,7 +144,6 @@ public class GameFragment extends Fragment {
 
         // observer game over
         resetButton.setOnClickListener(view -> boardFragment.resetGrid());
-        undoButton.setOnClickListener(view -> boardFragment.undoLastTurn());
 
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
