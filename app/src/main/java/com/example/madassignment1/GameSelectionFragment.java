@@ -61,7 +61,7 @@ public class GameSelectionFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_game_selection, container, false);
         // find the back button
-        ImageButton backButton = (ImageButton) rootView.findViewById(R.id.back_button);
+        ImageButton backButton = rootView.findViewById(R.id.back_button);
         // find human vs human button
         Button humanVsHumanButton = rootView.findViewById(R.id.humanVsHumanButton);
         // find human vs AI button
