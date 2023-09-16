@@ -16,6 +16,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +51,8 @@ public class GameSettingsFragment extends Fragment {
             "Robot", R.drawable.robot);
     private final Map<Integer, String> markerImagesReversed = switchKeysAndValues(markerImages);
     private final List<String> markers = new ArrayList<>(markerImages.keySet());
+    private TextInputLayout boardSizeInputLayout;
+    private TextInputLayout matchConditionInputLayout;
     private AutoCompleteTextView boardSizeDropdown;
     private AutoCompleteTextView matchConditionDropdown;
 
@@ -125,6 +129,8 @@ public class GameSettingsFragment extends Fragment {
         backButton = gameSettingsView.findViewById(R.id.back_button);
         startGameButton = gameSettingsView.findViewById(R.id.startButton);
         boardSizeDropdown = gameSettingsView.findViewById(R.id.BoardSizeOptionTextView);
+        boardSizeInputLayout = gameSettingsView.findViewById(R.id.BoardSizeOptionTextInputLayout);
+        matchConditionInputLayout = gameSettingsView.findViewById(R.id.WinConditionOptionTextInputLayout);
         matchConditionDropdown = gameSettingsView.findViewById(R.id.MatchConditionDropDownTextView);
         player1MarkerDropdown = gameSettingsView.findViewById(R.id.Player1MarkerSelectorDropDownTextView);
         player2MarkerDropdown = gameSettingsView.findViewById(R.id.Player2MarkerSelectorDropDownTextView);
@@ -144,6 +150,22 @@ public class GameSettingsFragment extends Fragment {
         setPlayerOneMarker(currentMarkerPlayer1);
         setPlayerTwoMarker(currentMarkerPlayer2);
         setListeners();
+        boardViewModel.getGamePaused().observe(getViewLifecycleOwner(), gamePaused-> {
+            if (gamePaused){
+                boardSizeInputLayout.setVisibility(View.GONE);
+                matchConditionInputLayout.setVisibility(View.GONE);
+                boardSizeDropdown.setVisibility(View.GONE);
+                matchConditionDropdown.setVisibility(View.GONE);
+                startGameButton.setVisibility(View.GONE);
+            }
+            else {
+                boardSizeInputLayout.setVisibility(View.VISIBLE);
+                matchConditionInputLayout.setVisibility(View.VISIBLE);
+                boardSizeDropdown.setVisibility(View.VISIBLE);
+                matchConditionDropdown.setVisibility(View.VISIBLE);
+                startGameButton.setVisibility(View.VISIBLE);
+            }
+        });
         // On click listeners for each drop down menu
         return gameSettingsView;
     }
@@ -169,6 +191,9 @@ public class GameSettingsFragment extends Fragment {
         assert imageResource != null;
         player1MarkerImageView.setImageResource(imageResource);
         boardViewModel.setPlayer1Marker(imageResource);
+        if(!boardViewModel.getGamePaused().getValue()){
+            boardViewModel.setCurrentPlayer1Marker(imageResource);
+        }
     }
 
     private void setPlayerTwoMarker(String marker) {
@@ -176,6 +201,9 @@ public class GameSettingsFragment extends Fragment {
         assert imageResource != null;
         player2MarkerImageView.setImageResource(imageResource);
         boardViewModel.setPlayer2Marker(imageResource);
+        if(!boardViewModel.getGamePaused().getValue()){
+            boardViewModel.setCurrentPlayer2Marker(imageResource);
+        }
     }
 
     // private method to load the game selection fragment when the back button is clicked
@@ -242,7 +270,19 @@ public class GameSettingsFragment extends Fragment {
         // on click listener for the back button
         backButton.setOnClickListener(button -> {
             // perform the fragment transaction to load new game fragment
-            loadGameSelectionFragment();
+            if (boardViewModel.getGamePaused().getValue()) {
+                loadPauseFragment();
+            }
+            else {
+                loadGameSelectionFragment();
+            }
         });
+    }
+    public void loadPauseFragment() {
+        // get fragment manager
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+
+        // begin the fragment transaction
+        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new PauseFragment()).commit();
     }
 }
