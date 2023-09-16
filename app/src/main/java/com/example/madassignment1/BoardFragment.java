@@ -100,7 +100,7 @@ public class BoardFragment extends Fragment {
                     }, delayAiMove);
                     disableBoard();
                 }
-                ;
+
             }
         });
         boardViewModel.getGamePaused().observe(getViewLifecycleOwner(), gamePaused -> {

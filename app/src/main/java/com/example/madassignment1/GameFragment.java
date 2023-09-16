@@ -158,7 +158,7 @@ public class GameFragment extends Fragment {
 
         // if the game is over, you can no longer click the pause button
         // previously, it would crash if you tried to
-        boardViewModel.getGameOver().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        boardViewModel.getGameOver().observe(getViewLifecycleOwner(), new Observer<>() {
             @Override
             public void onChanged(Boolean isGameOver) {
                 // Here, you can react to changes in the 'gameOver' LiveData
@@ -177,7 +177,7 @@ public class GameFragment extends Fragment {
                 }
             }
         });
-        boardViewModel.getTie().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+        boardViewModel.getTie().observe(getViewLifecycleOwner(), new Observer<>() {
             @Override
             public void onChanged(Boolean getIsTie) {
                 if (getIsTie ) {
