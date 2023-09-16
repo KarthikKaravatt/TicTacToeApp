@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,21 @@ public class MainActivity extends AppCompatActivity {
 
     // loads login
     private void loadLoginFragment() {
-        fm.beginTransaction().replace(R.id.MainActivityFrameLayout, loginFragment).commit();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // Check if the loginFragment is already added to the back stack by finding it by its tag
+        LoginFragment existingFragment = (LoginFragment) fragmentManager.findFragmentByTag("login_fragment");
+
+        if (existingFragment == null) {
+            // The fragment is not added, so create and add it
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.MainActivityFrameLayout, loginFragment, "login_fragment");
+            transaction.addToBackStack("login_fragment"); // Add the transaction to the back stack
+            transaction.commit();
+        } else {
+            // The fragment is already added, so just pop the back stack to navigate back to it
+            fragmentManager.popBackStackImmediate("login_fragment", 0);
+        }
     }
 
     // loads user statistics

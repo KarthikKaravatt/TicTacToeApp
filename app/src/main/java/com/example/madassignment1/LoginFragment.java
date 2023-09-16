@@ -13,12 +13,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.textfield.TextInputEditText;
 
-
-public class LoginFragment extends Fragment {
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+public class LoginFragment extends Fragment implements AvatarSelectListener{
     private BoardViewModel boardViewModel;
-
+    public int avatarId = 2131230954;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
@@ -35,10 +38,17 @@ public class LoginFragment extends Fragment {
 
         usernameEditText.setText(boardViewModel.getUsername().getValue());
 
+        // Find the AvatarImage ImageView
+        ImageView avatarImage = rootView.findViewById(R.id.AvatarImage);
+
+        // update avatarImage with the selected avatar each time fragment is reloaded
+        avatarImage.setImageResource(avatarId);
+
         // set a click listener on the change avatar button
         avatarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                loadAvatarFragment();
             }
         });
 
@@ -69,6 +79,11 @@ public class LoginFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onAvatarSelected(int drawableResourceId) {
+        avatarId = drawableResourceId;
+    }
+
     // method to load the HomepageFragment
     private void loadHomepageFragment() {
         // get fragment manager
@@ -86,4 +101,16 @@ public class LoginFragment extends Fragment {
         boardViewModel.addUsername("gridmaster");
     }
 
+
+    private void loadAvatarFragment() {
+        // Create the AvatarListFragment with the listener (listener is LoginFragment)
+        AvatarListFragment avatarListFragment = new AvatarListFragment(this);
+
+        // Begin the fragment transaction
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.MainActivityFrameLayout, avatarListFragment);
+        transaction.addToBackStack("avatar_fragment"); // Add the transaction to the back stack
+        transaction.commit();
+    }
 }
