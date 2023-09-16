@@ -105,9 +105,9 @@ public class GameSettingsFragment extends Fragment {
         markerImageView = gameSettingsView.findViewById(R.id.markerImage);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
         // Connect drop down menu with the base element
-        ArrayAdapter<String> boardSizeAdapter = new ArrayAdapter<>(requireActivity(), R.layout.list_item, boardSizes);
-        ArrayAdapter<String> matchConditionAdapter = new ArrayAdapter<>(requireActivity(), R.layout.list_item, matchConditions);
-        ArrayAdapter<String> markerAdapter = new ArrayAdapter<>(requireActivity(), R.layout.list_item, markers);
+        ArrayAdapter<String> boardSizeAdapter = new ArrayAdapter<>(requireActivity(), R.layout.recycler_list_item, boardSizes);
+        ArrayAdapter<String> matchConditionAdapter = new ArrayAdapter<>(requireActivity(), R.layout.recycler_list_item, matchConditions);
+        ArrayAdapter<String> markerAdapter = new ArrayAdapter<>(requireActivity(), R.layout.recycler_list_item, markers);
         boardSizeDropdown.setAdapter(boardSizeAdapter);
         matchConditionDropdown.setAdapter(matchConditionAdapter);
         markerDropdown.setAdapter(markerAdapter);
