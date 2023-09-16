@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.util.Log;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,26 +78,11 @@ public class LeaderboardFragment extends Fragment {
         fourthPlace = rootView.findViewById(R.id.fourthName);
         fifthPlace = rootView.findViewById(R.id.fifthName);
 
-        wins1=10;
-        wins2=7;
-        wins3=4;
-        wins4=2;
-        userWins =  boardViewModel.getGamesWon().getValue();
-        username1 = "sajib";
-        username2 = "gridmaster";
-        username3 = "mango";
-        username4 = "xochamp";
-
-        username=(boardViewModel.getUsername().getValue());
+        initialiseData();
 
         String[] usernames = {username1, username2, username3, username4, username};
         int[] wins = {wins1, wins2, wins3, wins4, userWins};
 
-
-        ((MainActivity) requireActivity()).handleUsername(username1);
-        ((MainActivity) requireActivity()).handleUsername(username2);
-        ((MainActivity) requireActivity()).handleUsername(username3);
-        ((MainActivity) requireActivity()).handleUsername(username4);
 
         for (int i = 0; i < wins.length - 1; i++) {
             for (int j = i + 1; j < wins.length; j++) {
@@ -137,6 +123,20 @@ public class LeaderboardFragment extends Fragment {
 
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new HomepageFragment()).commit();
+    }
+
+    private void initialiseData()
+    {
+        wins1=10;
+        wins2=7;
+        wins3=4;
+        wins4=2;
+        userWins =  boardViewModel.getGamesWon().getValue();
+        username1 = "sajib";
+        username2 = "gridmaster";
+        username3 = "mango";
+        username4 = "xochamp";
+        username=(boardViewModel.getUsername().getValue());
     }
 
 }

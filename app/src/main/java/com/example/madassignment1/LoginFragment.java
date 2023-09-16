@@ -31,6 +31,8 @@ public class LoginFragment extends Fragment {
         // find the username text box
         TextInputEditText usernameEditText = rootView.findViewById(R.id.usernameText);
 
+        addUsernames();
+
         usernameEditText.setText(boardViewModel.getUsername().getValue());
 
         // set a click listener on the change avatar button
@@ -49,7 +51,7 @@ public class LoginFragment extends Fragment {
                 String username = usernameEditText.getText() != null ? usernameEditText.getText().toString().trim() : "";
 
                 if (!username.isEmpty()) {
-                    if (((MainActivity) requireActivity()).usernameExists(username)) {
+                    if (boardViewModel.getUsernameList().getValue().contains(username.toLowerCase())) {
                         Toast.makeText(requireContext(), "Username already exists", Toast.LENGTH_SHORT).show();
                     } else {
                         // perform the fragment transaction to load HomepageFragment
@@ -74,6 +76,14 @@ public class LoginFragment extends Fragment {
 
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, new HomepageFragment()).commit();
+    }
+    private void addUsernames()
+    {
+        boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+        boardViewModel.addUsername("sajib");
+        boardViewModel.addUsername("xochamp");
+        boardViewModel.addUsername("mango");
+        boardViewModel.addUsername("gridmaster");
     }
 
 }

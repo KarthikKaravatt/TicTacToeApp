@@ -19,6 +19,7 @@ public class BoardViewModel extends ViewModel {
     // defaults values
     // with thread safe live data
     private MutableLiveData<String> username = new MutableLiveData<>("");
+    private MutableLiveData<ArrayList<String>> usernameList = new MutableLiveData<>();
     private LiveData<LinearLayout> boardLayout;
     // keeps track of the winner. 0 = tie, 1 = player 1, 2 = player 2
     private MutableLiveData<Boolean> gamePaused = new MutableLiveData<>(false);
@@ -243,6 +244,21 @@ public class BoardViewModel extends ViewModel {
 
     public void setUsername(String value) {
         username.setValue(value);
+    }
+    public MutableLiveData<ArrayList<String>> getUsernameList() {
+        if (usernameList.getValue() == null) {
+            usernameList.setValue(new ArrayList<>());
+        }
+        return usernameList;
+    }
+
+    public void addUsername(String value) {
+        ArrayList<String> currentList = usernameList.getValue();
+        if (currentList == null) {
+            currentList = new ArrayList<>();
+        }
+        currentList.add(value);
+        usernameList.setValue(currentList);
     }
 
     public LiveData<Integer> getWinner() {
