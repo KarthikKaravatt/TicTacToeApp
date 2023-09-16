@@ -43,6 +43,7 @@ public class GameFragment extends Fragment {
     private TextView turnsLeftDisplay;
     private TextView playerTurnDisplay;
     private ImageView playerTurnMarkerDisplay;
+    private ImageView playerAvatarDisplay;
     private TimerViewModel timerViewModel;
     private BoardViewModel boardViewModel;
     private ImageButton pauseButton;
@@ -89,7 +90,7 @@ public class GameFragment extends Fragment {
         pauseButton = gameView.findViewById(R.id.pause_button);
         long delayMillis = 3000;
         Handler handler = new Handler();
-
+        GameSettingsViewModel gameSettingsViewModel = new ViewModelProvider(requireActivity()).get(GameSettingsViewModel.class);
         FrameLayout gameFrameLayout = gameView.findViewById(R.id.fragment_game_board);
         Button undoButton = gameView.findViewById(R.id.undo_turn_button);
         Button resetButton = gameView.findViewById(R.id.reset_button);
@@ -98,8 +99,10 @@ public class GameFragment extends Fragment {
         turnsLeftDisplay = gameView.findViewById(R.id.turns_remaining_text_view);
         playerTurnDisplay = gameView.findViewById(R.id.playerTurn_text_view);
         playerTurnMarkerDisplay = gameView.findViewById(R.id.playerTurn_image_view);
+        playerAvatarDisplay = gameView.findViewById(R.id.avatar_image_view);
         timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+        playerAvatarDisplay.setImageResource(gameSettingsViewModel.getAvatarId().getValue());
 
 
         // observer time remaining
