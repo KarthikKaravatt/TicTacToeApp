@@ -221,7 +221,7 @@ public class GameSettingsFragment extends Fragment {
 
         boardSizeDropdown.setOnItemClickListener((adapterView, view, i, l) -> {
             // If the match condition is greater than the board size, then the board size is invalid
-            if (i <= currentMatchCondition) {
+            if (i < currentMatchCondition) {
                 boardSizeDropdown.setText(boardSizes.get(currentBoardSize), false);
                 Toast.makeText(requireActivity(), "Error: selection", Toast.LENGTH_SHORT).show();
             } else {
