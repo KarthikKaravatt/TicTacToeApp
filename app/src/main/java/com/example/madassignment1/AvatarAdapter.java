@@ -33,13 +33,10 @@ public class AvatarAdapter extends RecyclerView.Adapter<AvatarAdapter.ImageViewH
         holder.imageView.setImageResource(image.getImageResourceId());
 
         // Set an OnClickListener to handle avatar selection
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int drawableResourceId = image.getImageResourceId();
-                if (listener != null) {
-                    listener.onAvatarSelected(drawableResourceId);
-                }
+        holder.imageView.setOnClickListener(v -> {
+            int drawableResourceId = image.getImageResourceId();
+            if (listener != null) {
+                listener.onAvatarSelected(drawableResourceId);
             }
         });
     }
@@ -50,7 +47,7 @@ public class AvatarAdapter extends RecyclerView.Adapter<AvatarAdapter.ImageViewH
     }
 
     public static class ImageViewHolder extends RecyclerView.ViewHolder {
-        public ImageView imageView;
+        public final ImageView imageView;
 
         public ImageViewHolder(View view) {
             super(view);

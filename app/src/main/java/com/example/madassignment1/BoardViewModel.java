@@ -107,6 +107,7 @@ public class BoardViewModel extends ViewModel {
     }
 
     public int getBoardSize() {
+        assert boardSize.getValue() != null;
         return boardSize.getValue();
     }
 
@@ -118,6 +119,7 @@ public class BoardViewModel extends ViewModel {
     }
 
     public void resetBoard() {
+        assert boardSize.getValue() != null;
         this.movesAvailable.setValue(boardSize.getValue() * boardSize.getValue());
         this.movesMade.setValue(0);
         this.tie.setValue(false);
@@ -129,11 +131,13 @@ public class BoardViewModel extends ViewModel {
     }
 
     public int getWinCondition() {
+        assert winCondition.getValue() != null;
         return winCondition.getValue();
     }
 
     public void setWinCondition(int winCondition) {
         // changing the win condition will reset everything
+        assert boardSize.getValue() != null;
         assert winCondition <= boardSize.getValue();
         this.winCondition.setValue(winCondition);
         resetBoard();
@@ -141,6 +145,7 @@ public class BoardViewModel extends ViewModel {
     }
 
     public boolean isAi() {
+        assert ai.getValue() != null;
         return ai.getValue();
     }
 
@@ -150,6 +155,7 @@ public class BoardViewModel extends ViewModel {
 
 
     public int getPlayer1Marker() {
+        assert player1Marker.getValue() != null;
         return player1Marker.getValue();
     }
 
@@ -158,6 +164,7 @@ public class BoardViewModel extends ViewModel {
     }
 
     public int getPlayer2Marker() {
+        assert player2Marker.getValue() != null;
         return player2Marker.getValue();
     }
 
@@ -166,14 +173,17 @@ public class BoardViewModel extends ViewModel {
     }
 
     public void decrementMovesAvailable() {
+        assert movesAvailable.getValue() != null;
         this.movesAvailable.setValue(movesAvailable.getValue() - 1);
     }
 
     public void resetMovesAvailable() {
+        assert boardSize.getValue() != null;
         this.movesAvailable.setValue(boardSize.getValue() * boardSize.getValue());
     }
 
     public void incrementMovesMade() {
+        assert movesMade.getValue() != null;
         this.movesMade.setValue(movesMade.getValue() + 1);
     }
 
@@ -182,6 +192,7 @@ public class BoardViewModel extends ViewModel {
     }
 
     public boolean isGameOver() {
+        assert gameOver.getValue() != null;
         return gameOver.getValue();
     }
 
@@ -194,6 +205,7 @@ public class BoardViewModel extends ViewModel {
     }
 
     public int getLastMoveX() {
+        assert lastMoveX.getValue() != null;
         return lastMoveX.getValue();
     }
 
@@ -202,6 +214,7 @@ public class BoardViewModel extends ViewModel {
     }
 
     public int getLastMoveY() {
+        assert lastMoveY.getValue() != null;
         return lastMoveY.getValue();
     }
 
@@ -210,10 +223,12 @@ public class BoardViewModel extends ViewModel {
     }
 
     public boolean isTurnOver() {
+        assert turnOver.getValue() != null;
         return turnOver.getValue();
     }
 
     public void setTurnOver() {
+        assert turnOver.getValue() != null;
         this.turnOver.setValue(!turnOver.getValue());
     }
 
@@ -281,10 +296,12 @@ public class BoardViewModel extends ViewModel {
 
 
     public void incrementMovesAvailable() {
+        assert movesAvailable.getValue() != null;
         this.movesAvailable.setValue(movesAvailable.getValue() + 1);
     }
 
     public void decrementMovesMade() {
+        assert movesMade.getValue() != null;
         this.movesMade.setValue(movesMade.getValue() - 1);
     }
 }

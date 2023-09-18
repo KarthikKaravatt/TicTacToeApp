@@ -12,6 +12,9 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.util.Objects;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link GameOverFragment#newInstance} factory method to
@@ -74,13 +77,14 @@ public class GameOverFragment extends Fragment {
         outcome = rootView.findViewById(R.id.outcome);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
         Boolean isTieValue = boardViewModel.getTie().getValue();
-        Log.d("1. ", "Played " + boardViewModel.getGamesPlayed().getValue().toString() + "won: " + boardViewModel.getGamesWon().getValue() + "lost "+ boardViewModel.getGamesLost().getValue());
+        Log.d("1. ", "Played " + Objects.requireNonNull(boardViewModel.getGamesPlayed().getValue()).toString() + "won: " + boardViewModel.getGamesWon().getValue() + "lost "+ boardViewModel.getGamesLost().getValue());
 
         if (savedInstanceState == null)
         {
                 boardViewModel.setGamesPlayed(boardViewModel.getGamesPlayed().getValue() + 1);
-                if (isTieValue) {
+                if (Boolean.TRUE.equals(isTieValue)) {
                     outcome.setText("Tie");
+                    assert boardViewModel.getGamesTied().getValue() != null;
                     boardViewModel.setGamesTied(boardViewModel.getGamesTied().getValue() + 1);
                     boardViewModel.setWinner(0);
                 }
@@ -89,12 +93,14 @@ public class GameOverFragment extends Fragment {
                     if (boardViewModel.isTurnOver())
                     {
                         winnerImage.setBackgroundResource(boardViewModel.getPlayer1Marker());
+                        assert boardViewModel.getGamesWon().getValue() != null;
                         boardViewModel.setGamesWon(boardViewModel.getGamesWon().getValue() + 1);
                         boardViewModel.setWinner(1);
                     }
                     else
                     {
                         winnerImage.setBackgroundResource(boardViewModel.getPlayer2Marker());
+                        assert boardViewModel.getGamesLost().getValue() != null;
                         boardViewModel.setGamesLost(boardViewModel.getGamesLost().getValue() + 1);
                         boardViewModel.setWinner(2);
                     }
@@ -103,12 +109,13 @@ public class GameOverFragment extends Fragment {
         }
         else
         {
-            if (isTieValue)
+            if (Boolean.TRUE.equals(isTieValue))
             {
                 outcome.setText("Tie");
             }
             else
             {
+                assert boardViewModel.getWinner().getValue() != null;
                 if (boardViewModel.getWinner().getValue() == 1)
                 {
                     winnerImage.setBackgroundResource(boardViewModel.getPlayer1Marker());
@@ -120,12 +127,9 @@ public class GameOverFragment extends Fragment {
             }
         }
         Log.d("3. ", "Played " + boardViewModel.getGamesPlayed().getValue().toString() + "won: " + boardViewModel.getGamesWon().getValue() + "lost "+ boardViewModel.getGamesLost().getValue());
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load HomepageFragment
-                loadHomepageFragment();
-            }
+        homeButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load HomepageFragment
+            loadHomepageFragment();
         });
         boardViewModel.resetBoard();
         Log.d("4. ", "Played " + boardViewModel.getGamesPlayed().getValue().toString() + "won: " + boardViewModel.getGamesWon().getValue() + "lost "+ boardViewModel.getGamesLost().getValue());

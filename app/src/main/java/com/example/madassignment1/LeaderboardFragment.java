@@ -103,13 +103,9 @@ public class LeaderboardFragment extends Fragment {
         fourthPlace.setText(usernames[3] + " - " + wins[3] + " wins");
         fifthPlace.setText(usernames[4] + " - " + wins[4] + " wins");
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load HomepageFragment
-                loadHomepageFragment();
-            }
+        backButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load HomepageFragment
+            loadHomepageFragment();
         });
         // Inflate the layout for this fragment
         return rootView;
@@ -129,6 +125,7 @@ public class LeaderboardFragment extends Fragment {
         wins2=7;
         wins3=4;
         wins4=2;
+        assert boardViewModel.getGamesWon().getValue() != null;
         userWins =  boardViewModel.getGamesWon().getValue();
         username1 = "sajib";
         username2 = "gridmaster";

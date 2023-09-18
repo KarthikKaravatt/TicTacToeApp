@@ -11,6 +11,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -72,7 +73,6 @@ public class GameSettingsFragment extends Fragment {
     private FragmentManager fragmentManager;
     private GameFragment gameFragment = new GameFragment();
     private BoardViewModel boardViewModel;
-    private GameSettingsViewModel gameSettingsViewModel;
 
 
     // TODO: Rename and change types of parameters
@@ -111,7 +111,7 @@ public class GameSettingsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // restart activity on screen rotate otherwise the drop downs do not save
         if (savedInstanceState != null) {
@@ -136,7 +136,6 @@ public class GameSettingsFragment extends Fragment {
         player1MarkerImageView = gameSettingsView.findViewById(R.id.player1markerImage);
         player2MarkerImageView = gameSettingsView.findViewById(R.id.player2markerImage);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
-        gameSettingsViewModel = new ViewModelProvider(requireActivity()).get(GameSettingsViewModel.class);
         // Connect drop down menu with the base element
         ArrayAdapter<String> boardSizeAdapter = new ArrayAdapter<>(requireActivity(), R.layout.list_item, boardSizes);
         ArrayAdapter<String> matchConditionAdapter = new ArrayAdapter<>(requireActivity(), R.layout.list_item, matchConditions);
@@ -190,7 +189,7 @@ public class GameSettingsFragment extends Fragment {
         assert imageResource != null;
         player1MarkerImageView.setImageResource(imageResource);
         boardViewModel.setPlayer1Marker(imageResource);
-        if(!boardViewModel.getGamePaused().getValue()){
+        if(Boolean.FALSE.equals(boardViewModel.getGamePaused().getValue())){
             boardViewModel.setCurrentPlayer1Marker(imageResource);
         }
     }
@@ -200,7 +199,7 @@ public class GameSettingsFragment extends Fragment {
         assert imageResource != null;
         player2MarkerImageView.setImageResource(imageResource);
         boardViewModel.setPlayer2Marker(imageResource);
-        if(!boardViewModel.getGamePaused().getValue()){
+        if(Boolean.FALSE.equals(boardViewModel.getGamePaused().getValue())){
             boardViewModel.setCurrentPlayer2Marker(imageResource);
         }
     }
@@ -269,7 +268,7 @@ public class GameSettingsFragment extends Fragment {
         // on click listener for the back button
         backButton.setOnClickListener(button -> {
             // perform the fragment transaction to load new game fragment
-            if (boardViewModel.getGamePaused().getValue()) {
+            if (Boolean.TRUE.equals(boardViewModel.getGamePaused().getValue())) {
                 loadPauseFragment();
             }
             else {

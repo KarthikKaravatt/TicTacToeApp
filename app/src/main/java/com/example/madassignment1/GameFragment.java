@@ -16,7 +16,6 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 
@@ -37,10 +36,9 @@ public class GameFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private BoardFragment boardFragment = new BoardFragment();
+    private final BoardFragment boardFragment = new BoardFragment();
     private TextView timeRemainingDisplay;
     private TextView turnsLeftDisplay;
-    private TextView playerTurnDisplay;
     private ImageView playerTurnMarkerDisplay;
     private ImageView playerAvatarDisplay;
     private TimerViewModel timerViewModel;
@@ -96,11 +94,11 @@ public class GameFragment extends Fragment {
         MediatorLiveData<Pair<Integer, Integer>> mediator = new MediatorLiveData<>();
         timeRemainingDisplay = gameView.findViewById(R.id.time_remaining_text_view);
         turnsLeftDisplay = gameView.findViewById(R.id.turns_remaining_text_view);
-        playerTurnDisplay = gameView.findViewById(R.id.playerTurn_text_view);
         playerTurnMarkerDisplay = gameView.findViewById(R.id.playerTurn_image_view);
         playerAvatarDisplay = gameView.findViewById(R.id.avatar_image_view);
         timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+        assert gameSettingsViewModel.getAvatarId().getValue() != null;
         playerAvatarDisplay.setImageResource(gameSettingsViewModel.getAvatarId().getValue());
 
 
@@ -148,41 +146,26 @@ public class GameFragment extends Fragment {
         // observer game over
         resetButton.setOnClickListener(view -> boardFragment.resetGrid());
 
-        pauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load PauseFragment
-                loadPauseFragment();
-            }
+        pauseButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load PauseFragment
+            loadPauseFragment();
         });
 
         // if the game is over, you can no longer click the pause button
         // previously, it would crash if you tried to
-        boardViewModel.getGameOver().observe(getViewLifecycleOwner(), new Observer<>() {
-            @Override
-            public void onChanged(Boolean isGameOver) {
-                // Here, you can react to changes in the 'gameOver' LiveData
-                if (isGameOver) {
-                pauseButton.setEnabled(false);
-                    if (boardViewModel.isGameOver()) {
-                        timerViewModel.stopTimer();
-                        handler.postDelayed(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                loadGameOverFragment();
-                            }
-                        }, delayMillis);
-                    }
+        boardViewModel.getGameOver().observe(getViewLifecycleOwner(), isGameOver -> {
+            // Here, you can react to changes in the 'gameOver' LiveData
+            if (isGameOver) {
+            pauseButton.setEnabled(false);
+                if (boardViewModel.isGameOver()) {
+                    timerViewModel.stopTimer();
+                    handler.postDelayed(this::loadGameOverFragment, delayMillis);
                 }
             }
         });
-        boardViewModel.getTie().observe(getViewLifecycleOwner(), new Observer<>() {
-            @Override
-            public void onChanged(Boolean getIsTie) {
-                if (getIsTie ) {
-                    pauseButton.setEnabled(false);
-                }
+        boardViewModel.getTie().observe(getViewLifecycleOwner(), getIsTie -> {
+            if (getIsTie ) {
+                pauseButton.setEnabled(false);
             }
         });
 
@@ -194,50 +177,8 @@ public class GameFragment extends Fragment {
         getChildFragmentManager().beginTransaction().replace(gameFrameLayout.getId(), boardFragment).commit();
         return gameView;
     }
-    private void loadGameSettingsFragment() {
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        GameSettingsFragment gameSettingsFragment = new GameSettingsFragment();
-        fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, gameSettingsFragment).commit();
-    }
 
 
-    public void changeBoardSize(int boardSize) {
-        // remove the old board fragment
-        FragmentManager fragmentManager = getChildFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_game_board);
-        if (fragment != null) {
-            fragmentManager.beginTransaction().remove(fragment).commit();
-        }
-        // create a new board fragment and reset the board by changing the board size
-        boardViewModel.setBoardSize(boardSize);
-        boardFragment = new BoardFragment();
-        getChildFragmentManager().beginTransaction().replace(R.id.fragment_game_board, boardFragment).commit();
-    }
-    public void changeWinCondition(int winCondition) {
-        // remove the old board fragment
-        FragmentManager fragmentManager = getChildFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_game_board);
-        if (fragment != null) {
-            fragmentManager.beginTransaction().remove(fragment).commit();
-        }
-        // create a new board fragment and reset the board by changing the win condition
-        boardViewModel.setWinCondition(winCondition);
-        boardFragment = new BoardFragment();
-        getChildFragmentManager().beginTransaction().replace(R.id.fragment_game_board, boardFragment).commit();
-    }
-
-    public void setPlayer1Marker(int marker) {
-        // only allow the player to change the marker if the game is over
-        if(boardViewModel.isGameOver()) {
-            boardViewModel.setPlayer1Marker(marker);
-        }
-    }
-    public void setPlayer2Marker(int marker) {
-        // only allow the player to change the marker if the game is over
-        if(boardViewModel.isGameOver()) {
-            boardViewModel.setPlayer2Marker(marker);
-        }
-    }
     // TODO: make it so if a you move to a different fragment, the timer stops and gameOver set to true
 
     @Override

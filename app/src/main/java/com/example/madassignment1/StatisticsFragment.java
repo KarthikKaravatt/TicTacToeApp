@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.Objects;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link StatisticsFragment#newInstance} factory method to
@@ -86,30 +88,30 @@ public class StatisticsFragment extends Fragment {
         double percent;
 
         usernameText.setText(boardViewModel.getUsername().getValue());
+        assert gameSettingsViewModel.getAvatarId().getValue() != null;
         profilePicture.setImageResource(gameSettingsViewModel.getAvatarId().getValue());
 
         // if no games have been played yet, set the win percentage to 0.
+        assert boardViewModel.getGamesPlayed().getValue() != null;
         if (boardViewModel.getGamesPlayed().getValue() == 0)
         {
             percent = 0.0;
         }
         else {
+            assert boardViewModel.getGamesWon().getValue() != null;
             percent = ((double) boardViewModel.getGamesWon().getValue() / boardViewModel.getGamesPlayed().getValue()) * 100;
             percent =  Math.round(percent * 10.0) / 10.0;
         }
-        gamesTiedText.setText("Games Tied: " + boardViewModel.getGamesTied().getValue().toString());
-        gamesLostText.setText("Games Lost: " + boardViewModel.getGamesLost().getValue().toString());
-        gamesWonText.setText("Games Won: "+ boardViewModel.getGamesWon().getValue().toString());
-        gamesPlayedText.setText("Games Played: "+ boardViewModel.getGamesPlayed().getValue().toString());
-        percentWonText.setText("Win Percentage: " + percent +"%");
+        // had to move the text to strings.xml and do requireNonNull because it could throw a null pointer exception
+        gamesTiedText.setText(getString(R.string.games_tied, Objects.requireNonNull(boardViewModel.getGamesTied().getValue()).toString()));
+        gamesLostText.setText(getString(R.string.games_lost, Objects.requireNonNull(boardViewModel.getGamesLost().getValue()).toString()));
+        gamesWonText.setText(getString(R.string.games_won, Objects.requireNonNull(boardViewModel.getGamesWon().getValue()).toString()));
+        gamesPlayedText.setText(getString(R.string.games_played, boardViewModel.getGamesPlayed().getValue().toString()));
+        percentWonText.setText(getString(R.string.win_percentage, Double.toString(percent)));
 
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load HomepageFragment
-                loadHomepageFragment();
-            }
+        backButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load HomepageFragment
+            loadHomepageFragment();
         });
 
 
