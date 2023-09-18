@@ -10,7 +10,7 @@ public class GameSettingsViewModel extends ViewModel {
     private MutableLiveData<Integer> currentPlayerOneMarker = new MutableLiveData<>(R.drawable.x);
     private MutableLiveData<Integer> currentPlayerTwoMarker = new MutableLiveData<>(R.drawable.o);
 
-    private MutableLiveData<Integer> avatarId = new MutableLiveData<>(2131230954);
+    private MutableLiveData<Integer> avatarId = new MutableLiveData<>(R.drawable.avatar_default);
 
     public void setCurrentBoardSize(int boardSize) {
         currentBoardSize.setValue(boardSize);
