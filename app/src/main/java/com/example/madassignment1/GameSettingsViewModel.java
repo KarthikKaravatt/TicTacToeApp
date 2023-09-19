@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class GameSettingsViewModel extends ViewModel {
-    private MutableLiveData<Integer> currentBoardSize = new MutableLiveData<>(0);
-    private MutableLiveData<Integer> currentMatchCondition= new MutableLiveData<>(0);
-    private MutableLiveData<Integer> currentPlayerOneMarker = new MutableLiveData<>(R.drawable.x);
-    private MutableLiveData<Integer> currentPlayerTwoMarker = new MutableLiveData<>(R.drawable.o);
+    private final MutableLiveData<Integer> currentBoardSize = new MutableLiveData<>(0);
+    private final MutableLiveData<Integer> currentMatchCondition= new MutableLiveData<>(0);
+    private final MutableLiveData<Integer> currentPlayerOneMarker = new MutableLiveData<>(R.drawable.x);
+    private final MutableLiveData<Integer> currentPlayerTwoMarker = new MutableLiveData<>(R.drawable.o);
 
-    private MutableLiveData<Integer> avatarId = new MutableLiveData<>(2131230954);
+    private final MutableLiveData<Integer> avatarId = new MutableLiveData<>(2131230954);
 
     public void setCurrentBoardSize(int boardSize) {
         currentBoardSize.setValue(boardSize);

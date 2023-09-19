@@ -90,13 +90,9 @@ public class BoardFragment extends Fragment {
                 timerViewModel.resetTimer();
                 if (boardViewModel.isAi() && boardViewModel.isTurnOver()) {
                     // AI's turn (second player in AI mode)
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            makeRandomMoveForAI();
-                            enableBoard();
-                        }
-
+                    handler.postDelayed(() -> {
+                        makeRandomMoveForAI();
+                        enableBoard();
                     }, delayAiMove);
                     disableBoard();
                 }
@@ -208,7 +204,7 @@ public class BoardFragment extends Fragment {
                         setLastTurn(button);
                         boardViewModel.setTurnOver();
                         // set the button to the current player's marker
-                        Integer turn = boardViewModel.isTurnOver() ? boardViewModel.getPlayer1Marker() : boardViewModel.getPlayer2Marker();
+                        int turn = boardViewModel.isTurnOver() ? boardViewModel.getPlayer1Marker() : boardViewModel.getPlayer2Marker();
                         Integer currentTurn = boardViewModel.isTurnOver() ? boardViewModel.getCurrentPlayer1Marker().getValue() : boardViewModel.getCurrentPlayer2Marker().getValue();
                         button.setBackgroundResource(turn);
                         button.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -221,13 +217,9 @@ public class BoardFragment extends Fragment {
 
                         if (boardViewModel.isAi() && boardViewModel.isTurnOver()) {
                             // AI's turn (second player in AI mode)
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        makeRandomMoveForAI();
-                                        enableBoard();
-                                    }
-
+                                handler.postDelayed(() -> {
+                                    makeRandomMoveForAI();
+                                    enableBoard();
                                 }, delayAiMove);
                                 disableBoard();
                         }

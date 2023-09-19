@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     StatisticsFragment statsFragment = new StatisticsFragment();
     FragmentManager fm = getSupportFragmentManager();
     Fragment mainFragment = fm.findFragmentById(R.id.MainActivityFrameLayout);
-    private List<String> usernameList = new ArrayList<>();
+    private final List<String> usernameList = new ArrayList<>();
 
 
     // initial app startup

@@ -148,41 +148,26 @@ public class GameFragment extends Fragment {
         // observer game over
         resetButton.setOnClickListener(view -> boardFragment.resetGrid());
 
-        pauseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load PauseFragment
-                loadPauseFragment();
-            }
+        pauseButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load PauseFragment
+            loadPauseFragment();
         });
 
         // if the game is over, you can no longer click the pause button
         // previously, it would crash if you tried to
-        boardViewModel.getGameOver().observe(getViewLifecycleOwner(), new Observer<>() {
-            @Override
-            public void onChanged(Boolean isGameOver) {
-                // Here, you can react to changes in the 'gameOver' LiveData
-                if (isGameOver) {
-                pauseButton.setEnabled(false);
-                    if (boardViewModel.isGameOver()) {
-                        timerViewModel.stopTimer();
-                        handler.postDelayed(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                loadGameOverFragment();
-                            }
-                        }, delayMillis);
-                    }
+        boardViewModel.getGameOver().observe(getViewLifecycleOwner(), isGameOver -> {
+            // Here, you can react to changes in the 'gameOver' LiveData
+            if (isGameOver) {
+            pauseButton.setEnabled(false);
+                if (boardViewModel.isGameOver()) {
+                    timerViewModel.stopTimer();
+                    handler.postDelayed(this::loadGameOverFragment, delayMillis);
                 }
             }
         });
-        boardViewModel.getTie().observe(getViewLifecycleOwner(), new Observer<>() {
-            @Override
-            public void onChanged(Boolean getIsTie) {
-                if (getIsTie ) {
-                    pauseButton.setEnabled(false);
-                }
+        boardViewModel.getTie().observe(getViewLifecycleOwner(), getIsTie -> {
+            if (getIsTie ) {
+                pauseButton.setEnabled(false);
             }
         });
 

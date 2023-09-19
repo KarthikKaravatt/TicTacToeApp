@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class TimerViewModel extends ViewModel {
-    private MutableLiveData<Long> timeRemaining = new MutableLiveData<>(30000L);
+    private final MutableLiveData<Long> timeRemaining = new MutableLiveData<>(30000L);
     private CountDownTimer timer;
 
     public LiveData<Long> getTimeRemaining() {

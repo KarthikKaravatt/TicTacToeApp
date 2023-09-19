@@ -47,35 +47,27 @@ public class LoginFragment extends Fragment implements AvatarSelectListener{
         avatarImage.setImageResource(gameSettingsViewModel.getAvatarId().getValue());
 
         // set a click listener on the change avatar button
-        avatarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadAvatarFragment();
-            }
-        });
+        avatarButton.setOnClickListener(v -> loadAvatarFragment());
 
         // set a click listener on the login button
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        loginButton.setOnClickListener(v -> {
 
-                // get the username
-                String username = usernameEditText.getText() != null ? usernameEditText.getText().toString().trim() : "";
+            // get the username
+            String username = usernameEditText.getText() != null ? usernameEditText.getText().toString().trim() : "";
 
-                if (!username.isEmpty()) {
-                    if (boardViewModel.getUsernameList().getValue().contains(username.toLowerCase())) {
-                        Toast.makeText(requireContext(), "Username already exists", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // perform the fragment transaction to load HomepageFragment
-                        loadHomepageFragment();
-                    }
+            if (!username.isEmpty()) {
+                if (boardViewModel.getUsernameList().getValue().contains(username.toLowerCase())) {
+                    Toast.makeText(requireContext(), "Username already exists", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(requireContext(), "Username cannot be empty!", Toast.LENGTH_SHORT).show();
+                    // perform the fragment transaction to load HomepageFragment
+                    loadHomepageFragment();
                 }
-
-                boardViewModel.setUsername(username.toLowerCase());
-
+            } else {
+                Toast.makeText(requireContext(), "Username cannot be empty!", Toast.LENGTH_SHORT).show();
             }
+
+            boardViewModel.setUsername(username.toLowerCase());
+
         });
 
         return rootView;

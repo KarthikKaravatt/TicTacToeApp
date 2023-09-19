@@ -73,26 +73,18 @@ public class PauseFragment extends Fragment {
         settingsButton = rootView.findViewById(R.id.pauseSettingsButton);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
         boardViewModel.setGamePaused(true);
-        returnButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load HomepageFragment
-                loadGameFragment();
-            }
+        returnButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load HomepageFragment
+            loadGameFragment();
         });
 
-        exitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load HomepageFragment
-                boardViewModel.setGamePaused(false);
-                loadHomepageFragment();
-                boardViewModel.resetBoard();
-            }
+        exitButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load HomepageFragment
+            boardViewModel.setGamePaused(false);
+            loadHomepageFragment();
+            boardViewModel.resetBoard();
         });
-        settingsButton.setOnClickListener( view -> {
-            loadSettingsFragment();
-        });
+        settingsButton.setOnClickListener( view -> loadSettingsFragment());
 
         return rootView;
     }

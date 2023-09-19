@@ -4,24 +4,45 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="logo">Logo</string>
     <string name="username">Username</string>
-    <string name="LoginFragmentButtonText">Continue</string>
     <string name="board_size_option_String">Select Board Size</string>
     <string name="select_match_condition">Select Match Condition</string>
     <string name="select_player_1_marker">Player 1 Marker</string>
     <string name="select_player_2_marker">Player 2 Marker</string>
-    <string name="MarkerImageViewDescription">Player Marker</string>
     <string name="marker_image_description">Marker</string>
     <string name="undo">Undo</string>
     <string name="reset">Reset</string>
-    <string name="time_remaining">"Time remaining: "</string>
     <string name="start">Start!</string>
     <string name="playerTurn">PlayerTurn:</string>
     <string name="change_avatar">Change Avatar</string>
     <string name="arrow_symbol">➜</string>
     <string name="image_description">User Avatar</string>
-    <string-array name="board_size_options">
-        <item>3x3</item>
-        <item>6x6</item>
-        <item>9x9</item>
-    </string-array>
+    <string name="game_over">Game Over!</string>
+    <string name="winner">Winner:</string>
+    <string name="return_home">Return Home</string>
+    <string name="human_vs_ai">Human vs AI</string>
+    <string name="todo">TODO</string>
+    <string name="human_vs_human">Human vs Human</string>
+    <string name="tic_tac_toe">TIC TAC TOE</string>
+    <string name="new_game">New Game</string>
+    <string name="your_statistics">Your Statistics</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="_1">1.</string>
+    <string name="_2">2.</string>
+    <string name="_3">3.</string>
+    <string name="_4">4.</string>
+    <string name="_5">5.</string>
+    <string name="person_1">Person 1</string>
+    <string name="person_2">Person 2</string>
+    <string name="person_3">Person 3</string>
+    <string name="person_4">Person 4</string>
+    <string name="person_5">Person 5</string>
+    <string name="return_to_game">Return to Game</string>
+    <string name="settings">Settings</string>
+    <string name="exit_game">Exit Game</string>
+    <string name="games_won_0">Games Won: 0</string>
+    <string name="games_lost_0">Games Lost: 0</string>
+    <string name="games_drawn_0">Games Drawn: 0</string>
+    <string name="games_played_0">Games Played: 0</string>
+    <string name="win_percentage_0">Win Percentage: 0%</string>
 </resources>

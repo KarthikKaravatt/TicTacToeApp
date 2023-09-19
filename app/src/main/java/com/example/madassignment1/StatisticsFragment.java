@@ -109,12 +109,9 @@ public class StatisticsFragment extends Fragment {
         percentWonText.setText("Win Percentage: " + percent +"%");
 
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load HomepageFragment
-                loadHomepageFragment();
-            }
+        backButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load HomepageFragment
+            loadHomepageFragment();
         });
 
 

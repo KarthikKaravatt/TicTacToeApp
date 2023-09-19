@@ -30,36 +30,24 @@ public class HomepageFragment extends Fragment {
         Button editProfileButton = rootView.findViewById(R.id.EditProfileButton);
 
         // set a click listener on the new game button
-        newGameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load new game fragment
-                loadNewGameFragment();
-            }
+        newGameButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load new game fragment
+            loadNewGameFragment();
         });
 
-        statisticsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load statistics fragment
-                loadStatisticsFragment();
-            }
+        statisticsButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load statistics fragment
+            loadStatisticsFragment();
         });
 
-        leaderboardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load leaderboard
-                loadLeaderboardFragment();
-            }
+        leaderboardButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load leaderboard
+            loadLeaderboardFragment();
         });
 
-        editProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load login fragment
-                loadLoginFragment();
-            }
+        editProfileButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load login fragment
+            loadLoginFragment();
         });
 
 

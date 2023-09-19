@@ -70,29 +70,20 @@ public class GameSelectionFragment extends Fragment {
         Button humanVsAiButton = rootView.findViewById(R.id.humanVsAiButton);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
 
-        humanVsHumanButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load new game fragment
-                boardViewModel.setAi(false);
-                loadGameSettingsFragment();
-            }
+        humanVsHumanButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load new game fragment
+            boardViewModel.setAi(false);
+            loadGameSettingsFragment();
         });
-        humanVsAiButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load new game fragment
-                loadGameSettingsFragment();
-                boardViewModel.setAi(true);
-            }
+        humanVsAiButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load new game fragment
+            loadGameSettingsFragment();
+            boardViewModel.setAi(true);
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // perform the fragment transaction to load new game fragment
-                loadHomepageFragment();
-            }
+        backButton.setOnClickListener(v -> {
+            // perform the fragment transaction to load new game fragment
+            loadHomepageFragment();
         });
 
 

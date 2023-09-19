@@ -23,7 +23,7 @@
             android:id="@+id/humanVsHumanButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Human vs Human"
+            android:text="@string/human_vs_human"
             android:layout_gravity="center_horizontal"
             />
 
@@ -31,7 +31,7 @@
             android:id="@+id/humanVsAiButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Human vs AI"
+            android:text="@string/human_vs_ai"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
             />

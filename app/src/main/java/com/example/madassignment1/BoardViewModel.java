@@ -18,32 +18,32 @@ public class BoardViewModel extends ViewModel {
 
     // defaults values
     // with thread safe live data
-    private MutableLiveData<String> username = new MutableLiveData<>("");
-    private MutableLiveData<ArrayList<String>> usernameList = new MutableLiveData<>();
+    private final MutableLiveData<String> username = new MutableLiveData<>("");
+    private final MutableLiveData<ArrayList<String>> usernameList = new MutableLiveData<>();
     private LiveData<LinearLayout> boardLayout;
     // keeps track of the winner. 0 = tie, 1 = player 1, 2 = player 2
-    private MutableLiveData<Boolean> gamePaused = new MutableLiveData<>(false);
-    private MutableLiveData<Integer> winner = new MutableLiveData<>(0);
-    private MutableLiveData<Integer> gamesWon = new MutableLiveData<>(0);
-    private MutableLiveData<Integer> gamesLost = new MutableLiveData<>(0);
-    private MutableLiveData<Integer> gamesTied = new MutableLiveData<>(0);
-    private MutableLiveData<Integer> gamesPlayed = new MutableLiveData<>(0);
-    private MutableLiveData<Integer> movesAvailable = new MutableLiveData<>(9);
-    private MutableLiveData<Integer> movesMade = new MutableLiveData<>(0);
+    private final MutableLiveData<Boolean> gamePaused = new MutableLiveData<>(false);
+    private final MutableLiveData<Integer> winner = new MutableLiveData<>(0);
+    private final MutableLiveData<Integer> gamesWon = new MutableLiveData<>(0);
+    private final MutableLiveData<Integer> gamesLost = new MutableLiveData<>(0);
+    private final MutableLiveData<Integer> gamesTied = new MutableLiveData<>(0);
+    private final MutableLiveData<Integer> gamesPlayed = new MutableLiveData<>(0);
+    private final MutableLiveData<Integer> movesAvailable = new MutableLiveData<>(9);
+    private final MutableLiveData<Integer> movesMade = new MutableLiveData<>(0);
     private MutableLiveData<Boolean> gameOver = new MutableLiveData<>(false);
-    private MutableLiveData<Boolean> tie = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> tie = new MutableLiveData<>(false);
     private LiveData<Integer> lastMoveX = new MutableLiveData<>(-1);
     private LiveData<Integer> lastMoveY = new MutableLiveData<>(-1);
-    private MutableLiveData<Boolean> ai = new MutableLiveData<>(false);
+    private final MutableLiveData<Boolean> ai = new MutableLiveData<>(false);
 
     private LiveData<Integer> currentPlayer1Marker = new MutableLiveData<>(R.drawable.x);
     private LiveData<Integer> currentPlayer2Marker = new MutableLiveData<>(R.drawable.o);
     private LiveData<Integer> player1Marker = new MutableLiveData<>(R.drawable.x);
     private LiveData<Integer> player2Marker = new MutableLiveData<>(R.drawable.o);
 
-    private MutableLiveData<Integer> boardSize = new MutableLiveData<>(3);
-    private MutableLiveData<Integer> winCondition = new MutableLiveData<>(3);
-    private LiveData<Boolean> undoUsed = new MutableLiveData<>(false);
+    private final MutableLiveData<Integer> boardSize = new MutableLiveData<>(3);
+    private final MutableLiveData<Integer> winCondition = new MutableLiveData<>(3);
+    private final LiveData<Boolean> undoUsed = new MutableLiveData<>(false);
 
     public LiveData<Boolean> getGamePaused() {
         return gamePaused;

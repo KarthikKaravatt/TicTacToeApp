@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class AvatarListFragment extends Fragment implements AvatarSelectListener {
-    private AvatarSelectListener listener;
+    private final AvatarSelectListener listener;
 
     public AvatarListFragment(AvatarSelectListener listener) {
         this.listener = listener;}
