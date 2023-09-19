@@ -28,8 +28,6 @@ public class LoginFragment extends Fragment implements AvatarSelectListener{
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
         gameSettingsViewModel = new ViewModelProvider(requireActivity()).get(GameSettingsViewModel.class);
 
-
-
         // find buttons
         Button loginButton = rootView.findViewById(R.id.LoginFragmentButton);
         Button avatarButton = rootView.findViewById(R.id.AvatarButton);

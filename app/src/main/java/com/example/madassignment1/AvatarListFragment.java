@@ -18,7 +18,12 @@ import java.util.List;
 
 public class AvatarListFragment extends Fragment implements AvatarSelectListener {
 
-    public AvatarListFragment(AvatarSelectListener listener) {
+    public AvatarListFragment(AvatarSelectListener listener)
+    {
+    }
+
+    public AvatarListFragment()
+    {
     }
 
     @Override
