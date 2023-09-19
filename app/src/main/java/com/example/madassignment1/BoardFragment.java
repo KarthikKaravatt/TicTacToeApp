@@ -9,8 +9,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+import java.util.Random;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
@@ -23,10 +26,12 @@ import java.util.Random;
  */
 public class BoardFragment extends Fragment {
 
+    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -117,6 +122,7 @@ public class BoardFragment extends Fragment {
         // Must remove the the board layout from its parent before adding it to a new parent
         // because it can only have one parent
         ViewGroup boardLayout = boardViewModel.getBoardLayout();
+        Handler handler = new Handler();
         ViewGroup parent = (ViewGroup) boardLayout.getParent();
         if (parent != null) {
             parent.removeView(boardLayout);
@@ -211,11 +217,11 @@ public class BoardFragment extends Fragment {
 
                         if (boardViewModel.isAi() && boardViewModel.isTurnOver()) {
                             // AI's turn (second player in AI mode)
-                            handler.postDelayed(() -> {
-                                makeRandomMoveForAI();
-                                enableBoard();
-                            }, delayAiMove);
-                            disableBoard();
+                                handler.postDelayed(() -> {
+                                    makeRandomMoveForAI();
+                                    enableBoard();
+                                }, delayAiMove);
+                                disableBoard();
                         }
 
                         // if the game is over or there is a tie

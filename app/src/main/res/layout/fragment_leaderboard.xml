@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -17,6 +18,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         >
         <ImageView
+            android:id="@+id/star"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/star"
@@ -24,6 +26,7 @@
 
             />
         <TextView
+            android:id="@+id/leaderboard"
             android:layout_height="0dp"
             android:layout_width="match_parent"
             android:text="@string/leaderboard"
@@ -35,6 +38,7 @@
             android:paddingTop="5dp"
             />
         <LinearLayout
+            android:id="@+id/linearLayout1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -45,6 +49,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
+                android:id="@+id/firstNum"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:text="@string/_1"
@@ -62,6 +67,7 @@
                 />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -72,6 +78,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
+                android:id="@+id/secondNum"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:text="@string/_2"
@@ -89,6 +96,7 @@
                 />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/linearLayout3"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -99,6 +107,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
+                android:id="@+id/thirdNum"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:text="@string/_3"
@@ -116,6 +125,7 @@
                 />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -126,6 +136,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
+                android:id="@+id/fourthNum"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:text="@string/_4"
@@ -143,6 +154,7 @@
                 />
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/linearLayout5"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -153,6 +165,7 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
+                android:id="@+id/fifthNum"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:text="@string/_5"

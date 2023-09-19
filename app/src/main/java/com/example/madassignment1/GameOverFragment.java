@@ -77,7 +77,6 @@ public class GameOverFragment extends Fragment {
         outcome = rootView.findViewById(R.id.outcome);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
         Boolean isTieValue = boardViewModel.getTie().getValue();
-        Log.d("1. ", "Played " + Objects.requireNonNull(boardViewModel.getGamesPlayed().getValue()).toString() + "won: " + boardViewModel.getGamesWon().getValue() + "lost "+ boardViewModel.getGamesLost().getValue());
 
         if (savedInstanceState == null)
         {
@@ -105,7 +104,6 @@ public class GameOverFragment extends Fragment {
                         boardViewModel.setWinner(2);
                     }
                 }
-            Log.d("2. ", "Played " + boardViewModel.getGamesPlayed().getValue().toString() + "won: " + boardViewModel.getGamesWon().getValue() + "lost "+ boardViewModel.getGamesLost().getValue());
         }
         else
         {
@@ -126,13 +124,11 @@ public class GameOverFragment extends Fragment {
                 }
             }
         }
-        Log.d("3. ", "Played " + boardViewModel.getGamesPlayed().getValue().toString() + "won: " + boardViewModel.getGamesWon().getValue() + "lost "+ boardViewModel.getGamesLost().getValue());
         homeButton.setOnClickListener(v -> {
             // perform the fragment transaction to load HomepageFragment
             loadHomepageFragment();
         });
         boardViewModel.resetBoard();
-        Log.d("4. ", "Played " + boardViewModel.getGamesPlayed().getValue().toString() + "won: " + boardViewModel.getGamesWon().getValue() + "lost "+ boardViewModel.getGamesLost().getValue());
         return rootView;
     }
 

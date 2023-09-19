@@ -44,7 +44,6 @@ public class BoardViewModel extends ViewModel {
     private final MutableLiveData<Integer> boardSize = new MutableLiveData<>(3);
     private final MutableLiveData<Integer> winCondition = new MutableLiveData<>(3);
     private final MutableLiveData<Boolean> undoUsed = new MutableLiveData<>(false);
-
     public LiveData<Boolean> getUndoUsed() {
         return undoUsed;
     }
