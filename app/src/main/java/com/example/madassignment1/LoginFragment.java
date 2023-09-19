@@ -5,20 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.Objects;
-
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
 public class LoginFragment extends Fragment implements AvatarSelectListener{
     private BoardViewModel boardViewModel;
     private GameSettingsViewModel gameSettingsViewModel;
@@ -42,31 +42,38 @@ public class LoginFragment extends Fragment implements AvatarSelectListener{
         ImageView avatarImage = rootView.findViewById(R.id.AvatarImage);
 
         // update avatarImage with the selected avatar each time fragment is reloaded
-        assert gameSettingsViewModel.getAvatarId().getValue() != null;
         avatarImage.setImageResource(gameSettingsViewModel.getAvatarId().getValue());
 
         // set a click listener on the change avatar button
-        avatarButton.setOnClickListener(v -> loadAvatarFragment());
+        avatarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadAvatarFragment();
+            }
+        });
 
         // set a click listener on the login button
-        loginButton.setOnClickListener(v -> {
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-            // get the username
-            String username = usernameEditText.getText() != null ? usernameEditText.getText().toString().trim() : "";
+                // get the username
+                String username = usernameEditText.getText() != null ? usernameEditText.getText().toString().trim() : "";
 
-            if (!username.isEmpty()) {
-                if (Objects.requireNonNull(boardViewModel.getUsernameList().getValue()).contains(username.toLowerCase())) {
-                    Toast.makeText(requireContext(), "Username already exists", Toast.LENGTH_SHORT).show();
+                if (!username.isEmpty()) {
+                    if (boardViewModel.getUsernameList().getValue().contains(username.toLowerCase())) {
+                        Toast.makeText(requireContext(), "Username already exists", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // perform the fragment transaction to load HomepageFragment
+                        loadHomepageFragment();
+                    }
                 } else {
-                    // perform the fragment transaction to load HomepageFragment
-                    loadHomepageFragment();
+                    Toast.makeText(requireContext(), "Username cannot be empty!", Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                Toast.makeText(requireContext(), "Username cannot be empty!", Toast.LENGTH_SHORT).show();
+
+                boardViewModel.setUsername(username.toLowerCase());
+
             }
-
-            boardViewModel.setUsername(username.toLowerCase());
-
         });
 
         return rootView;
@@ -74,6 +81,7 @@ public class LoginFragment extends Fragment implements AvatarSelectListener{
 
     @Override
     public void onAvatarSelected(int drawableResourceId) {
+        gameSettingsViewModel = new ViewModelProvider(requireActivity()).get(GameSettingsViewModel.class);
         gameSettingsViewModel.setAvatarId(drawableResourceId);
     }
 
