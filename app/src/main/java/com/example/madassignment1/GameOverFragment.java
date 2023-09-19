@@ -25,14 +25,6 @@ public class GameOverFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private Button homeButton;
-    private BoardViewModel boardViewModel;
-    private ImageView winnerImage;
-    private TextView outcome;
-
     public GameOverFragment() {
         // Required empty public constructor
     }
@@ -59,8 +51,9 @@ public class GameOverFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            // TODO: Rename and change types of parameters
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
 
         }
     }
@@ -70,10 +63,10 @@ public class GameOverFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_game_over, container, false);
-        homeButton = rootView.findViewById(R.id.homeButton);
-        winnerImage = rootView.findViewById(R.id.winnerImage);
-        outcome = rootView.findViewById(R.id.outcome);
-        boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
+        Button homeButton = rootView.findViewById(R.id.homeButton);
+        ImageView winnerImage = rootView.findViewById(R.id.winnerImage);
+        TextView outcome = rootView.findViewById(R.id.outcome);
+        BoardViewModel boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
         Boolean isTieValue = boardViewModel.getTie().getValue();
         Log.d("1. ", "Played " + boardViewModel.getGamesPlayed().getValue().toString() + "won: " + boardViewModel.getGamesWon().getValue() + "lost "+ boardViewModel.getGamesLost().getValue());
 

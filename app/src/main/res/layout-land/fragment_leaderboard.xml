@@ -37,7 +37,7 @@
             android:layout_height="100dp"
             android:background="@drawable/star"
             android:layout_gravity="center"
-
+            android:contentDescription="@string/pause_button_image"
             />
         <TextView
             android:layout_height="0dp"
@@ -226,6 +226,7 @@
             android:background="@drawable/back"
             android:layout_gravity="start"
             android:scaleType="fitXY"
+            android:contentDescription="@string/pause_button_image"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

@@ -85,7 +85,7 @@
                 android:background="@drawable/pause"
                 android:layout_gravity="start"
                 android:scaleType="fitXY"
-
+                android:contentDescription="@string/pause_button_image"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -96,6 +96,7 @@
                 android:id="@+id/avatar_image_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:contentDescription="@string/users_avatar"
                 android:background="@drawable/avatar_default"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1:1"

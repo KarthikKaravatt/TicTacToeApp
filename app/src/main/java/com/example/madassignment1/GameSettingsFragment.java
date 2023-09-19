@@ -71,14 +71,8 @@ public class GameSettingsFragment extends Fragment {
     private String currentMarkerPlayer2 = "O";
 
     private FragmentManager fragmentManager;
-    private GameFragment gameFragment = new GameFragment();
     private BoardViewModel boardViewModel;
-    private GameSettingsViewModel gameSettingsViewModel;
 
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public GameSettingsFragment() {
         // Required empty public constructor
@@ -106,8 +100,9 @@ public class GameSettingsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            // TODO: Rename and change types of parameters
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -137,7 +132,7 @@ public class GameSettingsFragment extends Fragment {
         player1MarkerImageView = gameSettingsView.findViewById(R.id.player1markerImage);
         player2MarkerImageView = gameSettingsView.findViewById(R.id.player2markerImage);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
-        gameSettingsViewModel = new ViewModelProvider(requireActivity()).get(GameSettingsViewModel.class);
+        GameSettingsViewModel gameSettingsViewModel = new ViewModelProvider(requireActivity()).get(GameSettingsViewModel.class);
         // Connect drop down menu with the base element
         ArrayAdapter<String> boardSizeAdapter = new ArrayAdapter<>(requireActivity(), R.layout.list_item, boardSizes);
         ArrayAdapter<String> matchConditionAdapter = new ArrayAdapter<>(requireActivity(), R.layout.list_item, matchConditions);
@@ -213,7 +208,7 @@ public class GameSettingsFragment extends Fragment {
     }
 
     private void loadGameFragment() {
-        gameFragment = new GameFragment();
+        GameFragment gameFragment = new GameFragment();
         // begin the fragment transaction
         fragmentManager.beginTransaction().replace(R.id.MainActivityFrameLayout, gameFragment).commit();
     }
