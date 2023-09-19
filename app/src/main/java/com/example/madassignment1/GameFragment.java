@@ -32,7 +32,7 @@ public class GameFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private BoardFragment boardFragment = new BoardFragment();
+    private final BoardFragment boardFragment = new BoardFragment();
     private TextView timeRemainingDisplay;
     private TextView turnsLeftDisplay;
     private ImageView playerTurnMarkerDisplay;
@@ -90,7 +90,6 @@ public class GameFragment extends Fragment {
         MediatorLiveData<Pair<Integer, Integer>> mediator = new MediatorLiveData<>();
         timeRemainingDisplay = gameView.findViewById(R.id.time_remaining_text_view);
         turnsLeftDisplay = gameView.findViewById(R.id.turns_remaining_text_view);
-        TextView playerTurnDisplay = gameView.findViewById(R.id.playerTurn_text_view);
         playerTurnMarkerDisplay = gameView.findViewById(R.id.playerTurn_image_view);
         ImageView playerAvatarDisplay = gameView.findViewById(R.id.avatar_image_view);
         timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);

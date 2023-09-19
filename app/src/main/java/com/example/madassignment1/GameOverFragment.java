@@ -1,7 +1,6 @@
 package com.example.madassignment1;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,6 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
-
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,6 +70,7 @@ public class GameOverFragment extends Fragment {
 
         if (savedInstanceState == null)
         {
+                assert boardViewModel.getGamesPlayed().getValue() != null;
                 boardViewModel.setGamesPlayed(boardViewModel.getGamesPlayed().getValue() + 1);
                 if (Boolean.TRUE.equals(isTieValue)) {
                     outcome.setText("Tie");

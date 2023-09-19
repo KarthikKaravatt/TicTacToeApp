@@ -9,11 +9,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-import java.util.Random;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import java.util.ArrayList;
@@ -119,7 +116,6 @@ public class BoardFragment extends Fragment {
         // Must remove the the board layout from its parent before adding it to a new parent
         // because it can only have one parent
         ViewGroup boardLayout = boardViewModel.getBoardLayout();
-        Handler handler = new Handler();
         ViewGroup parent = (ViewGroup) boardLayout.getParent();
         if (parent != null) {
             parent.removeView(boardLayout);
