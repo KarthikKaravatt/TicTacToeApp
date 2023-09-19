@@ -32,15 +32,10 @@ public class GameFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private final BoardFragment boardFragment = new BoardFragment();
+    private BoardFragment boardFragment = new BoardFragment();
     private TextView timeRemainingDisplay;
     private TextView turnsLeftDisplay;
     private ImageView playerTurnMarkerDisplay;
-    private ImageView playerAvatarDisplay;
     private TimerViewModel timerViewModel;
     private BoardViewModel boardViewModel;
     private ImageButton pauseButton;
@@ -73,8 +68,9 @@ public class GameFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            // TODO: Rename and change types of parameters
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -94,8 +90,9 @@ public class GameFragment extends Fragment {
         MediatorLiveData<Pair<Integer, Integer>> mediator = new MediatorLiveData<>();
         timeRemainingDisplay = gameView.findViewById(R.id.time_remaining_text_view);
         turnsLeftDisplay = gameView.findViewById(R.id.turns_remaining_text_view);
+        TextView playerTurnDisplay = gameView.findViewById(R.id.playerTurn_text_view);
         playerTurnMarkerDisplay = gameView.findViewById(R.id.playerTurn_image_view);
-        playerAvatarDisplay = gameView.findViewById(R.id.avatar_image_view);
+        ImageView playerAvatarDisplay = gameView.findViewById(R.id.avatar_image_view);
         timerViewModel = new ViewModelProvider(requireActivity()).get(TimerViewModel.class);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
         assert gameSettingsViewModel.getAvatarId().getValue() != null;

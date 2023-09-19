@@ -16,7 +16,7 @@
             android:layout_height="300dp"
             android:adjustViewBounds="true"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/logo"
+            android:contentDescription="@string/users_avatar"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

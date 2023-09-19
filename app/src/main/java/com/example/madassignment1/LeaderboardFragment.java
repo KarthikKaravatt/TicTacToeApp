@@ -26,11 +26,6 @@ public class LeaderboardFragment extends Fragment {
 
     private int wins1, wins2, wins3, wins4, userWins;
     private String username1, username2, username3, username4, username;
-    private TextView firstPlace, secondPlace, thirdPlace, fourthPlace, fifthPlace;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public LeaderboardFragment() {
         // Required empty public constructor
@@ -58,8 +53,9 @@ public class LeaderboardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            // TODO: Rename and change types of parameters
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -70,11 +66,11 @@ public class LeaderboardFragment extends Fragment {
         ImageButton backButton = rootView.findViewById(R.id.back_button);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
 
-        firstPlace = rootView.findViewById(R.id.firstName);
-        secondPlace = rootView.findViewById(R.id.secondName);
-        thirdPlace = rootView.findViewById(R.id.thirdName);
-        fourthPlace = rootView.findViewById(R.id.fourthName);
-        fifthPlace = rootView.findViewById(R.id.fifthName);
+        TextView firstPlace = rootView.findViewById(R.id.firstName);
+        TextView secondPlace = rootView.findViewById(R.id.secondName);
+        TextView thirdPlace = rootView.findViewById(R.id.thirdName);
+        TextView fourthPlace = rootView.findViewById(R.id.fourthName);
+        TextView fifthPlace = rootView.findViewById(R.id.fifthName);
 
         initialiseData();
 

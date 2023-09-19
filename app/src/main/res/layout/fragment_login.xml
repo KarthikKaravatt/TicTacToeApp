@@ -16,7 +16,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:background="@android:color/transparent"
-            android:contentDescription="@string/logo"
+            android:contentDescription="@string/users_avatar"
             android:scaleType="centerInside"
             android:src="@drawable/avatar_default"
             app:layout_constraintBottom_toTopOf="@+id/AvatarButton"

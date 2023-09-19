@@ -22,13 +22,6 @@ public class PauseFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private Button returnButton;
-    private Button exitButton;
-    private Button settingsButton;
     private BoardViewModel boardViewModel;
 
     public PauseFragment() {
@@ -57,8 +50,9 @@ public class PauseFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            // TODO: Rename and change types of parameters
+            String mParam1 = getArguments().getString(ARG_PARAM1);
+            String mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -67,9 +61,9 @@ public class PauseFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_pause, container, false);
-        returnButton = rootView.findViewById(R.id.returnButton);
-        exitButton = rootView.findViewById(R.id.exitButton);
-        settingsButton = rootView.findViewById(R.id.pauseSettingsButton);
+        Button returnButton = rootView.findViewById(R.id.returnButton);
+        Button exitButton = rootView.findViewById(R.id.exitButton);
+        Button settingsButton = rootView.findViewById(R.id.pauseSettingsButton);
         boardViewModel = new ViewModelProvider(requireActivity()).get(BoardViewModel.class);
         boardViewModel.setGamePaused(true);
         returnButton.setOnClickListener(v -> {

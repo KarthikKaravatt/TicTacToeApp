@@ -44,6 +44,11 @@
     <string name="games_drawn_0">Games Drawn: 0</string>
     <string name="games_played_0">Games Played: 0</string>
     <string name="win_percentage_0">Win Percentage: 0%</string>
+    <string name="current_player_s_marker">Current player\'s marker</string>
+    <string name="users_avatar">Users Avatar</string>
+    <string name="pause_button_image">Pause button image</string>
+    <string name="application_logo">Application Logo</string>
+    <string name="golden_star">golden star</string>
     <string name="games_tied">Games Tied: %1$s</string>
     <string name="games_lost">Games Lost: %1$s</string>
     <string name="games_won">Games Won: %1$s</string>

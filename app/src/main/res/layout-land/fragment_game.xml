@@ -57,7 +57,7 @@
                     android:id="@+id/playerTurn_image_view"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:contentDescription="@string/hello_blank_fragment">
+                    android:contentDescription="@string/current_player_s_marker">
                 </ImageView>
             </LinearLayout>
                 <Button
@@ -88,6 +88,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/pause"
+                android:contentDescription="@string/pause_button_image"
                 android:layout_gravity="start"
                 android:scaleType="fitXY"
 
@@ -114,6 +115,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/avatar_default"
+                android:contentDescription="@string/users_avatar"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
