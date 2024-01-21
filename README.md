@@ -6,3 +6,5 @@ Features:
 - Works on multiple screen sizes
 - Leaderboard system
 - Ai for single player
+
+![Gameplay Demo](GameplayDemo.gif)
