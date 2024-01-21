@@ -1,3 +1,8 @@
-# MADGroup
+# Tic Tac Toe app
 
-We should each create our own branch, make the changes then make a pull request. Then each of us have to review the pull request before it is pushed 
+Features:
+- Custom profiles
+- Multiple borad sizes (3x3 - 20x20)
+- Works on multiple screen sizes
+- Leaderboard system
+- Ai for single player
